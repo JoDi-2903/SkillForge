@@ -1,0 +1,43 @@
+services:
+  db:
+    image: mariadb:latest
+    container_name: mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: passwort
+      MYSQL_DATABASE: skillforge_db
+      MYSQL_USER: dbuser
+      MYSQL_PASSWORD: dbpasswort
+    ports:
+      - "3306:3306"
+    volumes:
+      - mariadb_data:/var/lib/mysql
+      - ./database/database_scheme.sql:/docker-entrypoint-initdb.d/init.sql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: db
+      PMA_USER: dbuser
+      PMA_PASSWORD: dbpasswort
+    depends_on:
+      - db
+
+  backend:
+    build: ./backend
+    container_name: python-backend
+    volumes:
+      - ./backend:/app
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+    environment:
+      - FLASK_ENV=development
+      - DATABASE_URL=mysql+pymysql://dbuser:dbpasswort@db/skillforge_db
+
+volumes:
+  mariadb_data:
+    driver: local
