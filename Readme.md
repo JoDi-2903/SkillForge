@@ -15,4 +15,4 @@ The tables are created automatically using the defined database scheme.
 
 ## Backend REST-API
 
-The backend service provided by Flask is available at [`127.0.0.1:5000/`](http://127.0.0.1:5000/)
+The backend service provided by Flask is available at [`127.0.0.1:5000/api`](http://127.0.0.1:5000/api)
