@@ -60,24 +60,105 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'Calendar',
+          style: TextStyle(
+            fontSize: AutoScalingFactor.largeTextScaler(context)
+          ),
+        ),
+      ),
       body:
         GridView.count(
           crossAxisCount: 3,
           children: <Widget>[
-            SfCalendar(view: CalendarView.month, initialDisplayDate: DateTime(DateTime.now().year, 1)),
-            SfCalendar(view: CalendarView.month, initialDisplayDate: DateTime(DateTime.now().year, 2)),
-            SfCalendar(view: CalendarView.month, initialDisplayDate: DateTime(DateTime.now().year, 3)),
-            SfCalendar(view: CalendarView.month, initialDisplayDate: DateTime(DateTime.now().year, 4)),
-            SfCalendar(view: CalendarView.month, initialDisplayDate: DateTime(DateTime.now().year, 5)),
-            SfCalendar(view: CalendarView.month, initialDisplayDate: DateTime(DateTime.now().year, 6)),
-            SfCalendar(view: CalendarView.month, initialDisplayDate: DateTime(DateTime.now().year, 7)),
-            SfCalendar(view: CalendarView.month, initialDisplayDate: DateTime(DateTime.now().year, 8)),
-            SfCalendar(view: CalendarView.month, initialDisplayDate: DateTime(DateTime.now().year, 9)),
-            SfCalendar(view: CalendarView.month, initialDisplayDate: DateTime(DateTime.now().year, 10)),
-            SfCalendar(view: CalendarView.month, initialDisplayDate: DateTime(DateTime.now().year, 11)),
-            SfCalendar(view: CalendarView.month, initialDisplayDate: DateTime(DateTime.now().year, 12)),
+            Card(
+              child: SfCalendar(
+                view: CalendarView.month, 
+                initialDisplayDate: DateTime(DateTime.now().year, 1),
+                headerStyle: const CalendarHeaderStyle(
+                  textStyle: TextStyle(color: Colors.red, fontSize: 20),
+                  textAlign: TextAlign.center,
+                  backgroundColor: Colors.blue),
+                monthViewSettings: MonthViewSettings(
+                  monthCellStyle: MonthCellStyle(
+                    textStyle: TextStyle(color: Colors.black, fontSize: AutoScalingFactor.smallTextScaler(context), height: -1.01)
+                  ),
+                ),
+  
+              ),
+            ),
+            Card(
+              child:
+              SfCalendar(view: CalendarView.month, initialDisplayDate: DateTime(DateTime.now().year, 2)),
+              ),
+            Card(
+              child:
+              SfCalendar(view: CalendarView.month, initialDisplayDate: DateTime(DateTime.now().year, 3)),
+              ),
+            Card(
+              child:
+              SfCalendar(view: CalendarView.month, initialDisplayDate: DateTime(DateTime.now().year, 4)),
+              ),
+            Card(
+              child:
+              SfCalendar(view: CalendarView.month, initialDisplayDate: DateTime(DateTime.now().year, 5)),
+              ),
+            Card(
+              child:
+              SfCalendar(view: CalendarView.month, initialDisplayDate: DateTime(DateTime.now().year, 6)),
+              ),
+            Card(
+              child:
+              SfCalendar(view: CalendarView.month, initialDisplayDate: DateTime(DateTime.now().year, 7)),
+              ),
+            Card(
+              child:
+              SfCalendar(view: CalendarView.month, initialDisplayDate: DateTime(DateTime.now().year, 8)),
+              ),
+            Card(
+              child:
+              SfCalendar(view: CalendarView.month, initialDisplayDate: DateTime(DateTime.now().year, 9)),
+              ),
+            Card(
+              child:
+              SfCalendar(view: CalendarView.month, initialDisplayDate: DateTime(DateTime.now().year, 10)),
+              ),
+            Card(
+              child:
+              SfCalendar(view: CalendarView.month, initialDisplayDate: DateTime(DateTime.now().year, 11)),
+              ),
+            Card(
+              child:
+              SfCalendar(view: CalendarView.month, initialDisplayDate: DateTime(DateTime.now().year, 12)),
+              ),
+
           ],
         ),
     );
   }
+}
+
+class AutoScalingFactor {
+  static const widthThresholdLow = 600;
+  static const widthThresholdHigh = 800;
+  static const heightThresholdLow = 300;
+  static const heightThresholdHigh = 400;
+
+  static bool isLowWidth(BuildContext context) {
+    return MediaQuery.of(context).size.width < widthThresholdLow;
+  }
+  static bool isHighWidth(BuildContext context) {
+    return MediaQuery.of(context).size.width < widthThresholdLow;
+  }
+  static bool isLowHeigth(BuildContext context) {
+    print(MediaQuery.of(context).size.height);
+    return MediaQuery.of(context).size.height < heightThresholdLow;
+  }
+   static bool isHighHeight(BuildContext context) {
+    return MediaQuery.of(context).size.height < heightThresholdLow;
+  }
+
+  static double smallTextScaler(BuildContext context) => isLowHeigth(context) ? 4 : 8;
+  static double largeTextScaler(BuildContext context) => isLowHeigth(context) ? 8 : 16;
 }
