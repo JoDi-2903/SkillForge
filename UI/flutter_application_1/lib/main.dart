@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
@@ -56,30 +58,69 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  int _selectedIndex = 0;
+  int displayedYear = DateTime.now().year;
+  late CalendarController _controller;
+ 
+  @override
+  void initState() {
+    _controller = CalendarController();
+    super.initState();
+  }
 
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+      if (index == 0){
+        _controller.backward!();
+      }
+      else if (index == 2){
+        _controller.forward!();
+      }
+      else{
+        
+      }
+      print(index);
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Calendar',
-          style: TextStyle(
-            fontSize: AutoScalingFactor.largeTextScaler(context)
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.arrow_back),
+            label: 'Back',
           ),
-        ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.reset_tv),
+            label: 'Reset',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.arrow_forward),
+            label: 'Forward',
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
       ),
       body:
         GridView.count(
           crossAxisCount: 3,
           children: <Widget>[
             Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(0)
+              ),
               child: SfCalendar(
                 view: CalendarView.month, 
+                controller: _controller,
                 initialDisplayDate: DateTime(DateTime.now().year, 1),
                 headerStyle: const CalendarHeaderStyle(
                   textStyle: TextStyle(color: Colors.red, fontSize: 20),
                   textAlign: TextAlign.center,
                   backgroundColor: Colors.blue),
+                //backgroundColor: Colors.teal,
                 monthViewSettings: MonthViewSettings(
                   monthCellStyle: MonthCellStyle(
                     textStyle: TextStyle(color: Colors.black, fontSize: AutoScalingFactor.smallTextScaler(context), height: -1.01)
@@ -88,6 +129,8 @@ class _MyHomePageState extends State<MyHomePage> {
   
               ),
             ),
+            ///////////////////////////////////////////////////
+            //Currently Placeholder, probably better to inherit
             Card(
               child:
               SfCalendar(view: CalendarView.month, initialDisplayDate: DateTime(DateTime.now().year, 2)),
