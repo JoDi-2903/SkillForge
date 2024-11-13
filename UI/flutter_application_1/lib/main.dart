@@ -60,11 +60,27 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
   int displayedYear = DateTime.now().year;
-  late CalendarController _controller;
- 
+  final controllers = <CalendarController>[
+    CalendarController(),
+    CalendarController(),
+    CalendarController(),
+    CalendarController(),
+    CalendarController(),
+    CalendarController(),
+    CalendarController(),
+    CalendarController(),
+    CalendarController(),
+    CalendarController(),
+    CalendarController(),
+    CalendarController(),
+  ];
+
+
   @override
   void initState() {
-    _controller = CalendarController();
+    for (var i = 0; i < 12; i++) {
+      controllers[i] = CalendarController();
+    }
     super.initState();
   }
 
@@ -72,19 +88,43 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       _selectedIndex = index;
       if (index == 0){
-        _controller.backward!();
+        for (var i = 0; i < 12; i++) {  
+          for (var j = 0; j < 12; j++){
+            controllers[i].backward!();
+          }
+        }
       }
       else if (index == 2){
-        _controller.forward!();
+        for (var i = 0; i < 12; i++) {  
+          for (var j = 0; j < 12; j++){
+            controllers[i].forward!();
+          }
+        }
       }
       else{
-        
+        for (var i = 0; i < 12; i++) {  
+          controllers[i].displayDate = DateTime(DateTime.now().year, i+1);
+        }
       }
       print(index);
     });
   }
   @override
   Widget build(BuildContext context) {
+    final yearCalendar = <Card>[
+    Card(child: MonthCalendar(initDate: DateTime(DateTime.now().year, 1),control:controllers[0])),
+    Card(child: MonthCalendar(initDate: DateTime(DateTime.now().year, 2),control:controllers[1])),
+    Card(child: MonthCalendar(initDate: DateTime(DateTime.now().year, 3),control:controllers[2])),
+    Card(child: MonthCalendar(initDate: DateTime(DateTime.now().year, 4),control:controllers[3])),
+    Card(child: MonthCalendar(initDate: DateTime(DateTime.now().year, 5),control:controllers[4])),
+    Card(child: MonthCalendar(initDate: DateTime(DateTime.now().year, 6),control:controllers[5])),
+    Card(child: MonthCalendar(initDate: DateTime(DateTime.now().year, 7),control:controllers[6])),
+    Card(child: MonthCalendar(initDate: DateTime(DateTime.now().year, 8),control:controllers[7])),
+    Card(child: MonthCalendar(initDate: DateTime(DateTime.now().year, 9),control:controllers[8])),
+    Card(child: MonthCalendar(initDate: DateTime(DateTime.now().year, 10),control:controllers[9])),
+    Card(child: MonthCalendar(initDate: DateTime(DateTime.now().year, 11),control:controllers[10])),
+    Card(child: MonthCalendar(initDate: DateTime(DateTime.now().year, 12),control:controllers[11])),
+  ];
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
@@ -108,7 +148,7 @@ class _MyHomePageState extends State<MyHomePage> {
         GridView.count(
           crossAxisCount: 3,
           children: <Widget>[
-            Card(
+            /*Card(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(0)
               ),
@@ -128,53 +168,21 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
   
               ),
-            ),
+            ),*/
             ///////////////////////////////////////////////////
             //Currently Placeholder, probably better to inherit
-            Card(
-              child:
-              SfCalendar(view: CalendarView.month, initialDisplayDate: DateTime(DateTime.now().year, 2)),
-              ),
-            Card(
-              child:
-              SfCalendar(view: CalendarView.month, initialDisplayDate: DateTime(DateTime.now().year, 3)),
-              ),
-            Card(
-              child:
-              SfCalendar(view: CalendarView.month, initialDisplayDate: DateTime(DateTime.now().year, 4)),
-              ),
-            Card(
-              child:
-              SfCalendar(view: CalendarView.month, initialDisplayDate: DateTime(DateTime.now().year, 5)),
-              ),
-            Card(
-              child:
-              SfCalendar(view: CalendarView.month, initialDisplayDate: DateTime(DateTime.now().year, 6)),
-              ),
-            Card(
-              child:
-              SfCalendar(view: CalendarView.month, initialDisplayDate: DateTime(DateTime.now().year, 7)),
-              ),
-            Card(
-              child:
-              SfCalendar(view: CalendarView.month, initialDisplayDate: DateTime(DateTime.now().year, 8)),
-              ),
-            Card(
-              child:
-              SfCalendar(view: CalendarView.month, initialDisplayDate: DateTime(DateTime.now().year, 9)),
-              ),
-            Card(
-              child:
-              SfCalendar(view: CalendarView.month, initialDisplayDate: DateTime(DateTime.now().year, 10)),
-              ),
-            Card(
-              child:
-              SfCalendar(view: CalendarView.month, initialDisplayDate: DateTime(DateTime.now().year, 11)),
-              ),
-            Card(
-              child:
-              SfCalendar(view: CalendarView.month, initialDisplayDate: DateTime(DateTime.now().year, 12)),
-              ),
+            yearCalendar[0],
+            yearCalendar[1], 
+            yearCalendar[2],
+            yearCalendar[3],
+            yearCalendar[4],
+            yearCalendar[5],
+            yearCalendar[6],
+            yearCalendar[7],
+            yearCalendar[8],
+            yearCalendar[9],
+            yearCalendar[10],
+            yearCalendar[11],
 
           ],
         ),
@@ -204,4 +212,13 @@ class AutoScalingFactor {
 
   static double smallTextScaler(BuildContext context) => isLowHeigth(context) ? 4 : 8;
   static double largeTextScaler(BuildContext context) => isLowHeigth(context) ? 8 : 16;
+}
+
+class MonthCalendar extends SfCalendar {
+  MonthCalendar({DateTime?initDate, this.control}): 
+  initDate = initDate ?? DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day,
+  08, 45), 
+  super(view: CalendarView.month, initialDisplayDate: initDate, controller: control);
+  final DateTime initDate;
+  final CalendarController?control;
 }
