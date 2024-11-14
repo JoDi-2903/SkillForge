@@ -94,11 +94,21 @@ class _MyHomePageState extends State<MyHomePage> {
           }
         }
       }
-      else if (index == 2){
+      else if (index == 4){
         for (var i = 0; i < 12; i++) {  
           for (var j = 0; j < 12; j++){
             controllers[i].forward!();
           }
+        }
+      }
+      else if (index == 3){
+        for (var i = 0; i < 12; i++) {  
+          controllers[i].forward!();
+        }
+      }
+      else if (index == 1){
+        for (var i = 0; i < 12; i++) {  
+          controllers[i].backward!();
         }
       }
       else{
@@ -112,35 +122,51 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     final yearCalendar = <Card>[
-    Card(child: MonthCalendar(initDate: DateTime(DateTime.now().year, 1),control:controllers[0])),
-    Card(child: MonthCalendar(initDate: DateTime(DateTime.now().year, 2),control:controllers[1])),
-    Card(child: MonthCalendar(initDate: DateTime(DateTime.now().year, 3),control:controllers[2])),
-    Card(child: MonthCalendar(initDate: DateTime(DateTime.now().year, 4),control:controllers[3])),
-    Card(child: MonthCalendar(initDate: DateTime(DateTime.now().year, 5),control:controllers[4])),
-    Card(child: MonthCalendar(initDate: DateTime(DateTime.now().year, 6),control:controllers[5])),
-    Card(child: MonthCalendar(initDate: DateTime(DateTime.now().year, 7),control:controllers[6])),
-    Card(child: MonthCalendar(initDate: DateTime(DateTime.now().year, 8),control:controllers[7])),
-    Card(child: MonthCalendar(initDate: DateTime(DateTime.now().year, 9),control:controllers[8])),
-    Card(child: MonthCalendar(initDate: DateTime(DateTime.now().year, 10),control:controllers[9])),
-    Card(child: MonthCalendar(initDate: DateTime(DateTime.now().year, 11),control:controllers[10])),
-    Card(child: MonthCalendar(initDate: DateTime(DateTime.now().year, 12),control:controllers[11])),
+    Card(margin: const EdgeInsets.all(7), child: MonthCalendar(initDate: DateTime(DateTime.now().year, 1),control:controllers[0])),
+    Card(margin: const EdgeInsets.all(7), child: MonthCalendar(initDate: DateTime(DateTime.now().year, 2),control:controllers[1])),
+    Card(margin: const EdgeInsets.all(7), child: MonthCalendar(initDate: DateTime(DateTime.now().year, 3),control:controllers[2])),
+    Card(margin: const EdgeInsets.all(7), child: MonthCalendar(initDate: DateTime(DateTime.now().year, 4),control:controllers[3])),
+    Card(margin: const EdgeInsets.all(7), child: MonthCalendar(initDate: DateTime(DateTime.now().year, 5),control:controllers[4])),
+    Card(margin: const EdgeInsets.all(7), child: MonthCalendar(initDate: DateTime(DateTime.now().year, 6),control:controllers[5])),
+    Card(margin: const EdgeInsets.all(7), child: MonthCalendar(initDate: DateTime(DateTime.now().year, 7),control:controllers[6])),
+    Card(margin: const EdgeInsets.all(7), child: MonthCalendar(initDate: DateTime(DateTime.now().year, 8),control:controllers[7])),
+    Card(margin: const EdgeInsets.all(7), child: MonthCalendar(initDate: DateTime(DateTime.now().year, 9),control:controllers[8])),
+    Card(margin: const EdgeInsets.all(7), child: MonthCalendar(initDate: DateTime(DateTime.now().year, 10),control:controllers[9])),
+    Card(margin: const EdgeInsets.all(7), child: MonthCalendar(initDate: DateTime(DateTime.now().year, 11),control:controllers[10])),
+    Card(margin: const EdgeInsets.all(7), child: MonthCalendar(initDate: DateTime(DateTime.now().year, 12),control:controllers[11])),
   ];
     return Scaffold(
+      backgroundColor: const Color(0xffffffff),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.arrow_back),
-            label: 'Back',
+            icon: Icon(Icons.arrow_back, color: Color(0xff034875),),
+            label: 'Year',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.reset_tv),
+            icon: Icon(Icons.arrow_back, color: Color(0xff034875),),
+            label: 'Month',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.reset_tv, color: Color(0xff034875),),
             label: 'Reset',
           ),
+                    BottomNavigationBarItem(
+            icon: Icon(Icons.arrow_forward, color: Color(0xff034875),),
+            label: 'Month',
+          ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.arrow_forward),
+            icon: Icon(Icons.arrow_forward, color: Color(0xff034875),),
             label: 'Forward',
           ),
         ],
+        backgroundColor: const Color(0xFFEEEEEE),
+        selectedItemColor: const Color(0xff034875),
+        unselectedItemColor: const Color(0xff034875),
+        selectedFontSize: 12,
+        unselectedFontSize: 12,
+        type: BottomNavigationBarType.fixed,
+        elevation: 0.0,
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
       ),
@@ -218,7 +244,7 @@ class MonthCalendar extends SfCalendar {
   MonthCalendar({DateTime?initDate, this.control}): 
   initDate = initDate ?? DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day,
   08, 45), 
-  super(view: CalendarView.month, initialDisplayDate: initDate, controller: control);
+  super(view: CalendarView.month, backgroundColor: const Color(0xffffffff), initialDisplayDate: initDate, controller: control);
   final DateTime initDate;
   final CalendarController?control;
 }
