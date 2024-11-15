@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
-
+import 'package:syncfusion_flutter_core/theme.dart';
 void main() {
   runApp(const MyApp());
 }
@@ -30,8 +30,8 @@ class MyApp extends StatelessWidget {
         // restart instead.
         //
         // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        // tested with just a hot reload
+        colorScheme: ColorScheme.fromSeed(seedColor: Color(0xff034875)),
         useMaterial3: true,
       ),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
@@ -119,21 +119,22 @@ class _MyHomePageState extends State<MyHomePage> {
       print(index);
     });
   }
+
   @override
   Widget build(BuildContext context) {
     final yearCalendar = <Card>[
-    Card(margin: const EdgeInsets.all(7), child: MonthCalendar(initDate: DateTime(DateTime.now().year, 1),control:controllers[0])),
-    Card(margin: const EdgeInsets.all(7), child: MonthCalendar(initDate: DateTime(DateTime.now().year, 2),control:controllers[1])),
-    Card(margin: const EdgeInsets.all(7), child: MonthCalendar(initDate: DateTime(DateTime.now().year, 3),control:controllers[2])),
-    Card(margin: const EdgeInsets.all(7), child: MonthCalendar(initDate: DateTime(DateTime.now().year, 4),control:controllers[3])),
-    Card(margin: const EdgeInsets.all(7), child: MonthCalendar(initDate: DateTime(DateTime.now().year, 5),control:controllers[4])),
-    Card(margin: const EdgeInsets.all(7), child: MonthCalendar(initDate: DateTime(DateTime.now().year, 6),control:controllers[5])),
-    Card(margin: const EdgeInsets.all(7), child: MonthCalendar(initDate: DateTime(DateTime.now().year, 7),control:controllers[6])),
-    Card(margin: const EdgeInsets.all(7), child: MonthCalendar(initDate: DateTime(DateTime.now().year, 8),control:controllers[7])),
-    Card(margin: const EdgeInsets.all(7), child: MonthCalendar(initDate: DateTime(DateTime.now().year, 9),control:controllers[8])),
-    Card(margin: const EdgeInsets.all(7), child: MonthCalendar(initDate: DateTime(DateTime.now().year, 10),control:controllers[9])),
-    Card(margin: const EdgeInsets.all(7), child: MonthCalendar(initDate: DateTime(DateTime.now().year, 11),control:controllers[10])),
-    Card(margin: const EdgeInsets.all(7), child: MonthCalendar(initDate: DateTime(DateTime.now().year, 12),control:controllers[11])),
+    Card(margin: const EdgeInsets.all(7), child: SfCalendarTheme(data: SfCalendarThemeData(todayBackgroundColor: Color(0xff034875)), child:MonthCalendar(context: context, initDate: DateTime(DateTime.now().year, 1),control:controllers[0]))),
+    Card(margin: const EdgeInsets.all(7), child: SfCalendarTheme(data: SfCalendarThemeData(todayBackgroundColor: Color(0xff034875)), child:MonthCalendar(context: context, initDate: DateTime(DateTime.now().year, 2),control:controllers[1]))),
+    Card(margin: const EdgeInsets.all(7), child: SfCalendarTheme(data: SfCalendarThemeData(todayBackgroundColor: Color(0xff034875)), child:MonthCalendar(context: context, initDate: DateTime(DateTime.now().year, 3),control:controllers[2]))),
+    Card(margin: const EdgeInsets.all(7), child: SfCalendarTheme(data: SfCalendarThemeData(todayBackgroundColor: Color(0xff034875)), child:MonthCalendar(context: context, initDate: DateTime(DateTime.now().year, 4),control:controllers[3]))),
+    Card(margin: const EdgeInsets.all(7), child: SfCalendarTheme(data: SfCalendarThemeData(todayBackgroundColor: Color(0xff034875)), child:MonthCalendar(context: context, initDate: DateTime(DateTime.now().year, 5),control:controllers[4]))),
+    Card(margin: const EdgeInsets.all(7), child: SfCalendarTheme(data: SfCalendarThemeData(todayBackgroundColor: Color(0xff034875)), child:MonthCalendar(context: context, initDate: DateTime(DateTime.now().year, 6),control:controllers[5]))),
+    Card(margin: const EdgeInsets.all(7), child: SfCalendarTheme(data: SfCalendarThemeData(todayBackgroundColor: Color(0xff034875)), child:MonthCalendar(context: context, initDate: DateTime(DateTime.now().year, 7),control:controllers[6]))),
+    Card(margin: const EdgeInsets.all(7), child: SfCalendarTheme(data: SfCalendarThemeData(todayBackgroundColor: Color(0xff034875)), child:MonthCalendar(context: context, initDate: DateTime(DateTime.now().year, 8),control:controllers[7]))),
+    Card(margin: const EdgeInsets.all(7), child: SfCalendarTheme(data: SfCalendarThemeData(todayBackgroundColor: Color(0xff034875)), child:MonthCalendar(context: context, initDate: DateTime(DateTime.now().year, 9),control:controllers[8]))),
+    Card(margin: const EdgeInsets.all(7), child: SfCalendarTheme(data: SfCalendarThemeData(todayBackgroundColor: Color(0xff034875)), child:MonthCalendar(context: context, initDate: DateTime(DateTime.now().year, 10),control:controllers[9]))),
+    Card(margin: const EdgeInsets.all(7), child: SfCalendarTheme(data: SfCalendarThemeData(todayBackgroundColor: Color(0xff034875)), child:MonthCalendar(context: context, initDate: DateTime(DateTime.now().year, 11),control:controllers[10]))),
+    Card(margin: const EdgeInsets.all(7), child: SfCalendarTheme(data: SfCalendarThemeData(todayBackgroundColor: Color(0xff034875)), child:MonthCalendar(context: context, initDate: DateTime(DateTime.now().year, 12),control:controllers[11]))),
   ];
     return Scaffold(
       backgroundColor: const Color(0xffffffff),
@@ -172,31 +173,8 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body:
         GridView.count(
-          crossAxisCount: 3,
+          crossAxisCount: AutoScalingFactor.calendarsPerRow(context),
           children: <Widget>[
-            /*Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(0)
-              ),
-              child: SfCalendar(
-                view: CalendarView.month, 
-                controller: _controller,
-                initialDisplayDate: DateTime(DateTime.now().year, 1),
-                headerStyle: const CalendarHeaderStyle(
-                  textStyle: TextStyle(color: Colors.red, fontSize: 20),
-                  textAlign: TextAlign.center,
-                  backgroundColor: Colors.blue),
-                //backgroundColor: Colors.teal,
-                monthViewSettings: MonthViewSettings(
-                  monthCellStyle: MonthCellStyle(
-                    textStyle: TextStyle(color: Colors.black, fontSize: AutoScalingFactor.smallTextScaler(context), height: -1.01)
-                  ),
-                ),
-  
-              ),
-            ),*/
-            ///////////////////////////////////////////////////
-            //Currently Placeholder, probably better to inherit
             yearCalendar[0],
             yearCalendar[1], 
             yearCalendar[2],
@@ -223,28 +201,115 @@ class AutoScalingFactor {
   static const heightThresholdHigh = 400;
 
   static bool isLowWidth(BuildContext context) {
+    //print(MediaQuery.of(context).size.width);
     return MediaQuery.of(context).size.width < widthThresholdLow;
   }
   static bool isHighWidth(BuildContext context) {
     return MediaQuery.of(context).size.width < widthThresholdLow;
   }
   static bool isLowHeigth(BuildContext context) {
-    print(MediaQuery.of(context).size.height);
+    //print(MediaQuery.of(context).size.height);
     return MediaQuery.of(context).size.height < heightThresholdLow;
   }
    static bool isHighHeight(BuildContext context) {
     return MediaQuery.of(context).size.height < heightThresholdLow;
   }
 
-  static double smallTextScaler(BuildContext context) => isLowHeigth(context) ? 4 : 8;
-  static double largeTextScaler(BuildContext context) => isLowHeigth(context) ? 8 : 16;
+  static double height(BuildContext context){
+    return MediaQuery.of(context).size.height;
+  }
+  static double width(BuildContext context){
+    return MediaQuery.of(context).size.width;
+  }
+  static double smallTextScaler(BuildContext context) => isLowWidth(context) ? 4 : 8;
+  static double largeTextScaler(BuildContext context) => isLowWidth(context) ? 8 : 16;
+  static int calendarsPerRow(BuildContext context){
+    if (width(context)/height(context) < 9/16){
+      return 2;
+    }
+    else if (width(context)/height(context) < 1){
+      print("Hello3");
+      return 3;
+      
+    }
+    else if (width(context)/height(context) < 18/9){
+      return 4;
+    }
+    else {
+      print("Hello");
+      return 6;
+    }
+  }
+  static double cellTextScaler(BuildContext context){
+    double calendarWidth = MediaQuery.of(context).size.width/calendarsPerRow(context);
+    print(calendarWidth / 40);
+    return calendarWidth / 40;
+  }
 }
 
 class MonthCalendar extends SfCalendar {
-  MonthCalendar({DateTime?initDate, this.control}): 
-  initDate = initDate ?? DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day,
-  08, 45), 
-  super(view: CalendarView.month, backgroundColor: const Color(0xffffffff), initialDisplayDate: initDate, controller: control);
+  MonthCalendar({this.context, DateTime?initDate, this.control}): 
+
+  initDate = initDate ?? DateTime(
+    DateTime.now().year, 
+    DateTime.now().month, 
+    DateTime.now().day,
+    08, 
+    45
+  ), 
+  super(
+    view: CalendarView.month, 
+    backgroundColor: const Color(0xffffffff), 
+    initialDisplayDate: initDate, 
+    controller: control,
+    headerHeight:4.5*AutoScalingFactor.cellTextScaler(context),
+    viewNavigationMode: ViewNavigationMode.none,
+    headerStyle: CalendarHeaderStyle(
+      textStyle: TextStyle(color: Colors.black, fontSize: 2.5*AutoScalingFactor.cellTextScaler(context),),
+      textAlign: TextAlign.center,
+      backgroundColor: Color(0xFFEEEEEE)),
+    monthViewSettings: MonthViewSettings(
+      monthCellStyle: MonthCellStyle(
+        leadingDatesTextStyle: TextStyle(
+          color: Colors.black, 
+          fontSize: AutoScalingFactor.cellTextScaler(context), 
+          height: -1.01,
+        ),
+        textStyle: TextStyle(
+          color: Colors.black, 
+          fontSize: AutoScalingFactor.cellTextScaler(context), 
+          height: -1.01,
+        ),
+        trailingDatesTextStyle: TextStyle(
+          color: Colors.black, 
+          fontSize: AutoScalingFactor.cellTextScaler(context), 
+          height: -1.01,
+        ),
+        leadingDatesBackgroundColor: Color(0xFFEEEEEE),
+        trailingDatesBackgroundColor: Color(0xFFEEEEEE),
+      ),
+    ),
+    todayHighlightColor: Color(0xff034875),
+    todayTextStyle: TextStyle(
+          color: Colors.black, 
+          fontSize: AutoScalingFactor.cellTextScaler(context), 
+          height: -1.01,
+    ),
+    selectionDecoration: BoxDecoration(
+      border: Border.all(color: Color(0xff034875), width: 2),
+    ),
+    viewHeaderHeight: 3*AutoScalingFactor.cellTextScaler(context),
+    viewHeaderStyle: ViewHeaderStyle(
+      backgroundColor: Colors.white,
+      dayTextStyle: TextStyle(
+          color: Colors.black, 
+          fontSize: 2*AutoScalingFactor.cellTextScaler(context), 
+          height: -1.01,
+      ),
+    )
+  );
+  
+  final context;
   final DateTime initDate;
   final CalendarController?control;
 }
