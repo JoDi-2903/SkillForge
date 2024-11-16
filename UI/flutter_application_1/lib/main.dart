@@ -116,7 +116,6 @@ class _MyHomePageState extends State<MyHomePage> {
           controllers[i].displayDate = DateTime(DateTime.now().year, i+1);
         }
       }
-      print(index);
     });
   }
 
@@ -201,14 +200,12 @@ class AutoScalingFactor {
   static const heightThresholdHigh = 400;
 
   static bool isLowWidth(BuildContext context) {
-    //print(MediaQuery.of(context).size.width);
     return MediaQuery.of(context).size.width < widthThresholdLow;
   }
   static bool isHighWidth(BuildContext context) {
     return MediaQuery.of(context).size.width < widthThresholdLow;
   }
   static bool isLowHeigth(BuildContext context) {
-    //print(MediaQuery.of(context).size.height);
     return MediaQuery.of(context).size.height < heightThresholdLow;
   }
    static bool isHighHeight(BuildContext context) {
@@ -228,21 +225,17 @@ class AutoScalingFactor {
       return 2;
     }
     else if (width(context)/height(context) < 1){
-      print("Hello3");
       return 3;
-      
     }
     else if (width(context)/height(context) < 18/9){
       return 4;
     }
     else {
-      print("Hello");
       return 6;
     }
   }
   static double cellTextScaler(BuildContext context){
     double calendarWidth = MediaQuery.of(context).size.width/calendarsPerRow(context);
-    print(calendarWidth / 40);
     return calendarWidth / 40;
   }
 }
@@ -259,6 +252,7 @@ class MonthCalendar extends SfCalendar {
   ), 
   super(
     view: CalendarView.month, 
+    dataSource: _getCalendarDataSource(),
     backgroundColor: const Color(0xffffffff), 
     initialDisplayDate: initDate, 
     controller: control,
@@ -269,6 +263,8 @@ class MonthCalendar extends SfCalendar {
       textAlign: TextAlign.center,
       backgroundColor: Color(0xFFEEEEEE)),
     monthViewSettings: MonthViewSettings(
+      appointmentDisplayMode: MonthAppointmentDisplayMode.appointment,
+      appointmentDisplayCount: 2,
       monthCellStyle: MonthCellStyle(
         leadingDatesTextStyle: TextStyle(
           color: Colors.black, 
@@ -289,6 +285,10 @@ class MonthCalendar extends SfCalendar {
         trailingDatesBackgroundColor: Color(0xFFEEEEEE),
       ),
     ),
+    appointmentTextStyle: TextStyle(
+      color: Colors.white,
+      fontSize: AutoScalingFactor.cellTextScaler(context),
+    ),
     todayHighlightColor: Color(0xff034875),
     todayTextStyle: TextStyle(
           color: Colors.black, 
@@ -308,8 +308,29 @@ class MonthCalendar extends SfCalendar {
       ),
     )
   );
-  
+
   final context;
   final DateTime initDate;
   final CalendarController?control;
+}
+
+class DataSource extends CalendarDataSource {
+ DataSource(List<Appointment> source) {
+   appointments = source;
+ }
+}
+
+DataSource _getCalendarDataSource() {
+   List<Appointment> appointments = <Appointment>[];
+   appointments.add(Appointment(
+     startTime: DateTime.now().subtract(Duration(hours:4*48)),
+     endTime: DateTime.now().add(Duration(hours: 48)),
+     isAllDay: true,
+     subject: 'Meeting',
+     color: Colors.blue,
+     startTimeZone: '',
+     endTimeZone: '',
+   ));
+
+   return DataSource(appointments);
 }
