@@ -37,6 +37,14 @@ services:
     environment:
       - FLASK_ENV=development
       - DATABASE_URL=mysql+pymysql://dbuser:dbpasswort@db/skillforge_db
+    
+  flutter_web:
+    container_name: flutter-web-app
+    build:
+      context: ./flutter_app
+      dockerfile: Dockerfile
+    ports:
+      - "8081:80"
 
 volumes:
   mariadb_data:
