@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
-
 void main() {
   runApp(const MyApp());
 }
@@ -78,6 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
     CalendarController(),
   ];
 
+
   @override
   void initState() {
     for (var i = 0; i < 12; i++) {
@@ -89,86 +89,55 @@ class _MyHomePageState extends State<MyHomePage> {
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
-      if (index == 0) {
-        for (var i = 0; i < 12; i++) {
-          for (var j = 0; j < 12; j++) {
+      if (index == 0){
+        for (var i = 0; i < 12; i++) {  
+          for (var j = 0; j < 12; j++){
             controllers[i].backward!();
           }
         }
-      } else if (index == 4) {
-        for (var i = 0; i < 12; i++) {
-          for (var j = 0; j < 12; j++) {
+      }
+      else if (index == 4){
+        for (var i = 0; i < 12; i++) {  
+          for (var j = 0; j < 12; j++){
             controllers[i].forward!();
           }
         }
-      } else if (index == 3) {
-        for (var i = 0; i < 12; i++) {
+      }
+      else if (index == 3){
+        for (var i = 0; i < 12; i++) {  
           controllers[i].forward!();
         }
-      } else if (index == 1) {
-        for (var i = 0; i < 12; i++) {
+      }
+      else if (index == 1){
+        for (var i = 0; i < 12; i++) {  
           controllers[i].backward!();
         }
-      } else {
-        for (var i = 0; i < 12; i++) {
-          controllers[i].displayDate = DateTime(DateTime.now().year, i + 1);
+      }
+      else{
+        for (var i = 0; i < 12; i++) {  
+          controllers[i].displayDate = DateTime(DateTime.now().year, i+1);
         }
       }
     });
   }
 
+
   @override
   Widget build(BuildContext context) {
     final yearCalendar = <MonthCalendarCard>[
-      MonthCalendarCard(
-          context: context,
-          initDate: DateTime(DateTime.now().year, 1),
-          control: controllers[0]),
-      MonthCalendarCard(
-          context: context,
-          initDate: DateTime(DateTime.now().year, 2),
-          control: controllers[1]),
-      MonthCalendarCard(
-          context: context,
-          initDate: DateTime(DateTime.now().year, 3),
-          control: controllers[2]),
-      MonthCalendarCard(
-          context: context,
-          initDate: DateTime(DateTime.now().year, 4),
-          control: controllers[3]),
-      MonthCalendarCard(
-          context: context,
-          initDate: DateTime(DateTime.now().year, 5),
-          control: controllers[4]),
-      MonthCalendarCard(
-          context: context,
-          initDate: DateTime(DateTime.now().year, 6),
-          control: controllers[5]),
-      MonthCalendarCard(
-          context: context,
-          initDate: DateTime(DateTime.now().year, 7),
-          control: controllers[6]),
-      MonthCalendarCard(
-          context: context,
-          initDate: DateTime(DateTime.now().year, 8),
-          control: controllers[7]),
-      MonthCalendarCard(
-          context: context,
-          initDate: DateTime(DateTime.now().year, 9),
-          control: controllers[8]),
-      MonthCalendarCard(
-          context: context,
-          initDate: DateTime(DateTime.now().year, 10),
-          control: controllers[9]),
-      MonthCalendarCard(
-          context: context,
-          initDate: DateTime(DateTime.now().year, 11),
-          control: controllers[10]),
-      MonthCalendarCard(
-          context: context,
-          initDate: DateTime(DateTime.now().year, 12),
-          control: controllers[11]),
-    ];
+    MonthCalendarCard(context: context, initDate: DateTime(DateTime.now().year, 1), control:controllers[0]),
+    MonthCalendarCard(context: context, initDate: DateTime(DateTime.now().year, 2), control:controllers[1]),
+    MonthCalendarCard(context: context, initDate: DateTime(DateTime.now().year, 3), control:controllers[2]),
+    MonthCalendarCard(context: context, initDate: DateTime(DateTime.now().year, 4), control:controllers[3]),
+    MonthCalendarCard(context: context, initDate: DateTime(DateTime.now().year, 5), control:controllers[4]),
+    MonthCalendarCard(context: context, initDate: DateTime(DateTime.now().year, 6), control:controllers[5]),
+    MonthCalendarCard(context: context, initDate: DateTime(DateTime.now().year, 7), control:controllers[6]),
+    MonthCalendarCard(context: context, initDate: DateTime(DateTime.now().year, 8), control:controllers[7]),
+    MonthCalendarCard(context: context, initDate: DateTime(DateTime.now().year, 9), control:controllers[8]),
+    MonthCalendarCard(context: context, initDate: DateTime(DateTime.now().year, 10), control:controllers[9]),
+    MonthCalendarCard(context: context, initDate: DateTime(DateTime.now().year, 11), control:controllers[10]),
+    MonthCalendarCard(context: context, initDate: DateTime(DateTime.now().year, 12), control:controllers[11]),
+  ];
 
     return Scaffold(
       backgroundColor: const Color(0xffffffff),
@@ -186,38 +155,23 @@ class _MyHomePageState extends State<MyHomePage> {
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(
-              Icons.arrow_back,
-              color: Color(0xff034875),
-            ),
+            icon: Icon(Icons.arrow_back, color: Color(0xff034875),),
             label: 'Year',
           ),
           BottomNavigationBarItem(
-            icon: Icon(
-              Icons.arrow_back,
-              color: Color(0xff034875),
-            ),
+            icon: Icon(Icons.arrow_back, color: Color(0xff034875),),
             label: 'Month',
           ),
           BottomNavigationBarItem(
-            icon: Icon(
-              Icons.reset_tv,
-              color: Color(0xff034875),
-            ),
+            icon: Icon(Icons.reset_tv, color: Color(0xff034875),),
             label: 'Reset',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.arrow_forward,
-              color: Color(0xff034875),
-            ),
+                    BottomNavigationBarItem(
+            icon: Icon(Icons.arrow_forward, color: Color(0xff034875),),
             label: 'Month',
           ),
           BottomNavigationBarItem(
-            icon: Icon(
-              Icons.arrow_forward,
-              color: Color(0xff034875),
-            ),
+            icon: Icon(Icons.arrow_forward, color: Color(0xff034875),),
             label: 'Forward',
           ),
         ],
@@ -231,23 +185,25 @@ class _MyHomePageState extends State<MyHomePage> {
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
       ),
-      body: GridView.count(
-        crossAxisCount: AutoScalingFactor.calendarsPerRow(context),
-        children: <Widget>[
-          yearCalendar[0],
-          yearCalendar[1],
-          yearCalendar[2],
-          yearCalendar[3],
-          yearCalendar[4],
-          yearCalendar[5],
-          yearCalendar[6],
-          yearCalendar[7],
-          yearCalendar[8],
-          yearCalendar[9],
-          yearCalendar[10],
-          yearCalendar[11],
-        ],
-      ),
+      body:
+        GridView.count(
+          crossAxisCount: AutoScalingFactor.calendarsPerRow(context),
+          children: <Widget>[
+            yearCalendar[0],
+            yearCalendar[1], 
+            yearCalendar[2],
+            yearCalendar[3],
+            yearCalendar[4],
+            yearCalendar[5],
+            yearCalendar[6],
+            yearCalendar[7],
+            yearCalendar[8],
+            yearCalendar[9],
+            yearCalendar[10],
+            yearCalendar[11],
+
+          ],
+        ),
     );
   }
 }
@@ -261,158 +217,147 @@ class AutoScalingFactor {
   static bool isLowWidth(BuildContext context) {
     return MediaQuery.of(context).size.width < widthThresholdLow;
   }
-
   static bool isHighWidth(BuildContext context) {
     return MediaQuery.of(context).size.width < widthThresholdLow;
   }
-
   static bool isLowHeigth(BuildContext context) {
     return MediaQuery.of(context).size.height < heightThresholdLow;
   }
-
-  static bool isHighHeight(BuildContext context) {
+   static bool isHighHeight(BuildContext context) {
     return MediaQuery.of(context).size.height < heightThresholdLow;
   }
 
-  static double height(BuildContext context) {
+  static double height(BuildContext context){
     return MediaQuery.of(context).size.height;
   }
-
-  static double width(BuildContext context) {
+  static double width(BuildContext context){
     return MediaQuery.of(context).size.width;
   }
-
-  static double smallTextScaler(BuildContext context) =>
-      isLowWidth(context) ? 4 : 8;
-  static double largeTextScaler(BuildContext context) =>
-      isLowWidth(context) ? 8 : 16;
-  static int calendarsPerRow(BuildContext context) {
-    if (width(context) / height(context) < 9 / 16) {
+  static double smallTextScaler(BuildContext context) => isLowWidth(context) ? 4 : 8;
+  static double largeTextScaler(BuildContext context) => isLowWidth(context) ? 8 : 16;
+  static int calendarsPerRow(BuildContext context){
+    if (width(context)/height(context) < 9/16){
       return 2;
-    } else if (width(context) / height(context) < 1) {
+    }
+    else if (width(context)/height(context) < 1){
       return 3;
-    } else if (width(context) / height(context) < 18 / 9) {
+    }
+    else if (width(context)/height(context) < 18/9){
       return 4;
-    } else {
+    }
+    else {
       return 6;
     }
   }
-
-  static double cellTextScaler(BuildContext context) {
-    double calendarWidth =
-        MediaQuery.of(context).size.width / calendarsPerRow(context);
+  static double cellTextScaler(BuildContext context){
+    double calendarWidth = MediaQuery.of(context).size.width/calendarsPerRow(context);
     return calendarWidth / 40;
   }
 }
 
-class MonthCalendarCard extends Card {
-  MonthCalendarCard({
-    this.context,
-    this.initDate,
-    this.control,
-  }) : super(
-            margin: const EdgeInsets.all(7),
-            child: SfCalendarTheme(
-                data: const SfCalendarThemeData(
-                    todayBackgroundColor: Color(0xff034875)),
-                child: MonthCalendar(
-                    context: context, initDate: initDate, control: control)));
+class MonthCalendarCard extends Card{
+  MonthCalendarCard({this.context, this.initDate, this.control,}):
+  super(margin: const EdgeInsets.all(7), child: SfCalendarTheme(data: const SfCalendarThemeData(todayBackgroundColor: Color(0xff034875)), child: MonthCalendar(context: context, initDate: initDate, control:control)));
   final context;
-  final DateTime? initDate;
-  final CalendarController? control;
+  final DateTime?initDate;
+  final CalendarController?control;
 }
 
+
 class MonthCalendar extends SfCalendar {
-  MonthCalendar({Key? key, this.context, DateTime? initDate, this.control})
-      : initDate = initDate ??
-            DateTime(DateTime.now().year, DateTime.now().month,
-                DateTime.now().day, 08, 45),
-        super(
-            key: key,
-            view: CalendarView.month,
-            dataSource: _getCalendarDataSource(),
-            backgroundColor: const Color(0xffffffff),
-            initialDisplayDate: initDate,
-            controller: control,
-            headerHeight: 4.5 * AutoScalingFactor.cellTextScaler(context),
-            viewNavigationMode: ViewNavigationMode.none,
-            headerStyle: CalendarHeaderStyle(
-                textStyle: TextStyle(
-                  color: Colors.black,
-                  fontSize: 2.5 * AutoScalingFactor.cellTextScaler(context),
-                ),
-                textAlign: TextAlign.center,
-                backgroundColor: Color(0xFFEEEEEE)),
-            monthViewSettings: MonthViewSettings(
-              appointmentDisplayMode: MonthAppointmentDisplayMode.appointment,
-              appointmentDisplayCount: 2,
-              monthCellStyle: MonthCellStyle(
-                leadingDatesTextStyle: TextStyle(
-                  color: Colors.black,
-                  fontSize: AutoScalingFactor.cellTextScaler(context),
-                  height: -1.01,
-                ),
-                textStyle: TextStyle(
-                  color: Colors.black,
-                  fontSize: AutoScalingFactor.cellTextScaler(context),
-                  height: -1.01,
-                ),
-                trailingDatesTextStyle: TextStyle(
-                  color: Colors.black,
-                  fontSize: AutoScalingFactor.cellTextScaler(context),
-                  height: -1.01,
-                ),
-                leadingDatesBackgroundColor: Color(0xFFEEEEEE),
-                trailingDatesBackgroundColor: Color(0xFFEEEEEE),
-              ),
-            ),
-            appointmentTextStyle: TextStyle(
-              color: Colors.white,
-              fontSize: AutoScalingFactor.cellTextScaler(context),
-            ),
-            todayHighlightColor: const Color(0xff034875),
-            todayTextStyle: TextStyle(
-              color: Colors.black,
-              fontSize: AutoScalingFactor.cellTextScaler(context),
-              height: -1.01,
-            ),
-            selectionDecoration: BoxDecoration(
-              border: Border.all(color: const Color(0xff034875), width: 2),
-            ),
-            viewHeaderHeight: 3 * AutoScalingFactor.cellTextScaler(context),
-            viewHeaderStyle: ViewHeaderStyle(
-              backgroundColor: Colors.white,
-              dayTextStyle: TextStyle(
-                color: Colors.black,
-                fontSize: 2 * AutoScalingFactor.cellTextScaler(context),
-                height: -1.01,
-              ),
-            ));
+  MonthCalendar({Key?key, this.context, DateTime?initDate, this.control}): 
+
+  initDate = initDate ?? DateTime(
+    DateTime.now().year, 
+    DateTime.now().month, 
+    DateTime.now().day,
+    08, 
+    45
+  ), 
+  super(
+    key: key,
+    view: CalendarView.month, 
+    dataSource: _getCalendarDataSource(),
+    backgroundColor: const Color(0xffffffff), 
+    initialDisplayDate: initDate, 
+    controller: control,
+    headerHeight:4.5*AutoScalingFactor.cellTextScaler(context),
+    viewNavigationMode: ViewNavigationMode.none,
+    headerStyle: CalendarHeaderStyle(
+      textStyle: TextStyle(color: Colors.black, fontSize: 2.5*AutoScalingFactor.cellTextScaler(context),),
+      textAlign: TextAlign.center,
+      backgroundColor: Color(0xFFEEEEEE)),
+    monthViewSettings: MonthViewSettings(
+      appointmentDisplayMode: MonthAppointmentDisplayMode.appointment,
+      appointmentDisplayCount: 2,
+      monthCellStyle: MonthCellStyle(
+        leadingDatesTextStyle: TextStyle(
+          color: Colors.black, 
+          fontSize: AutoScalingFactor.cellTextScaler(context), 
+          height: -1.01,
+        ),
+        textStyle: TextStyle(
+          color: Colors.black, 
+          fontSize: AutoScalingFactor.cellTextScaler(context), 
+          height: -1.01,
+        ),
+        trailingDatesTextStyle: TextStyle(
+          color: Colors.black, 
+          fontSize: AutoScalingFactor.cellTextScaler(context), 
+          height: -1.01,
+        ),
+        leadingDatesBackgroundColor: Color(0xFFEEEEEE),
+        trailingDatesBackgroundColor: Color(0xFFEEEEEE),
+      ),
+    ),
+    appointmentTextStyle: TextStyle(
+      color: Colors.white,
+      fontSize: AutoScalingFactor.cellTextScaler(context),
+    ),
+    todayHighlightColor: const Color(0xff034875),
+    todayTextStyle: TextStyle(
+          color: Colors.black, 
+          fontSize: AutoScalingFactor.cellTextScaler(context), 
+          height: -1.01,
+    ),
+    selectionDecoration: BoxDecoration(
+      border: Border.all(color: const Color(0xff034875), width: 2),
+    ),
+    viewHeaderHeight: 3*AutoScalingFactor.cellTextScaler(context),
+    viewHeaderStyle: ViewHeaderStyle(
+      backgroundColor: Colors.white,
+      dayTextStyle: TextStyle(
+          color: Colors.black, 
+          fontSize: 2*AutoScalingFactor.cellTextScaler(context), 
+          height: -1.01,
+      ),
+    )
+  );
 
   final context;
   final DateTime initDate;
-  final CalendarController? control;
+  final CalendarController?control;
 }
 
 class DataSource extends CalendarDataSource {
-  DataSource(List<Appointment> source) {
-    appointments = source;
-  }
+ DataSource(List<Appointment> source) {
+   appointments = source;
+ }
 }
 
 DataSource _getCalendarDataSource() {
-  List<Appointment> appointments = <Appointment>[];
-  appointments.add(Appointment(
-    startTime: DateTime.now().subtract(Duration(hours: 4 * 48)),
-    endTime: DateTime.now().add(Duration(hours: 48)),
-    isAllDay: true,
-    subject: 'Meeting',
-    color: Colors.blue,
-    startTimeZone: '',
-    endTimeZone: '',
-  ));
+   List<Appointment> appointments = <Appointment>[];
+   appointments.add(Appointment(
+     startTime: DateTime.now().subtract(Duration(hours:4*48)),
+     endTime: DateTime.now().add(Duration(hours: 48)),
+     isAllDay: true,
+     subject: 'Meeting',
+     color: Colors.blue,
+     startTimeZone: '',
+     endTimeZone: '',
+   ));
 
-  return DataSource(appointments);
+   return DataSource(appointments);
 }
 
 class ToggleSwitch extends StatefulWidget {
@@ -431,26 +376,21 @@ class _ToggleSwitchState extends State<ToggleSwitch> {
       value: light,
       activeTrackColor: const Color(0xff034875),
       inactiveTrackColor: const Color(0xA0034875),
-      trackOutlineColor: MaterialStateProperty.resolveWith(
-        (final Set<MaterialState> states) {
-          if (states.contains(MaterialState.selected)) {
-            return null;
-          }
-          return const Color(0x08034875);
+      trackOutlineColor: MaterialStateProperty.resolveWith((final Set<MaterialState> states) {
+        if (states.contains(MaterialState.selected)) {
+          return null;
+        }
+        return const Color(0x08034875);
         },
       ),
-      thumbColor: MaterialStateProperty.resolveWith(
-        (final Set<MaterialState> states) {
-          if (states.contains(MaterialState.selected)) {
-            return null;
-          }
-          return Colors.white;
+      thumbColor: MaterialStateProperty.resolveWith((final Set<MaterialState> states) {
+        if (states.contains(MaterialState.selected)) {
+          return null;
+        }
+        return Colors.white;
         },
       ),
-      onChanged: (bool value) {
-        setState(() {
-          light = value;
-        });
+      onChanged: (bool value) {setState(() {light = value;});
       },
     );
   }
@@ -474,7 +414,8 @@ class _CalendarButtonState extends State<CalendarButton> {
           color: const Color(0xff034875),
           iconSize: 35,
           onPressed: () {
-            setState(() {});
+            setState(() {
+            });
           },
         ),
       ],
@@ -489,7 +430,7 @@ class LoginButton extends StatefulWidget {
   State<LoginButton> createState() => _LoginButtonState();
 }
 
-class _LoginButtonState extends State<LoginButton> {
+class _LoginButtonState extends State <LoginButton> {
   @override
   Widget build(BuildContext context) {
     return Column(
