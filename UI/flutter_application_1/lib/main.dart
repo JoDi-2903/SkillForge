@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
         //
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload
-        colorScheme: ColorScheme.fromSeed(seedColor: Color(0xff034875)),
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xff034875)),
         useMaterial3: true,
       ),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
@@ -121,19 +121,19 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final yearCalendar = <Card>[
-    Card(margin: const EdgeInsets.all(7), child: SfCalendarTheme(data: SfCalendarThemeData(todayBackgroundColor: Color(0xff034875)), child:MonthCalendar(context: context, initDate: DateTime(DateTime.now().year, 1),control:controllers[0]))),
-    Card(margin: const EdgeInsets.all(7), child: SfCalendarTheme(data: SfCalendarThemeData(todayBackgroundColor: Color(0xff034875)), child:MonthCalendar(context: context, initDate: DateTime(DateTime.now().year, 2),control:controllers[1]))),
-    Card(margin: const EdgeInsets.all(7), child: SfCalendarTheme(data: SfCalendarThemeData(todayBackgroundColor: Color(0xff034875)), child:MonthCalendar(context: context, initDate: DateTime(DateTime.now().year, 3),control:controllers[2]))),
-    Card(margin: const EdgeInsets.all(7), child: SfCalendarTheme(data: SfCalendarThemeData(todayBackgroundColor: Color(0xff034875)), child:MonthCalendar(context: context, initDate: DateTime(DateTime.now().year, 4),control:controllers[3]))),
-    Card(margin: const EdgeInsets.all(7), child: SfCalendarTheme(data: SfCalendarThemeData(todayBackgroundColor: Color(0xff034875)), child:MonthCalendar(context: context, initDate: DateTime(DateTime.now().year, 5),control:controllers[4]))),
-    Card(margin: const EdgeInsets.all(7), child: SfCalendarTheme(data: SfCalendarThemeData(todayBackgroundColor: Color(0xff034875)), child:MonthCalendar(context: context, initDate: DateTime(DateTime.now().year, 6),control:controllers[5]))),
-    Card(margin: const EdgeInsets.all(7), child: SfCalendarTheme(data: SfCalendarThemeData(todayBackgroundColor: Color(0xff034875)), child:MonthCalendar(context: context, initDate: DateTime(DateTime.now().year, 7),control:controllers[6]))),
-    Card(margin: const EdgeInsets.all(7), child: SfCalendarTheme(data: SfCalendarThemeData(todayBackgroundColor: Color(0xff034875)), child:MonthCalendar(context: context, initDate: DateTime(DateTime.now().year, 8),control:controllers[7]))),
-    Card(margin: const EdgeInsets.all(7), child: SfCalendarTheme(data: SfCalendarThemeData(todayBackgroundColor: Color(0xff034875)), child:MonthCalendar(context: context, initDate: DateTime(DateTime.now().year, 9),control:controllers[8]))),
-    Card(margin: const EdgeInsets.all(7), child: SfCalendarTheme(data: SfCalendarThemeData(todayBackgroundColor: Color(0xff034875)), child:MonthCalendar(context: context, initDate: DateTime(DateTime.now().year, 10),control:controllers[9]))),
-    Card(margin: const EdgeInsets.all(7), child: SfCalendarTheme(data: SfCalendarThemeData(todayBackgroundColor: Color(0xff034875)), child:MonthCalendar(context: context, initDate: DateTime(DateTime.now().year, 11),control:controllers[10]))),
-    Card(margin: const EdgeInsets.all(7), child: SfCalendarTheme(data: SfCalendarThemeData(todayBackgroundColor: Color(0xff034875)), child:MonthCalendar(context: context, initDate: DateTime(DateTime.now().year, 12),control:controllers[11]))),
+    final yearCalendar = <MonthCalendarCard>[
+    MonthCalendarCard(context: context, initDate: DateTime(DateTime.now().year, 1), control:controllers[0]),
+    MonthCalendarCard(context: context, initDate: DateTime(DateTime.now().year, 2), control:controllers[1]),
+    MonthCalendarCard(context: context, initDate: DateTime(DateTime.now().year, 3), control:controllers[2]),
+    MonthCalendarCard(context: context, initDate: DateTime(DateTime.now().year, 4), control:controllers[3]),
+    MonthCalendarCard(context: context, initDate: DateTime(DateTime.now().year, 5), control:controllers[4]),
+    MonthCalendarCard(context: context, initDate: DateTime(DateTime.now().year, 6), control:controllers[5]),
+    MonthCalendarCard(context: context, initDate: DateTime(DateTime.now().year, 7), control:controllers[6]),
+    MonthCalendarCard(context: context, initDate: DateTime(DateTime.now().year, 8), control:controllers[7]),
+    MonthCalendarCard(context: context, initDate: DateTime(DateTime.now().year, 9), control:controllers[8]),
+    MonthCalendarCard(context: context, initDate: DateTime(DateTime.now().year, 10), control:controllers[9]),
+    MonthCalendarCard(context: context, initDate: DateTime(DateTime.now().year, 11), control:controllers[10]),
+    MonthCalendarCard(context: context, initDate: DateTime(DateTime.now().year, 12), control:controllers[11]),
   ];
     return Scaffold(
       backgroundColor: const Color(0xffffffff),
@@ -240,8 +240,17 @@ class AutoScalingFactor {
   }
 }
 
+class MonthCalendarCard extends Card{
+  MonthCalendarCard({this.context, this.initDate, this.control,}):
+  super(margin: const EdgeInsets.all(7), child: SfCalendarTheme(data: const SfCalendarThemeData(todayBackgroundColor: Color(0xff034875)), child: MonthCalendar(context: context, initDate: initDate, control:control)));
+  final context;
+  final DateTime?initDate;
+  final CalendarController?control;
+}
+
+
 class MonthCalendar extends SfCalendar {
-  MonthCalendar({this.context, DateTime?initDate, this.control}): 
+  MonthCalendar({Key?key, this.context, DateTime?initDate, this.control}): 
 
   initDate = initDate ?? DateTime(
     DateTime.now().year, 
@@ -251,6 +260,7 @@ class MonthCalendar extends SfCalendar {
     45
   ), 
   super(
+    key: key,
     view: CalendarView.month, 
     dataSource: _getCalendarDataSource(),
     backgroundColor: const Color(0xffffffff), 
@@ -289,14 +299,14 @@ class MonthCalendar extends SfCalendar {
       color: Colors.white,
       fontSize: AutoScalingFactor.cellTextScaler(context),
     ),
-    todayHighlightColor: Color(0xff034875),
+    todayHighlightColor: const Color(0xff034875),
     todayTextStyle: TextStyle(
           color: Colors.black, 
           fontSize: AutoScalingFactor.cellTextScaler(context), 
           height: -1.01,
     ),
     selectionDecoration: BoxDecoration(
-      border: Border.all(color: Color(0xff034875), width: 2),
+      border: Border.all(color: const Color(0xff034875), width: 2),
     ),
     viewHeaderHeight: 3*AutoScalingFactor.cellTextScaler(context),
     viewHeaderStyle: ViewHeaderStyle(
