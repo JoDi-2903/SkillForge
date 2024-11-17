@@ -148,7 +148,8 @@ class _MyHomePageState extends State<MyHomePage> {
         shadowColor: const Color(0xFF034875),
         surfaceTintColor: Colors.transparent,
         actions: <Widget>[
-          CalendarButton()
+          LoginButton(),
+          CalendarButton(),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -421,3 +422,54 @@ class _CalendarButtonState extends State<CalendarButton> {
     );
   }
 }
+
+class LoginButton extends StatefulWidget {
+  const LoginButton({super.key});
+
+  @override
+  State<LoginButton> createState() => _LoginButtonState();
+}
+
+class _LoginButtonState extends State <LoginButton> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        IconButton(
+          icon: const Icon(Icons.account_circle_outlined),
+          color: const Color(0xff034875),
+          iconSize: 35,
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const RoutePage()),
+            );
+          },
+        ),
+      ],
+    );
+  }
+}
+
+class RoutePage extends StatelessWidget {
+  const RoutePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Second Route'),
+      ),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: const Text('Go back!'),
+        ),
+      ),
+    );
+  }
+}
+
