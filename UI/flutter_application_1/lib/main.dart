@@ -14,6 +14,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         // This is the theme of your application.
@@ -59,6 +60,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
+  bool switchValue = false;
   int displayedYear = DateTime.now().year;
   final controllers = <CalendarController>[
     CalendarController(),
@@ -119,6 +121,7 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+
   @override
   Widget build(BuildContext context) {
     final yearCalendar = <MonthCalendarCard>[
@@ -135,8 +138,19 @@ class _MyHomePageState extends State<MyHomePage> {
     MonthCalendarCard(context: context, initDate: DateTime(DateTime.now().year, 11), control:controllers[10]),
     MonthCalendarCard(context: context, initDate: DateTime(DateTime.now().year, 12), control:controllers[11]),
   ];
+
     return Scaffold(
       backgroundColor: const Color(0xffffffff),
+      appBar: AppBar(
+        leading: ToggleSwitch(),
+        backgroundColor: const Color(0xFFEEEEEE),
+        elevation: 5,
+        shadowColor: const Color(0xFF034875),
+        surfaceTintColor: Colors.transparent,
+        actions: <Widget>[
+          CalendarButton()
+        ],
+      ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -343,4 +357,67 @@ DataSource _getCalendarDataSource() {
    ));
 
    return DataSource(appointments);
+}
+
+class ToggleSwitch extends StatefulWidget {
+  const ToggleSwitch({super.key});
+
+  @override
+  State<ToggleSwitch> createState() => _ToggleSwitchState();
+}
+
+class _ToggleSwitchState extends State<ToggleSwitch> {
+  bool light = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Switch(
+      value: light,
+      activeTrackColor: const Color(0xff034875),
+      inactiveTrackColor: const Color(0xA0034875),
+      trackOutlineColor: MaterialStateProperty.resolveWith((final Set<MaterialState> states) {
+        if (states.contains(MaterialState.selected)) {
+          return null;
+        }
+        return const Color(0x08034875);
+        },
+      ),
+      thumbColor: MaterialStateProperty.resolveWith((final Set<MaterialState> states) {
+        if (states.contains(MaterialState.selected)) {
+          return null;
+        }
+        return Colors.white;
+        },
+      ),
+      onChanged: (bool value) {setState(() {light = value;});
+      },
+    );
+  }
+}
+
+class CalendarButton extends StatefulWidget {
+  const CalendarButton({super.key});
+
+  @override
+  State<CalendarButton> createState() => _CalendarButtonState();
+}
+
+class _CalendarButtonState extends State<CalendarButton> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        IconButton(
+          icon: const Icon(Icons.calendar_month),
+          color: const Color(0xff034875),
+          iconSize: 35,
+          onPressed: () {
+            setState(() {
+            });
+          },
+        ),
+      ],
+    );
+  }
 }
