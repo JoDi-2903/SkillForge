@@ -489,14 +489,14 @@ class AppColorScheme{
   static Color ownWhite = const Color(0xFFFFFFFF);
   static void setDarkmode(bool darkmode){
     if (darkmode){
-      indigo = const Color(0xFF5EB0C4);
+      indigo = const Color(0xFFAD450D);
       lapisLazuli = const Color(0xFF799BB2);
       payne = const Color(0xFF4E7187);
       slate = const Color(0xFF034875);
       battleShip = const Color(0xFFEEEEEE);
-      antiFlash = const Color(0xFF111111);
+      antiFlash = const Color(0xFF032F4C);
       ownBlack = const Color(0xFFFFFFFF);
-      ownWhite = const Color(0xFF000000);
+      ownWhite = const Color(0xFF1C2C36);
     }
     else{
       indigo = const Color(0xFF034875);
