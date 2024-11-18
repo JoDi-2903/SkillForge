@@ -1,4 +1,3 @@
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
@@ -32,7 +31,7 @@ class MyApp extends StatelessWidget {
         //
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xff034875)),
+        colorScheme: ColorScheme.fromSeed(seedColor: AppColorScheme.indigo),
         useMaterial3: true,
       ),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
@@ -121,7 +120,9 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-
+  dynamic refresh(){
+    setState(() {});
+  }
   @override
   Widget build(BuildContext context) {
     final yearCalendar = <MonthCalendarCard>[
@@ -138,14 +139,13 @@ class _MyHomePageState extends State<MyHomePage> {
     MonthCalendarCard(context: context, initDate: DateTime(DateTime.now().year, 11), control:controllers[10]),
     MonthCalendarCard(context: context, initDate: DateTime(DateTime.now().year, 12), control:controllers[11]),
   ];
-
     return Scaffold(
-      backgroundColor: const Color(0xffffffff),
+      backgroundColor:  AppColorScheme.ownWhite,
       appBar: AppBar(
-        leading: ToggleSwitch(),
-        backgroundColor: const Color(0xFFEEEEEE),
+        leading: ToggleSwitch(notifyParent: refresh),
+        backgroundColor:  AppColorScheme.antiFlash,
         elevation: 5,
-        shadowColor: const Color(0xFF034875),
+        shadowColor:  AppColorScheme.indigo,
         surfaceTintColor: Colors.transparent,
         actions: <Widget>[
           LoginButton(),
@@ -153,31 +153,31 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
+        items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.arrow_back, color: Color(0xff034875),),
+            icon: Icon(Icons.arrow_back, color: AppColorScheme.indigo,),
             label: 'Year',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.arrow_back, color: Color(0xff034875),),
+            icon: Icon(Icons.arrow_back, color: AppColorScheme.indigo,),
             label: 'Month',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.reset_tv, color: Color(0xff034875),),
+            icon: Icon(Icons.reset_tv, color: AppColorScheme.indigo,),
             label: 'Reset',
           ),
                     BottomNavigationBarItem(
-            icon: Icon(Icons.arrow_forward, color: Color(0xff034875),),
+            icon: Icon(Icons.arrow_forward, color: AppColorScheme.indigo,),
             label: 'Month',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.arrow_forward, color: Color(0xff034875),),
+            icon: Icon(Icons.arrow_forward, color: AppColorScheme.indigo,),
             label: 'Forward',
           ),
         ],
-        backgroundColor: const Color(0xFFEEEEEE),
-        selectedItemColor: const Color(0xff034875),
-        unselectedItemColor: const Color(0xff034875),
+        backgroundColor: AppColorScheme.antiFlash,
+        selectedItemColor: AppColorScheme.indigo,
+        unselectedItemColor: AppColorScheme.indigo,
         selectedFontSize: 12,
         unselectedFontSize: 12,
         type: BottomNavigationBarType.fixed,
@@ -256,16 +256,15 @@ class AutoScalingFactor {
 }
 
 class MonthCalendarCard extends Card{
-  MonthCalendarCard({this.context, this.initDate, this.control,}):
-  super(margin: const EdgeInsets.all(7), child: SfCalendarTheme(data: const SfCalendarThemeData(todayBackgroundColor: Color(0xff034875)), child: MonthCalendar(context: context, initDate: initDate, control:control)));
-  final context;
+  MonthCalendarCard({super.key, required this.context, this.initDate, this.control,}):
+  super(margin: const EdgeInsets.all(7), child: SfCalendarTheme(data: SfCalendarThemeData(todayBackgroundColor:  AppColorScheme.indigo), child: MonthCalendar(context: context, initDate: initDate, control:control)));
+  final BuildContext context;
   final DateTime?initDate;
   final CalendarController?control;
 }
 
-
 class MonthCalendar extends SfCalendar {
-  MonthCalendar({Key?key, this.context, DateTime?initDate, this.control}): 
+  MonthCalendar({super.key, required this.context, DateTime?initDate, this.control}): 
 
   initDate = initDate ?? DateTime(
     DateTime.now().year, 
@@ -275,66 +274,65 @@ class MonthCalendar extends SfCalendar {
     45
   ), 
   super(
-    key: key,
     view: CalendarView.month, 
     dataSource: _getCalendarDataSource(),
-    backgroundColor: const Color(0xffffffff), 
+    backgroundColor: AppColorScheme.ownWhite, 
     initialDisplayDate: initDate, 
     controller: control,
     headerHeight:4.5*AutoScalingFactor.cellTextScaler(context),
     viewNavigationMode: ViewNavigationMode.none,
     headerStyle: CalendarHeaderStyle(
-      textStyle: TextStyle(color: Colors.black, fontSize: 2.5*AutoScalingFactor.cellTextScaler(context),),
+      textStyle: TextStyle(color: AppColorScheme.ownBlack, fontSize: 2.5*AutoScalingFactor.cellTextScaler(context),),
       textAlign: TextAlign.center,
-      backgroundColor: Color(0xFFEEEEEE)),
+      backgroundColor: AppColorScheme.antiFlash),
     monthViewSettings: MonthViewSettings(
       appointmentDisplayMode: MonthAppointmentDisplayMode.appointment,
       appointmentDisplayCount: 2,
       monthCellStyle: MonthCellStyle(
         leadingDatesTextStyle: TextStyle(
-          color: Colors.black, 
+          color: AppColorScheme.ownBlack, 
           fontSize: AutoScalingFactor.cellTextScaler(context), 
           height: -1.01,
         ),
         textStyle: TextStyle(
-          color: Colors.black, 
+          color: AppColorScheme.ownBlack, 
           fontSize: AutoScalingFactor.cellTextScaler(context), 
           height: -1.01,
         ),
         trailingDatesTextStyle: TextStyle(
-          color: Colors.black, 
+          color: AppColorScheme.ownBlack, 
           fontSize: AutoScalingFactor.cellTextScaler(context), 
           height: -1.01,
         ),
-        leadingDatesBackgroundColor: Color(0xFFEEEEEE),
-        trailingDatesBackgroundColor: Color(0xFFEEEEEE),
+        leadingDatesBackgroundColor: AppColorScheme.antiFlash,
+        trailingDatesBackgroundColor: AppColorScheme.antiFlash,
       ),
     ),
     appointmentTextStyle: TextStyle(
-      color: Colors.white,
+      color: AppColorScheme.ownWhite,
       fontSize: AutoScalingFactor.cellTextScaler(context),
     ),
-    todayHighlightColor: const Color(0xff034875),
+    todayHighlightColor: AppColorScheme.indigo,
     todayTextStyle: TextStyle(
-          color: Colors.black, 
+          color: AppColorScheme.ownBlack, 
           fontSize: AutoScalingFactor.cellTextScaler(context), 
           height: -1.01,
     ),
     selectionDecoration: BoxDecoration(
-      border: Border.all(color: const Color(0xff034875), width: 2),
+      border: Border.all(color:  AppColorScheme.indigo, width: 2),
     ),
     viewHeaderHeight: 3*AutoScalingFactor.cellTextScaler(context),
     viewHeaderStyle: ViewHeaderStyle(
-      backgroundColor: Colors.white,
+      backgroundColor:  AppColorScheme.ownWhite,
       dayTextStyle: TextStyle(
-          color: Colors.black, 
+          color: AppColorScheme.ownBlack, 
           fontSize: 2*AutoScalingFactor.cellTextScaler(context), 
           height: -1.01,
       ),
     )
   );
 
-  final context;
+  final BuildContext context;
   final DateTime initDate;
   final CalendarController?control;
 }
@@ -361,7 +359,8 @@ DataSource _getCalendarDataSource() {
 }
 
 class ToggleSwitch extends StatefulWidget {
-  const ToggleSwitch({super.key});
+  final Function() notifyParent;
+  const ToggleSwitch({super.key, required this.notifyParent});
 
   @override
   State<ToggleSwitch> createState() => _ToggleSwitchState();
@@ -374,30 +373,35 @@ class _ToggleSwitchState extends State<ToggleSwitch> {
   Widget build(BuildContext context) {
     return Switch(
       value: light,
-      activeTrackColor: const Color(0xff034875),
-      inactiveTrackColor: const Color(0xA0034875),
-      trackOutlineColor: MaterialStateProperty.resolveWith((final Set<MaterialState> states) {
-        if (states.contains(MaterialState.selected)) {
+      activeTrackColor: AppColorScheme.indigo,
+      inactiveTrackColor: AppColorScheme.slate,
+      trackOutlineColor: WidgetStateProperty.resolveWith((final Set<WidgetState> states) {
+        if (states.contains(WidgetState.selected)) {
           return null;
         }
-        return const Color(0x08034875);
+        return const Color(0x66748590);
         },
       ),
-      thumbColor: MaterialStateProperty.resolveWith((final Set<MaterialState> states) {
-        if (states.contains(MaterialState.selected)) {
+      thumbColor: WidgetStateProperty.resolveWith((final Set<WidgetState> states) {
+        if (states.contains(WidgetState.selected)) {
           return null;
         }
-        return Colors.white;
+        return AppColorScheme.ownWhite;
         },
       ),
-      onChanged: (bool value) {setState(() {light = value;});
+      onChanged: (bool value) {setState(() {
+        light = value;
+        AppColorScheme.setDarkmode(value);
+        widget.notifyParent();
+        });
       },
     );
   }
 }
 
+
 class CalendarButton extends StatefulWidget {
-  const CalendarButton({super.key});
+  CalendarButton({super.key});
 
   @override
   State<CalendarButton> createState() => _CalendarButtonState();
@@ -411,7 +415,7 @@ class _CalendarButtonState extends State<CalendarButton> {
       children: <Widget>[
         IconButton(
           icon: const Icon(Icons.calendar_month),
-          color: const Color(0xff034875),
+          color: AppColorScheme.indigo,
           iconSize: 35,
           onPressed: () {
             setState(() {
@@ -424,7 +428,7 @@ class _CalendarButtonState extends State<CalendarButton> {
 }
 
 class LoginButton extends StatefulWidget {
-  const LoginButton({super.key});
+  LoginButton({super.key});
 
   @override
   State<LoginButton> createState() => _LoginButtonState();
@@ -438,7 +442,7 @@ class _LoginButtonState extends State <LoginButton> {
       children: <Widget>[
         IconButton(
           icon: const Icon(Icons.account_circle_outlined),
-          color: const Color(0xff034875),
+          color: AppColorScheme.indigo,
           iconSize: 35,
           onPressed: () {
             Navigator.push(
@@ -470,5 +474,39 @@ class RoutePage extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class AppColorScheme{
+
+  static Color indigo = const Color(0xFF034875);
+  static Color lapisLazuli = const Color(0xFF799BB2);
+  static Color payne = const Color(0xFF4E7187);
+  static Color slate = const Color(0xFF748590);
+  static Color battleShip = const Color(0xFF999999);
+  static Color antiFlash = const Color(0xFFEEEEEE);
+  static Color ownBlack = const Color(0xFF000000);
+  static Color ownWhite = const Color(0xFFFFFFFF);
+  static void setDarkmode(bool darkmode){
+    if (darkmode){
+      indigo = const Color(0xFFAD450D);
+      lapisLazuli = const Color(0xFF799BB2);
+      payne = const Color(0xFF4E7187);
+      slate = const Color(0xFF034875);
+      battleShip = const Color(0xFFEEEEEE);
+      antiFlash = const Color(0xFF032F4C);
+      ownBlack = const Color(0xFFFFFFFF);
+      ownWhite = const Color(0xFF1C2C36);
+    }
+    else{
+      indigo = const Color(0xFF034875);
+      lapisLazuli = const Color(0xFF799BB2);
+      payne = const Color(0xFF4E7187);
+      slate = const Color(0xFF748590);
+      battleShip = const Color(0xFF999999);
+      antiFlash = const Color(0xFFEEEEEE);
+      ownBlack = const Color(0xFF000000);
+      ownWhite = const Color(0xFFFFFFFF);
+    }
   }
 }
