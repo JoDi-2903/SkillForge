@@ -2,6 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
+import 'monthPage.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -123,6 +125,7 @@ class _MyHomePageState extends State<MyHomePage> {
   dynamic refresh(){
     setState(() {});
   }
+  
   @override
   Widget build(BuildContext context) {
     final yearCalendar = <MonthCalendarCard>[
@@ -399,7 +402,6 @@ class _ToggleSwitchState extends State<ToggleSwitch> {
   }
 }
 
-
 class CalendarButton extends StatefulWidget {
   CalendarButton({super.key});
 
@@ -418,8 +420,10 @@ class _CalendarButtonState extends State<CalendarButton> {
           color: AppColorScheme.indigo,
           iconSize: 35,
           onPressed: () {
-            setState(() {
-            });
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const MonthPage()),
+            );
           },
         ),
       ],
@@ -478,7 +482,6 @@ class RoutePage extends StatelessWidget {
 }
 
 class AppColorScheme{
-
   static Color indigo = const Color(0xFF034875);
   static Color lapisLazuli = const Color(0xFF799BB2);
   static Color payne = const Color(0xFF4E7187);
@@ -489,14 +492,14 @@ class AppColorScheme{
   static Color ownWhite = const Color(0xFFFFFFFF);
   static void setDarkmode(bool darkmode){
     if (darkmode){
-      indigo = const Color(0xFFAD450D);
+      indigo = const Color(0xFF5EB0C4);
       lapisLazuli = const Color(0xFF799BB2);
       payne = const Color(0xFF4E7187);
       slate = const Color(0xFF034875);
       battleShip = const Color(0xFFEEEEEE);
-      antiFlash = const Color(0xFF032F4C);
+      antiFlash = const Color(0xFF111111);
       ownBlack = const Color(0xFFFFFFFF);
-      ownWhite = const Color(0xFF1C2C36);
+      ownWhite = const Color(0xFF000000);
     }
     else{
       indigo = const Color(0xFF034875);
