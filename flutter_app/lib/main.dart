@@ -83,9 +83,14 @@ class _MyHomePageState extends State<MyHomePage> {
       controllers[i] = CalendarController();
     }
     super.initState();
+    if (DateTime.now().hour > 18 || DateTime.now().hour <= 6){
+      _ToggleSwitchState.light = true;
+      AppColorScheme.setDarkmode(true);
+    }
   }
-
+  
   void _onItemTapped(int index) {
+
     setState(() {
       _selectedIndex = index;
       if (index == 0){
@@ -142,7 +147,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       backgroundColor:  AppColorScheme.ownWhite,
       appBar: AppBar(
-        leading: ToggleSwitch(notifyParent: refresh),
+        leading: ToggleSwitch(notifyParent: refresh,),
         backgroundColor:  AppColorScheme.antiFlash,
         elevation: 5,
         shadowColor:  AppColorScheme.indigo,
@@ -367,7 +372,7 @@ class ToggleSwitch extends StatefulWidget {
 }
 
 class _ToggleSwitchState extends State<ToggleSwitch> {
-  bool light = false;
+  static bool light = false;
 
   @override
   Widget build(BuildContext context) {
@@ -387,6 +392,13 @@ class _ToggleSwitchState extends State<ToggleSwitch> {
           return null;
         }
         return AppColorScheme.ownWhite;
+        },
+      ),
+      thumbIcon: WidgetStateProperty.resolveWith((final Set<WidgetState> states) {
+        if (states.contains(WidgetState.selected)) {
+          return  Icon(Icons.light_mode, color: AppColorScheme.indigo);
+        }
+        return Icon(Icons.dark_mode, color: AppColorScheme.indigo);
         },
       ),
       onChanged: (bool value) {setState(() {
