@@ -60,9 +60,9 @@ INSERT INTO `event_days` (`DayID`, `EventDate`, `StartTime`, `EndTime`, `EventLo
 (16, '2024-06-10', '10:00:00', '20:00:00', 'Dresden', 'Sachsen', 6),
 (17, '2024-06-11', '08:00:00', '17:00:00', 'Dresden', 'Sachsen', 6),
 (18, '2024-06-12', '08:00:00', '15:00:00', 'Dresden', 'Sachsen', 6),
-(19, '2024-11-21', '10:00:00', '18:00:00', 'Dresden', 'Sachsen', 6),
-(20, '2024-11-22', '08:00:00', '17:00:00', 'Dresden', 'Sachsen', 6),
-(21, '2024-11-23', '08:00:00', '15:00:00', 'Dresden', 'Sachsen', 6),
+(19, '2024-11-21', '10:00:00', '18:00:00', 'Koeln', 'Nordrhein Westfalen', 6),
+(20, '2024-11-22', '08:00:00', '17:00:00', 'Koeln', 'Nordrhein Westfalen', 6),
+(21, '2024-11-23', '08:00:00', '15:00:00', 'Koeln', 'Nordrhein Westfalen', 6),
 (22, '2024-09-10', '06:00:00', '16:00:00', 'Mannheim', 'Baden Wuettenberg', 7),
 (23, '2024-09-11', '08:00:00', '20:00:00', 'Mannheim', 'Baden Wuettenberg', 7);
 
@@ -91,7 +91,7 @@ INSERT INTO `event_information` (`InformationID`, `NameDE`, `NameEN`, `Descripti
 (1, 'Mikroelektronik und Sensorik', 'Microelectronics and Sensor Technology', 'Die Vorlesung Mikroelektronik und Sensorik bietet eine umfassende Einführung in die Grundlagen und Anwendungen moderner mikroelektronischer Systeme und Sensoriktechnologien. Ziel ist es, die Studierenden mit den Prinzipien, Konzepten und Herausforderungen in der Entwicklung von Mikroelektronik und Sensortechnologien vertraut zu machen, die in einer Vielzahl von Industriebereichen – von der Automobilindustrie bis zur Medizintechnik – zum Einsatz kommen.', 'The lecture Microelectronics and Sensor Technology offers a comprehensive introduction to the fundamentals and applications of modern microelectronic systems and sensor technologies. The aim is to familiarize students with the principles, concepts and challenges in the development of microelectronics and sensor technologies that are used in a wide range of industrial sectors - from the automotive industry to medical technology.', 'Electrical Engineering', 'Lecture', 0),
 (2, 'Qualitätsverbesserungsprojekte I', 'Quality Improvement Projects I', 'Die Vorlesung Qualitätsverbesserungsprojekte I – Six-Sigma-Methode bietet eine umfassende Einführung in die Six-Sigma-Methode als eine der effektivsten und weit verbreiteten Methoden zur Qualitätsverbesserung in der Industrie. Sie richtet sich an Studierende, die lernen möchten, wie man kontinuierliche Verbesserungsprozesse gestaltet, um die Qualität von Produkten und Dienstleistungen nachhaltig zu erhöhen. Im Mittelpunkt steht die systematische Anwendung von Six-Sigma-Techniken zur Identifikation und Reduzierung von Fehlerquellen sowie zur Optimierung von Geschäftsprozessen.', 'The lecture Quality Improvement Projects I - Six Sigma Method provides a comprehensive introduction to the Six Sigma method as one of the most effective and widely used methods for quality improvement in industry. It is aimed at students who want to learn how to design continuous improvement processes in order to sustainably increase the quality of products and services. The focus is on the systematic application of Six Sigma techniques to identify and reduce sources of error and to optimize business processes.', 'Other', 'Workshop', 1),
 (3, 'Höhere Festigkeitslehre und Werkstoffmechanik', 'Advanced strength of materials and mechanics', 'Die Vorlesung Höhere Festigkeitslehre und Werkstoffmechanik bietet eine vertiefte Auseinandersetzung mit den grundlegenden Konzepten und fortgeschrittenen Methoden der Festigkeitslehre und Werkstoffmechanik. Sie richtet sich an Studierende, die bereits über grundlegende Kenntnisse in der Festigkeitslehre verfügen und diese durch eine intensivere Betrachtung komplexer Phänomene und Anwendungen erweitern möchten. Ziel ist es, ein vertieftes Verständnis für die mechanischen Eigenschaften von Werkstoffen und deren Verhalten unter verschiedenen Belastungsbedingungen zu vermitteln, um Ingenieuren die Fähigkeit zu verleihen, strukturmechanische Probleme effizient zu analysieren und zu lösen.', 'The lecture Advanced Strength of Materials and Mechanics of Materials offers an in-depth examination of the fundamental concepts and advanced methods of strength of materials and mechanics of materials. It is aimed at students who already have a basic knowledge of strength of materials and would like to extend this by taking a closer look at complex phenomena and applications. The aim is to provide an in-depth understanding of the mechanical properties of materials and their behavior under different loading conditions in order to give engineers the ability to efficiently analyze and solve structural-mechanical problems.', 'Mechanical Engineering', 'Seminar', 2),
-(4, 'Embedded Systems im Kraftfahrzeug', 'Embedded Systems in a car', 'Die Vorlesung Embedded Systems im Kraftfahrzeug bietet eine tiefgehende Einführung in die Funktionsweise und die Anwendung von eingebetteten Systemen in modernen Kraftfahrzeugen. Sie richtet sich an Studierende der Ingenieurwissenschaften, die ein Verständnis für die Rolle von Mikroprozessoren, Steuergeräten und Softwarearchitekturen in der Fahrzeugtechnik entwickeln möchten. Ziel der Vorlesung ist es, den Studierenden die Grundlagen und fortgeschrittenen Technologien der Embedded Systems zu vermitteln, die in heutigen Fahrzeugen für eine Vielzahl von Funktionen von der Motorsteuerung bis hin zu Fahrerassistenzsystemen verantwortlich sind.', 'The lecture Embedded Systems in Motor Vehicles provides an in-depth introduction to the functionality and application of embedded systems in modern motor vehicles. It is aimed at engineering students who wish to develop an understanding of the role of microprocessors, control units and software architectures in vehicle technology. The aim of the course is to teach students the fundamentals and advanced technologies of embedded systems, which are responsible for a wide range of functions in today\'s vehicles, from engine control to driver assistance systems.', 'Electrical Engineering', 'Lecture', 3),
+(4, 'Embedded Systems im Kraftfahrzeug', 'Embedded Systems in a car', 'Die Vorlesung Embedded Systems im Kraftfahrzeug bietet eine tiefgehende Einführung in die Funktionsweise und die Anwendung von eingebetteten Systemen in modernen Kraftfahrzeugen. Sie richtet sich an Studierende der Ingenieurwissenschaften, die ein Verständnis für die Rolle von Mikroprozessoren, Steuergeräten und Softwarearchitekturen in der Fahrzeugtechnik entwickeln möchten. Ziel der Vorlesung ist es, den Studierenden die Grundlagen und fortgeschrittenen Technologien der Embedded Systems zu vermitteln, die in heutigen Fahrzeugen für eine Vielzahl von Funktionen von der Motorsteuerung bis hin zu Fahrerassistenzsystemen verantwortlich sind.', 'The lecture Embedded Systems in Motor Vehicles provides an in-depth introduction to the functionality and application of embedded systems in modern motor vehicles. It is aimed at engineering students who wish to develop an understanding of the role of microprocessors, control units and software architectures in vehicle technology. The aim of the course is to teach students the fundamentals and advanced technologies of embedded systems, which are responsible for a wide range of functions in todays vehicles, from engine control to driver assistance systems.', 'Electrical Engineering', 'Lecture', 3),
 (5, 'Leistungselektronik und Energiespeicher', 'Power electronics and energy storage', 'Die Vorlesung Leistungselektronik und Energiespeicher bietet eine fundierte Einführung in die Schlüsseltechnologien der modernen Leistungselektronik und deren Anwendung in Energiespeicherlösungen. Im Mittelpunkt stehen die grundlegenden Konzepte und Technologien, die für die Entwicklung, den Betrieb und die Optimierung von elektrischen Antriebssystemen, Energiespeichern und nachhaltigen Energiesystemen erforderlich sind. Die Vorlesung richtet sich an Studierende der Elektrotechnik und verwandter Disziplinen, die ein tiefes Verständnis für die Wechselwirkungen zwischen Leistungselektronik und Energiespeichertechnologien erwerben möchten.', 'The lecture Power Electronics and Energy Storage provides a sound introduction to the key technologies of modern power electronics and their application in energy storage solutions. The focus is on the fundamental concepts and technologies required for the development, operation and optimization of electric drive systems, energy storage systems and sustainable energy systems. The lecture is aimed at students of electrical engineering and related disciplines who wish to gain a deep understanding of the interactions between power electronics and energy storage technologies.', 'Mechatronics', 'Further training', 4),
 (6, 'Software-Qualitätstechnik', 'Software Quality Engineering', 'Die Vorlesung Software Quality Engineering vermittelt den Studierenden die notwendigen Kenntnisse und Fähigkeiten, um Softwarequalitätsprozesse zu verstehen, zu implementieren und kontinuierlich zu verbessern. Dabei liegt der Fokus auf der Anwendung von systematischen Methoden zur Sicherstellung einer hohen Qualität in Softwareentwicklungsprozessen, von der Planung und Konzeption bis hin zur Implementierung und Wartung. Die Studierenden lernen, wie sie Qualität als integralen Bestandteil des gesamten Softwareentwicklungszyklus in einem agilen und nicht-agilen Umfeld umsetzen können.', 'The Software Quality Engineering course provides students with the necessary knowledge and skills to understand, implement and continuously improve software quality processes. The focus is on the application of systematic methods to ensure high quality in software development processes, from planning and design through to implementation and maintenance. Students learn how to implement quality as an integral part of the entire software development cycle in an agile and non-agile environment.', 'Computer Science', 'Further training', 5),
 (7, 'Systementwicklung und Architektur', 'System development and architecture', 'Die Vorlesung Systementwicklung und Architektur vermittelt den Studierenden die grundlegenden Konzepte und Methoden, die erforderlich sind, um komplexe Softwaresysteme zu entwickeln und deren Architektur zu entwerfen. Ziel ist es, den Studierenden das nötige Wissen zu vermitteln, um Softwareprojekte effizient zu planen, zu strukturieren und erfolgreich umzusetzen. Der Fokus liegt auf dem Entwurf von Systemarchitekturen, die sowohl funktionale als auch nicht-funktionale Anforderungen berücksichtigen und den gesamten Lebenszyklus eines Systems – von der Anforderungsanalyse bis hin zur Wartung – abdecken.', 'The Systems Development and Architecture course teaches students the basic concepts and methods required to develop complex software systems and design their architecture. The aim is to provide students with the necessary knowledge to efficiently plan, structure and successfully implement software projects. The focus is on the design of system architectures that take into account both functional and non-functional requirements and cover the entire life cycle of a system - from requirements analysis to maintenance.', 'Computer Science', 'Other', 6),
@@ -114,7 +114,48 @@ CREATE TABLE `participates` (
 --
 
 INSERT INTO `participates` (`TrainingID`, `UserID`, `registration_date`) VALUES
+(1, 1, '2024-11-18 14:02:23');
+(1, 2, '2024-11-18 14:02:23');
+(1, 3, '2024-11-18 14:02:23');
+(1, 4, '2024-11-18 14:02:23');
+(1, 5, '2024-11-18 14:02:23');
+(1, 6, '2024-11-18 14:02:23');
+(1, 7, '2024-11-18 14:02:23');
+(1, 8, '2024-11-18 14:02:23');
 (1, 9, '2024-11-18 14:02:23');
+(1, 10, '2024-11-18 14:02:23');
+(1, 11, '2024-11-18 14:02:23');
+(1, 12, '2024-11-18 14:02:23');
+(1, 13, '2024-11-18 14:02:23');
+(1, 14, '2024-11-18 14:02:23');
+(1, 15, '2024-11-18 14:02:23');
+(1, 16, '2024-11-18 14:02:23');
+(1, 17, '2024-11-18 14:02:23');
+(1, 18, '2024-11-18 14:02:23');
+(1, 19, '2024-11-18 14:02:23');
+(1, 20, '2024-11-18 14:02:23');
+(1, 21, '2024-11-18 14:02:23');
+(1, 22, '2024-11-18 14:02:23');
+(1, 23, '2024-11-18 14:02:23');
+(1, 24, '2024-11-18 14:02:23');
+(1, 25, '2024-11-18 14:02:23');
+(2, 26, '2024-11-18 14:02:23');
+(2, 27, '2024-11-18 14:02:23');
+(2, 28, '2024-11-18 14:02:23');
+(3, 29, '2024-11-18 14:02:23');
+(3, 30, '2024-11-18 14:02:23');
+(3, 31, '2024-11-18 14:02:23');
+(3, 21, '2024-11-18 14:02:23');
+(3, 10, '2024-11-18 14:02:23');
+(3, 11, '2024-11-18 14:02:23');
+(3, 12, '2024-11-18 14:02:23');
+(4, 1, '2024-11-18 14:02:23');
+(5, 2, '2024-11-18 14:02:23');
+(5, 3, '2024-11-18 14:02:23');
+(5, 4, '2024-11-18 14:02:23');
+(6, 5, '2024-11-18 14:02:23');
+(7, 6, '2024-11-18 14:02:23');
+(8, 7, '2024-11-18 14:02:23');
 
 -- --------------------------------------------------------
 
@@ -133,14 +174,14 @@ CREATE TABLE `trainingcourses` (
 --
 
 INSERT INTO `trainingcourses` (`TrainingID`, `MinParticipants`, `MaxParticipants`) VALUES
-(0, 7, 25),
 (1, 7, 25),
 (2, 7, 25),
 (3, 7, 25),
 (4, 7, 25),
 (5, 7, 25),
 (6, 7, 25),
-(7, 7, 25);
+(7, 7, 25),
+(8, 7, 25);
 
 -- --------------------------------------------------------
 
@@ -166,13 +207,34 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`UserID`, `Username`, `PasswordHash`, `FirstName`, `LastName`, `Email`, `SpecializationField`, `is_admin`, `is_active`, `CountLoginAttempts`) VALUES
-(1, 'JoDi2903', 'Filler', 'Jonathan', 'Unknown', 'notamail@email.com', 'Computer Science', 1, 1, 0),
-(2, 'Firq', 'Filler', 'Noah Leon', 'Meier', 'MrMeier@email.com', 'Computer Science', 0, 1, 0),
-(3, 'Nehper', 'Filler', 'Nicki Matthias', 'Schuhmacher', 'MrSchuhmacher@email.com', 'Electrical Engineering', 0, 1, 0),
-(4, 'Neshura', 'Filler', 'Jan Elias', 'Sulzberger', 'MrSulzberger@email.com', 'Mechatronics', 0, 1, 0),
-(5, 'ArneLaudris', 'Filler', 'Arne', 'Laudris', 'MrLaudris@email.com', 'Electrical Engineering', 0, 1, 0),
-(8, 'DrSaumweber', 'Filler', 'Vicent', 'Saumweber', 'DrSaumweber@email.com', 'Mechanical Engineering', 0, 1, 0),
-(9, 'TheMan', 'Filler', 'Timo', 'Wehrle-Brunner', 'MrWehrle-Brunner@email.com', 'Other', 0, 1, 0);
+(1, 'JoDi2903', '', 'Jonathan', 'Diebel', 'notamail@email.com', 'Computer Science', 1, 1, 0),
+(2, 'Firq', '', 'Noah Leon', 'Meier', 'MrMeier@email.com', 'Computer Science', 0, 1, 0),
+(3, 'Nehper', '', 'Nicki Matthias', 'Schuhmacher', 'MrSchuhmacher@email.com', 'Electrical Engineering', 0, 1, 0),
+(4, 'Neshura', '', 'Jan Elias', 'Sulzberger', 'MrSulzberger@email.com', 'Mechatronics', 0, 1, 0),
+(5, 'ArneLaudris', '', 'Arne Laudris', 'Fränznick', 'MrLaudris@email.com', 'Electrical Engineering', 0, 1, 0),
+(8, 'DrSaumweber', '', 'Vicent', 'Saumweber', 'DrSaumweber@email.com', 'Mechanical Engineering', 0, 1, 0),
+(9, 'TheMan', '', 'Timo', 'Wehrle-Brunner', 'MrWehrle-Brunner@email.com', 'Other', 0, 1, 0),
+(10, 'Fish', '', 'Emma', 'Fischer', 'MsFischer@email.com', 'Computer Science', 0, 1, 0),
+(11, 'Miller', '', 'Lukas ', 'Müller', 'MrMueller@email.com', 'Computer Science', 0, 1, 0),
+(12, 'Schmiede', '', 'Hannah ', 'Schmidt', 'MsSchmidt@email.com', 'Computer Science', 0, 1, 0),
+(13, 'Spinnenweber', '', 'Maximilian', 'Weber', 'MrWeber@email.com', 'Computer Science', 0, 1, 0),
+(14, 'Beck', '', 'Leonie ', 'Becker', 'MsBecker@email.com', 'Computer Science', 0, 1, 0),
+(15, 'Schnitt', '', 'Elias ', 'Schneider', 'MrSchneider@email.com', 'Electrical Engineering', 0, 1, 0),
+(16, 'Waffel', '', 'Sophie ', 'Wagner', 'MsWagner@email.com', 'Electrical Engineering', 0, 1, 0),
+(17, 'Rasierer', '', 'Felix Braun', 'Braun', 'DrBraun@email.com', 'Mechanical Engineering', 0, 1, 0),
+(18, 'Freddy', '', 'Charlotte ', 'Krüger', 'MsKrüger@email.com', 'Mechanical Engineering', 0, 1, 0),
+(19, 'DrHofmann', '', 'Paul Hofmann', 'Hofmann', 'MrHofmann@email.com', 'Mechanical Engineering', 0, 1, 0),
+(20, 'DrMeier', '', 'Anna Meier', 'Meier', 'DrMeier@email.com', 'Mechanical Engineering', 0, 1, 0),
+(22, 'Keller', '', 'Jonas ', 'Keller', 'MrKeller@email.com', 'Mechatronics', 0, 1, 0),
+(23, 'Falke', '', 'Laura ', 'Vogel', 'MsVogel@email.com', 'Mechatronics', 0, 1, 0),
+(24, 'Hoffe', '', 'Tim ', 'Hoffmann', 'MrHoffmann@email.com', 'Mechatronics', 0, 1, 0),
+(25, 'Anwalt', '', 'Lina ', 'Richter', 'MsRichter@email.com', 'Mechatronics', 0, 1, 0),
+(26, 'Arche', '', 'Noah ', 'Schulz', 'MrSchulz@email.com', 'Other', 0, 1, 0),
+(27, 'Lehmann', '', 'Marie ', 'Lehmann', 'MsLehmann@email.com', 'Other', 0, 1, 0),
+(28, 'King', '', 'Elias ', 'Koenig', 'MrKoenig@email.com', 'Other', 0, 1, 0),
+(29, 'Farmer', '', 'Clara ', 'Bauer', 'MsBauer@email.com', 'Other', 0, 1, 0),
+(30, 'Lorenz', '', 'Simon Lorenz', 'Lorenz', 'MrLorenz@email.com', 'Other', 0, 1, 0),
+(31, 'Frankonia', '', 'Julia ', 'Frank', 'MsFrank@email.com', 'Electrical Engineering', 0, 1, 0);
 
 --
 -- Indizes der exportierten Tabellen
