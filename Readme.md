@@ -10,7 +10,7 @@ docker-compose up --build
 
 ## Flutter Web-App Frontend
 
-The Flutter Web-App is available at [`127.0.0.1:8081/`](http://127.0.0.1:8080/) in your browser.
+The Flutter Web-App is available at [`127.0.0.1:8081/`](http://127.0.0.1:8081/) in your browser.
 
 ## Backend REST-API
 

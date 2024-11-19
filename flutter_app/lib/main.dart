@@ -1,7 +1,9 @@
-
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
+import 'package:skill_forge/screens/login_screen.dart';
+import 'package:skill_forge/utils/color_scheme.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -76,7 +78,6 @@ class _MyHomePageState extends State<MyHomePage> {
     CalendarController(),
   ];
 
-
   @override
   void initState() {
     for (var i = 0; i < 12; i++) {
@@ -88,64 +89,97 @@ class _MyHomePageState extends State<MyHomePage> {
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
-      if (index == 0){
-        for (var i = 0; i < 12; i++) {  
-          for (var j = 0; j < 12; j++){
+      if (index == 0) {
+        for (var i = 0; i < 12; i++) {
+          for (var j = 0; j < 12; j++) {
             controllers[i].backward!();
           }
         }
-      }
-      else if (index == 4){
-        for (var i = 0; i < 12; i++) {  
-          for (var j = 0; j < 12; j++){
+      } else if (index == 4) {
+        for (var i = 0; i < 12; i++) {
+          for (var j = 0; j < 12; j++) {
             controllers[i].forward!();
           }
         }
-      }
-      else if (index == 3){
-        for (var i = 0; i < 12; i++) {  
+      } else if (index == 3) {
+        for (var i = 0; i < 12; i++) {
           controllers[i].forward!();
         }
-      }
-      else if (index == 1){
-        for (var i = 0; i < 12; i++) {  
+      } else if (index == 1) {
+        for (var i = 0; i < 12; i++) {
           controllers[i].backward!();
         }
-      }
-      else{
-        for (var i = 0; i < 12; i++) {  
-          controllers[i].displayDate = DateTime(DateTime.now().year, i+1);
+      } else {
+        for (var i = 0; i < 12; i++) {
+          controllers[i].displayDate = DateTime(DateTime.now().year, i + 1);
         }
       }
     });
   }
 
-  dynamic refresh(){
+  dynamic refresh() {
     setState(() {});
   }
+
   @override
   Widget build(BuildContext context) {
     final yearCalendar = <MonthCalendarCard>[
-    MonthCalendarCard(context: context, initDate: DateTime(DateTime.now().year, 1), control:controllers[0]),
-    MonthCalendarCard(context: context, initDate: DateTime(DateTime.now().year, 2), control:controllers[1]),
-    MonthCalendarCard(context: context, initDate: DateTime(DateTime.now().year, 3), control:controllers[2]),
-    MonthCalendarCard(context: context, initDate: DateTime(DateTime.now().year, 4), control:controllers[3]),
-    MonthCalendarCard(context: context, initDate: DateTime(DateTime.now().year, 5), control:controllers[4]),
-    MonthCalendarCard(context: context, initDate: DateTime(DateTime.now().year, 6), control:controllers[5]),
-    MonthCalendarCard(context: context, initDate: DateTime(DateTime.now().year, 7), control:controllers[6]),
-    MonthCalendarCard(context: context, initDate: DateTime(DateTime.now().year, 8), control:controllers[7]),
-    MonthCalendarCard(context: context, initDate: DateTime(DateTime.now().year, 9), control:controllers[8]),
-    MonthCalendarCard(context: context, initDate: DateTime(DateTime.now().year, 10), control:controllers[9]),
-    MonthCalendarCard(context: context, initDate: DateTime(DateTime.now().year, 11), control:controllers[10]),
-    MonthCalendarCard(context: context, initDate: DateTime(DateTime.now().year, 12), control:controllers[11]),
-  ];
+      MonthCalendarCard(
+          context: context,
+          initDate: DateTime(DateTime.now().year, 1),
+          control: controllers[0]),
+      MonthCalendarCard(
+          context: context,
+          initDate: DateTime(DateTime.now().year, 2),
+          control: controllers[1]),
+      MonthCalendarCard(
+          context: context,
+          initDate: DateTime(DateTime.now().year, 3),
+          control: controllers[2]),
+      MonthCalendarCard(
+          context: context,
+          initDate: DateTime(DateTime.now().year, 4),
+          control: controllers[3]),
+      MonthCalendarCard(
+          context: context,
+          initDate: DateTime(DateTime.now().year, 5),
+          control: controllers[4]),
+      MonthCalendarCard(
+          context: context,
+          initDate: DateTime(DateTime.now().year, 6),
+          control: controllers[5]),
+      MonthCalendarCard(
+          context: context,
+          initDate: DateTime(DateTime.now().year, 7),
+          control: controllers[6]),
+      MonthCalendarCard(
+          context: context,
+          initDate: DateTime(DateTime.now().year, 8),
+          control: controllers[7]),
+      MonthCalendarCard(
+          context: context,
+          initDate: DateTime(DateTime.now().year, 9),
+          control: controllers[8]),
+      MonthCalendarCard(
+          context: context,
+          initDate: DateTime(DateTime.now().year, 10),
+          control: controllers[9]),
+      MonthCalendarCard(
+          context: context,
+          initDate: DateTime(DateTime.now().year, 11),
+          control: controllers[10]),
+      MonthCalendarCard(
+          context: context,
+          initDate: DateTime(DateTime.now().year, 12),
+          control: controllers[11]),
+    ];
     return Scaffold(
-      backgroundColor:  AppColorScheme.ownWhite,
+      backgroundColor: AppColorScheme.ownWhite,
       appBar: AppBar(
         leading: ToggleSwitch(notifyParent: refresh),
-        backgroundColor:  AppColorScheme.antiFlash,
+        backgroundColor: AppColorScheme.antiFlash,
         elevation: 5,
-        shadowColor:  AppColorScheme.indigo,
+        shadowColor: AppColorScheme.indigo,
         surfaceTintColor: Colors.transparent,
         actions: <Widget>[
           LoginButton(),
@@ -155,23 +189,38 @@ class _MyHomePageState extends State<MyHomePage> {
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.arrow_back, color: AppColorScheme.indigo,),
+            icon: Icon(
+              Icons.arrow_back,
+              color: AppColorScheme.indigo,
+            ),
             label: 'Year',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.arrow_back, color: AppColorScheme.indigo,),
+            icon: Icon(
+              Icons.arrow_back,
+              color: AppColorScheme.indigo,
+            ),
             label: 'Month',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.reset_tv, color: AppColorScheme.indigo,),
+            icon: Icon(
+              Icons.reset_tv,
+              color: AppColorScheme.indigo,
+            ),
             label: 'Reset',
           ),
-                    BottomNavigationBarItem(
-            icon: Icon(Icons.arrow_forward, color: AppColorScheme.indigo,),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.arrow_forward,
+              color: AppColorScheme.indigo,
+            ),
             label: 'Month',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.arrow_forward, color: AppColorScheme.indigo,),
+            icon: Icon(
+              Icons.arrow_forward,
+              color: AppColorScheme.indigo,
+            ),
             label: 'Forward',
           ),
         ],
@@ -185,25 +234,23 @@ class _MyHomePageState extends State<MyHomePage> {
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
       ),
-      body:
-        GridView.count(
-          crossAxisCount: AutoScalingFactor.calendarsPerRow(context),
-          children: <Widget>[
-            yearCalendar[0],
-            yearCalendar[1], 
-            yearCalendar[2],
-            yearCalendar[3],
-            yearCalendar[4],
-            yearCalendar[5],
-            yearCalendar[6],
-            yearCalendar[7],
-            yearCalendar[8],
-            yearCalendar[9],
-            yearCalendar[10],
-            yearCalendar[11],
-
-          ],
-        ),
+      body: GridView.count(
+        crossAxisCount: AutoScalingFactor.calendarsPerRow(context),
+        children: <Widget>[
+          yearCalendar[0],
+          yearCalendar[1],
+          yearCalendar[2],
+          yearCalendar[3],
+          yearCalendar[4],
+          yearCalendar[5],
+          yearCalendar[6],
+          yearCalendar[7],
+          yearCalendar[8],
+          yearCalendar[9],
+          yearCalendar[10],
+          yearCalendar[11],
+        ],
+      ),
     );
   }
 }
@@ -217,145 +264,159 @@ class AutoScalingFactor {
   static bool isLowWidth(BuildContext context) {
     return MediaQuery.of(context).size.width < widthThresholdLow;
   }
+
   static bool isHighWidth(BuildContext context) {
     return MediaQuery.of(context).size.width < widthThresholdLow;
   }
+
   static bool isLowHeigth(BuildContext context) {
     return MediaQuery.of(context).size.height < heightThresholdLow;
   }
-   static bool isHighHeight(BuildContext context) {
+
+  static bool isHighHeight(BuildContext context) {
     return MediaQuery.of(context).size.height < heightThresholdLow;
   }
 
-  static double height(BuildContext context){
+  static double height(BuildContext context) {
     return MediaQuery.of(context).size.height;
   }
-  static double width(BuildContext context){
+
+  static double width(BuildContext context) {
     return MediaQuery.of(context).size.width;
   }
-  static double smallTextScaler(BuildContext context) => isLowWidth(context) ? 4 : 8;
-  static double largeTextScaler(BuildContext context) => isLowWidth(context) ? 8 : 16;
-  static int calendarsPerRow(BuildContext context){
-    if (width(context)/height(context) < 9/16){
+
+  static double smallTextScaler(BuildContext context) =>
+      isLowWidth(context) ? 4 : 8;
+  static double largeTextScaler(BuildContext context) =>
+      isLowWidth(context) ? 8 : 16;
+  static int calendarsPerRow(BuildContext context) {
+    if (width(context) / height(context) < 9 / 16) {
       return 2;
-    }
-    else if (width(context)/height(context) < 1){
+    } else if (width(context) / height(context) < 1) {
       return 3;
-    }
-    else if (width(context)/height(context) < 18/9){
+    } else if (width(context) / height(context) < 18 / 9) {
       return 4;
-    }
-    else {
+    } else {
       return 6;
     }
   }
-  static double cellTextScaler(BuildContext context){
-    double calendarWidth = MediaQuery.of(context).size.width/calendarsPerRow(context);
+
+  static double cellTextScaler(BuildContext context) {
+    double calendarWidth =
+        MediaQuery.of(context).size.width / calendarsPerRow(context);
     return calendarWidth / 40;
   }
 }
 
-class MonthCalendarCard extends Card{
-  MonthCalendarCard({super.key, required this.context, this.initDate, this.control,}):
-  super(margin: const EdgeInsets.all(7), child: SfCalendarTheme(data: SfCalendarThemeData(todayBackgroundColor:  AppColorScheme.indigo), child: MonthCalendar(context: context, initDate: initDate, control:control)));
+class MonthCalendarCard extends Card {
+  MonthCalendarCard({
+    super.key,
+    required this.context,
+    this.initDate,
+    this.control,
+  }) : super(
+            margin: const EdgeInsets.all(7),
+            child: SfCalendarTheme(
+                data: SfCalendarThemeData(
+                    todayBackgroundColor: AppColorScheme.indigo),
+                child: MonthCalendar(
+                    context: context, initDate: initDate, control: control)));
   final BuildContext context;
-  final DateTime?initDate;
-  final CalendarController?control;
+  final DateTime? initDate;
+  final CalendarController? control;
 }
 
 class MonthCalendar extends SfCalendar {
-  MonthCalendar({super.key, required this.context, DateTime?initDate, this.control}): 
-
-  initDate = initDate ?? DateTime(
-    DateTime.now().year, 
-    DateTime.now().month, 
-    DateTime.now().day,
-    08, 
-    45
-  ), 
-  super(
-    view: CalendarView.month, 
-    dataSource: _getCalendarDataSource(),
-    backgroundColor: AppColorScheme.ownWhite, 
-    initialDisplayDate: initDate, 
-    controller: control,
-    headerHeight:4.5*AutoScalingFactor.cellTextScaler(context),
-    viewNavigationMode: ViewNavigationMode.none,
-    headerStyle: CalendarHeaderStyle(
-      textStyle: TextStyle(color: AppColorScheme.ownBlack, fontSize: 2.5*AutoScalingFactor.cellTextScaler(context),),
-      textAlign: TextAlign.center,
-      backgroundColor: AppColorScheme.antiFlash),
-    monthViewSettings: MonthViewSettings(
-      appointmentDisplayMode: MonthAppointmentDisplayMode.appointment,
-      appointmentDisplayCount: 2,
-      monthCellStyle: MonthCellStyle(
-        leadingDatesTextStyle: TextStyle(
-          color: AppColorScheme.ownBlack, 
-          fontSize: AutoScalingFactor.cellTextScaler(context), 
-          height: -1.01,
-        ),
-        textStyle: TextStyle(
-          color: AppColorScheme.ownBlack, 
-          fontSize: AutoScalingFactor.cellTextScaler(context), 
-          height: -1.01,
-        ),
-        trailingDatesTextStyle: TextStyle(
-          color: AppColorScheme.ownBlack, 
-          fontSize: AutoScalingFactor.cellTextScaler(context), 
-          height: -1.01,
-        ),
-        leadingDatesBackgroundColor: AppColorScheme.antiFlash,
-        trailingDatesBackgroundColor: AppColorScheme.antiFlash,
-      ),
-    ),
-    appointmentTextStyle: TextStyle(
-      color: AppColorScheme.ownWhite,
-      fontSize: AutoScalingFactor.cellTextScaler(context),
-    ),
-    todayHighlightColor: AppColorScheme.indigo,
-    todayTextStyle: TextStyle(
-          color: AppColorScheme.ownBlack, 
-          fontSize: AutoScalingFactor.cellTextScaler(context), 
-          height: -1.01,
-    ),
-    selectionDecoration: BoxDecoration(
-      border: Border.all(color:  AppColorScheme.indigo, width: 2),
-    ),
-    viewHeaderHeight: 3*AutoScalingFactor.cellTextScaler(context),
-    viewHeaderStyle: ViewHeaderStyle(
-      backgroundColor:  AppColorScheme.ownWhite,
-      dayTextStyle: TextStyle(
-          color: AppColorScheme.ownBlack, 
-          fontSize: 2*AutoScalingFactor.cellTextScaler(context), 
-          height: -1.01,
-      ),
-    )
-  );
+  MonthCalendar(
+      {super.key, required this.context, DateTime? initDate, this.control})
+      : initDate = initDate ??
+            DateTime(DateTime.now().year, DateTime.now().month,
+                DateTime.now().day, 08, 45),
+        super(
+            view: CalendarView.month,
+            dataSource: _getCalendarDataSource(),
+            backgroundColor: AppColorScheme.ownWhite,
+            initialDisplayDate: initDate,
+            controller: control,
+            headerHeight: 4.5 * AutoScalingFactor.cellTextScaler(context),
+            viewNavigationMode: ViewNavigationMode.none,
+            headerStyle: CalendarHeaderStyle(
+                textStyle: TextStyle(
+                  color: AppColorScheme.ownBlack,
+                  fontSize: 2.5 * AutoScalingFactor.cellTextScaler(context),
+                ),
+                textAlign: TextAlign.center,
+                backgroundColor: AppColorScheme.antiFlash),
+            monthViewSettings: MonthViewSettings(
+              appointmentDisplayMode: MonthAppointmentDisplayMode.appointment,
+              appointmentDisplayCount: 2,
+              monthCellStyle: MonthCellStyle(
+                leadingDatesTextStyle: TextStyle(
+                  color: AppColorScheme.ownBlack,
+                  fontSize: AutoScalingFactor.cellTextScaler(context),
+                  height: -1.01,
+                ),
+                textStyle: TextStyle(
+                  color: AppColorScheme.ownBlack,
+                  fontSize: AutoScalingFactor.cellTextScaler(context),
+                  height: -1.01,
+                ),
+                trailingDatesTextStyle: TextStyle(
+                  color: AppColorScheme.ownBlack,
+                  fontSize: AutoScalingFactor.cellTextScaler(context),
+                  height: -1.01,
+                ),
+                leadingDatesBackgroundColor: AppColorScheme.antiFlash,
+                trailingDatesBackgroundColor: AppColorScheme.antiFlash,
+              ),
+            ),
+            appointmentTextStyle: TextStyle(
+              color: AppColorScheme.ownWhite,
+              fontSize: AutoScalingFactor.cellTextScaler(context),
+            ),
+            todayHighlightColor: AppColorScheme.indigo,
+            todayTextStyle: TextStyle(
+              color: AppColorScheme.ownBlack,
+              fontSize: AutoScalingFactor.cellTextScaler(context),
+              height: -1.01,
+            ),
+            selectionDecoration: BoxDecoration(
+              border: Border.all(color: AppColorScheme.indigo, width: 2),
+            ),
+            viewHeaderHeight: 3 * AutoScalingFactor.cellTextScaler(context),
+            viewHeaderStyle: ViewHeaderStyle(
+              backgroundColor: AppColorScheme.ownWhite,
+              dayTextStyle: TextStyle(
+                color: AppColorScheme.ownBlack,
+                fontSize: 2 * AutoScalingFactor.cellTextScaler(context),
+                height: -1.01,
+              ),
+            ));
 
   final BuildContext context;
   final DateTime initDate;
-  final CalendarController?control;
+  final CalendarController? control;
 }
 
 class DataSource extends CalendarDataSource {
- DataSource(List<Appointment> source) {
-   appointments = source;
- }
+  DataSource(List<Appointment> source) {
+    appointments = source;
+  }
 }
 
 DataSource _getCalendarDataSource() {
-   List<Appointment> appointments = <Appointment>[];
-   appointments.add(Appointment(
-     startTime: DateTime.now().subtract(Duration(hours:4*48)),
-     endTime: DateTime.now().add(Duration(hours: 48)),
-     isAllDay: true,
-     subject: 'Meeting',
-     color: Colors.blue,
-     startTimeZone: '',
-     endTimeZone: '',
-   ));
+  List<Appointment> appointments = <Appointment>[];
+  appointments.add(Appointment(
+    startTime: DateTime.now().subtract(Duration(hours: 4 * 48)),
+    endTime: DateTime.now().add(Duration(hours: 48)),
+    isAllDay: true,
+    subject: 'Meeting',
+    color: Colors.blue,
+    startTimeZone: '',
+    endTimeZone: '',
+  ));
 
-   return DataSource(appointments);
+  return DataSource(appointments);
 }
 
 class ToggleSwitch extends StatefulWidget {
@@ -375,30 +436,32 @@ class _ToggleSwitchState extends State<ToggleSwitch> {
       value: light,
       activeTrackColor: AppColorScheme.indigo,
       inactiveTrackColor: AppColorScheme.slate,
-      trackOutlineColor: WidgetStateProperty.resolveWith((final Set<WidgetState> states) {
-        if (states.contains(WidgetState.selected)) {
-          return null;
-        }
-        return const Color(0x66748590);
+      trackOutlineColor: WidgetStateProperty.resolveWith(
+        (final Set<WidgetState> states) {
+          if (states.contains(WidgetState.selected)) {
+            return null;
+          }
+          return const Color(0x66748590);
         },
       ),
-      thumbColor: WidgetStateProperty.resolveWith((final Set<WidgetState> states) {
-        if (states.contains(WidgetState.selected)) {
-          return null;
-        }
-        return AppColorScheme.ownWhite;
+      thumbColor: WidgetStateProperty.resolveWith(
+        (final Set<WidgetState> states) {
+          if (states.contains(WidgetState.selected)) {
+            return null;
+          }
+          return AppColorScheme.ownWhite;
         },
       ),
-      onChanged: (bool value) {setState(() {
-        light = value;
-        AppColorScheme.setDarkmode(value);
-        widget.notifyParent();
+      onChanged: (bool value) {
+        setState(() {
+          light = value;
+          AppColorScheme.setDarkmode(value);
+          widget.notifyParent();
         });
       },
     );
   }
 }
-
 
 class CalendarButton extends StatefulWidget {
   CalendarButton({super.key});
@@ -418,8 +481,7 @@ class _CalendarButtonState extends State<CalendarButton> {
           color: AppColorScheme.indigo,
           iconSize: 35,
           onPressed: () {
-            setState(() {
-            });
+            setState(() {});
           },
         ),
       ],
@@ -434,7 +496,7 @@ class LoginButton extends StatefulWidget {
   State<LoginButton> createState() => _LoginButtonState();
 }
 
-class _LoginButtonState extends State <LoginButton> {
+class _LoginButtonState extends State<LoginButton> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -447,7 +509,7 @@ class _LoginButtonState extends State <LoginButton> {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const RoutePage()),
+              MaterialPageRoute(builder: (context) => const LoginScreen()),
             );
           },
         ),
@@ -474,39 +536,5 @@ class RoutePage extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-class AppColorScheme{
-
-  static Color indigo = const Color(0xFF034875);
-  static Color lapisLazuli = const Color(0xFF799BB2);
-  static Color payne = const Color(0xFF4E7187);
-  static Color slate = const Color(0xFF748590);
-  static Color battleShip = const Color(0xFF999999);
-  static Color antiFlash = const Color(0xFFEEEEEE);
-  static Color ownBlack = const Color(0xFF000000);
-  static Color ownWhite = const Color(0xFFFFFFFF);
-  static void setDarkmode(bool darkmode){
-    if (darkmode){
-      indigo = const Color(0xFFAD450D);
-      lapisLazuli = const Color(0xFF799BB2);
-      payne = const Color(0xFF4E7187);
-      slate = const Color(0xFF034875);
-      battleShip = const Color(0xFFEEEEEE);
-      antiFlash = const Color(0xFF032F4C);
-      ownBlack = const Color(0xFFFFFFFF);
-      ownWhite = const Color(0xFF1C2C36);
-    }
-    else{
-      indigo = const Color(0xFF034875);
-      lapisLazuli = const Color(0xFF799BB2);
-      payne = const Color(0xFF4E7187);
-      slate = const Color(0xFF748590);
-      battleShip = const Color(0xFF999999);
-      antiFlash = const Color(0xFFEEEEEE);
-      ownBlack = const Color(0xFF000000);
-      ownWhite = const Color(0xFFFFFFFF);
-    }
   }
 }
