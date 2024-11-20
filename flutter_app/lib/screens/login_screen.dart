@@ -1,13 +1,58 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:crypto/crypto.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:local_captcha/local_captcha.dart';
 import 'package:skill_forge/utils/color_scheme.dart';
 import 'package:skill_forge/screens/youtube_player_screen.dart';
+import 'package:skill_forge/main.dart';
+
+// Global user state management
+class UserState {
+  static final UserState _instance = UserState._internal();
+  factory UserState() => _instance;
+  UserState._internal();
+
+  int? userId;
+  String? username;
+  bool? isAdmin;
+
+  Future<void> saveUserData(int userId, String username, bool isAdmin) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('userId', userId);
+    await prefs.setString('username', username);
+    await prefs.setBool('isAdmin', isAdmin);
+
+    this.userId = userId;
+    this.username = username;
+    this.isAdmin = isAdmin;
+  }
+
+  Future<void> loadUserData() async {
+    final prefs = await SharedPreferences.getInstance();
+    userId = prefs.getInt('userId');
+    username = prefs.getString('username');
+    isAdmin = prefs.getBool('isAdmin');
+  }
+
+  Future<void> clearUserData() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('userId');
+    await prefs.remove('username');
+    await prefs.remove('isAdmin');
+
+    userId = null;
+    username = null;
+    isAdmin = null;
+  }
+}
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
@@ -16,8 +61,73 @@ class _LoginScreenState extends State<LoginScreen> {
   final _passwordController = TextEditingController();
   final _captchaController = LocalCaptchaController();
   final _captchaTextController = TextEditingController();
+
   bool _isPasswordVisible = false;
   bool _rememberMe = false;
+
+  // Hash password using SHA-256
+  String _hashPassword(String password) {
+    return sha256.convert(utf8.encode(password)).toString();
+  }
+
+  // Perform login API call
+  Future<void> _performLogin() async {
+    if (!_formKey.currentState!.validate()) return;
+
+    // Validate captcha
+    final captchaValidation =
+        _captchaController.validate(_captchaTextController.text);
+    if (captchaValidation != LocalCaptchaValidation.valid) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Invalid captcha. Please try again.')),
+      );
+      return;
+    }
+
+    try {
+      final response = await http.post(
+        Uri.parse('http://127.0.0.1:5000/api/login'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'username': _usernameController.text,
+          'password_hash': _hashPassword(_passwordController.text),
+        }),
+      );
+
+      final responseData = jsonDecode(response.body);
+
+      if (responseData['success']) {
+        // Save user data globally
+        await UserState().saveUserData(
+          responseData['user_id'],
+          _usernameController.text,
+          responseData['is_admin'],
+        );
+
+        // Navigate to home screen
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => MyHomePage(title: 'Skill Forge')),
+        );
+      } else {
+        // Show error message from API
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(responseData['error'] ?? 'Login failed'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Network error. Please try again.'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
 
   @override
   void dispose() {
@@ -30,6 +140,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Existing UI code remains the same, just update the onPressed for login button
     return Scaffold(
       backgroundColor: AppColorScheme.ownWhite,
       appBar: AppBar(
@@ -207,13 +318,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Login erfolgreich')),
-                          );
-                        }
-                      },
+                      onPressed: _performLogin,
                       child: const Text('Anmelden'),
                     ),
                     const SizedBox(height: 16),
