@@ -71,13 +71,17 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   // Perform login API call
-  Future<void> _performLogin() async {
+  Future _performLogin() async {
     if (!_formKey.currentState!.validate()) return;
 
     // Validate captcha
     final captchaValidation =
         _captchaController.validate(_captchaTextController.text);
     if (captchaValidation != LocalCaptchaValidation.valid) {
+      setState(() {
+        _captchaController.refresh();
+        _captchaTextController.clear();
+      });
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Invalid captcha. Please try again.')),
       );
@@ -93,7 +97,6 @@ class _LoginScreenState extends State<LoginScreen> {
           'password_hash': _hashPassword(_passwordController.text),
         }),
       );
-
       final responseData = jsonDecode(response.body);
 
       if (responseData['success']) {
@@ -106,12 +109,16 @@ class _LoginScreenState extends State<LoginScreen> {
 
         // Navigate to home screen
         Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (context) => MyHomePage(title: 'Skill Forge')),
-        );
+            context,
+            MaterialPageRoute(
+                builder: (context) => MyHomePage(title: 'Skill Forge')));
       } else {
-        // Show error message from API
+        // Refresh captcha and clear captcha text field on failed login
+        setState(() {
+          _captchaController.refresh();
+          _captchaTextController.clear();
+        });
+
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(responseData['error'] ?? 'Login failed'),
@@ -120,6 +127,12 @@ class _LoginScreenState extends State<LoginScreen> {
         );
       }
     } catch (e) {
+      // Refresh captcha and clear captcha text field on network error
+      setState(() {
+        _captchaController.refresh();
+        _captchaTextController.clear();
+      });
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Network error. Please try again.'),
