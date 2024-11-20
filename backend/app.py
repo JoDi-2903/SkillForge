@@ -461,5 +461,92 @@ def cancel_event_registration():
             'error': str(e)
         }), 500
 
+@app.route('/api/login', methods=['POST'])
+def user_login():
+    """
+    User login endpoint with authentication and account management.
+    
+    Request Body:
+    - username: User's username
+    - password_hash: Hashed password
+    
+    Returns:
+    JSON response with login status and user details
+    """
+    # Check content type
+    if not request.is_json:
+        return jsonify({
+            'success': False, 
+            'error': 'Request must be JSON'
+        }), 415
+        
+    # Extract login credentials
+    data = request.get_json()
+    username = data.get('username')
+    provided_password_hash = data.get('password_hash')
+
+    # Validate input parameters
+    if not username or not provided_password_hash:
+        return jsonify({
+            'success': False,
+            'error': 'Username and password hash are required'
+        }), 400
+
+    try:
+        # Find user by username
+        user = Users.query.filter_by(Username=username).first()
+
+        # Check if user exists
+        if not user:
+            return jsonify({
+                'success': False,
+                'error': 'Invalid username or password'
+            }), 401
+
+        # Check if account is active
+        if not user.is_active:
+            return jsonify({
+                'success': False,
+                'error': 'Account is locked. Please contact support.'
+            }), 403
+
+        # Verify password
+        if user.PasswordHash != provided_password_hash:
+            # Increment login attempts
+            user.CountLoginAttempts += 1
+
+            # Lock account after 5 failed attempts
+            if user.CountLoginAttempts >= 5:
+                user.is_active = False
+                db.session.commit()
+                return jsonify({
+                    'success': False,
+                    'error': 'Too many failed login attempts. Account locked.'
+                }), 403
+
+            db.session.commit()
+            return jsonify({
+                'success': False,
+                'error': 'Invalid username or password'
+            }), 401
+
+        # Successful login: reset login attempts
+        user.CountLoginAttempts = 0
+        db.session.commit()
+
+        # Return user details
+        return jsonify({
+            'success': True,
+            'user_id': user.UserID,
+            'is_admin': user.is_admin
+        })
+
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({
+            'success': False,
+            'error': 'An unexpected error occurred'
+        }), 500
+
 if __name__ == '__main__':
     app.run(debug=True)
