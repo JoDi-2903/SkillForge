@@ -111,5 +111,77 @@ def get_training_courses():
     
     return jsonify(result)
 
+@app.route('/api/calendar-events', methods=['GET'])
+def get_calendar_events():
+    """
+    Retrieve calendar events with optional filtering.
+    
+    Query Parameters:
+    - language: 'DE' or 'EN' (required)
+    - user_id: Optional user ID to filter events
+    - event_type: Optional event type filter
+    - subject_area: Optional subject area filter
+    
+    Returns:
+    JSON response with filtered calendar events
+    """
+    # Extract query parameters
+    language = request.args.get('language', 'EN').upper()
+    user_id = request.args.get('user_id', type=int)
+    event_type = request.args.get('event_type')
+    subject_area = request.args.get('subject_area')
+
+    # Base query to join relevant tables
+    query = db.session.query(
+        TrainingCourses, 
+        EventInformation, 
+        EventDays
+    ).join(
+        EventInformation, 
+        TrainingCourses.TrainingID == EventInformation.describes
+    ).join(
+        EventDays, 
+        TrainingCourses.TrainingID == EventDays.consists_of
+    )
+
+    # Apply optional filters
+    if user_id:
+        query = query.join(
+            Participates, 
+            TrainingCourses.TrainingID == Participates.TrainingID
+        ).filter(Participates.UserID == user_id)
+
+    if event_type:
+        query = query.filter(EventInformation.EventType == event_type)
+
+    if subject_area:
+        query = query.filter(EventInformation.SubjectArea == subject_area)
+
+    # Execute query
+    results = query.all()
+
+    # Prepare response
+    calendar_events = []
+    for training, event_info, event_day in results:
+        # Select name and description based on language
+        name = event_info.NameEN if language == 'EN' else event_info.NameDE
+
+        event = {
+            'training_id': training.TrainingID,
+            'title': name,
+            'event_type': event_info.EventType,
+            'subject_area': event_info.SubjectArea,
+            'dates': [{
+                'date': event_day.EventDate.isoformat(),
+                'start_time': str(event_day.StartTime),
+                'end_time': str(event_day.EndTime),
+                'location': event_day.EventLocation,
+                'federal_state': event_day.LocationFederalState
+            }]
+        }
+        calendar_events.append(event)
+
+    return jsonify(calendar_events)
+
 if __name__ == '__main__':
     app.run(debug=True)
