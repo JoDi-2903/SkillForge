@@ -2,3 +2,5 @@ flask
 flask-sqlalchemy
 pymysql
 flask-cors
+argostranslate
+requests

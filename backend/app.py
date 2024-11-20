@@ -1,3 +1,4 @@
+import argostranslate.translate as argo
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
@@ -479,7 +480,7 @@ def user_login():
             'success': False, 
             'error': 'Request must be JSON'
         }), 415
-        
+
     # Extract login credentials
     data = request.get_json()
     username = data.get('username')
@@ -546,6 +547,133 @@ def user_login():
         return jsonify({
             'success': False,
             'error': 'An unexpected error occurred'
+        }), 500
+
+@app.route('/api/admin/create-event', methods=['POST'])
+def create_new_event():
+    """
+    Create a new event with optional automatic translation.
+    
+    Request Body Parameters:
+    - training_course_data: Minimum/Maximum participants
+    - event_info_data: Event details
+    - event_days_data: List of event dates/times
+    - auto_translate: Optional boolean flag for automatic translation
+    - input_language: 'DE' or 'EN' (default: 'EN')
+    
+    Returns:
+    JSON response with created event details or error message
+    """
+    # Parse request data
+    data = request.get_json()
+    
+    # Validate input
+    if not data:
+        return jsonify({
+            'success': False,
+            'error': 'No input data provided'
+        }), 400
+
+    # Extract translation settings
+    auto_translate = data.get('auto_translate', False)
+    input_language = data.get('input_language', 'EN').upper()
+
+    try:
+        # Create TrainingCourses entry
+        training_course_data = data.get('training_course_data', {})
+        new_training_course = TrainingCourses(
+            MinParticipants=training_course_data.get('min_participants', 7),
+            MaxParticipants=training_course_data.get('max_participants', 25)
+        )
+        db.session.add(new_training_course)
+        db.session.flush()  # Get the new TrainingID
+
+        # Handle event information with optional translation
+        event_info_data = data.get('event_info_data', {})
+        
+        # Prepare name and description
+        if auto_translate:
+            # Use single input with automatic translation
+            name = event_info_data.get('name')
+            description = event_info_data.get('description')
+
+            if not name or not description:
+                return jsonify({
+                    'success': False,
+                    'error': 'Name and description are required for auto-translation'
+                }), 400
+
+            # Perform translation
+            if input_language == 'DE':
+                name_de = name
+                name_en = argo.translate(name, "de", "en")
+                description_de = description
+                description_en = argo.translate(description, "de", "en")
+            else:
+                name_en = name
+                name_de = argo.translate(name, "en", "de")
+                description_en = description
+                description_de = argo.translate(description, "en", "de")
+        else:
+            # Manual input of both languages
+            name_de = event_info_data.get('name_de')
+            name_en = event_info_data.get('name_en')
+            description_de = event_info_data.get('description_de')
+            description_en = event_info_data.get('description_en')
+
+            if not (name_de and name_en and description_de and description_en):
+                return jsonify({
+                    'success': False,
+                    'error': 'Both language versions of name and description are required'
+                }), 400
+
+        # Create EventInformation entry
+        new_event_info = EventInformation(
+            NameDE=name_de,
+            NameEN=name_en,
+            DescriptionDE=description_de,
+            DescriptionEN=description_en,
+            SubjectArea=event_info_data.get('subject_area', 'Other'),
+            EventType=event_info_data.get('event_type', 'Other'),
+            describes=new_training_course.TrainingID
+        )
+        db.session.add(new_event_info)
+
+        # Create EventDays entries
+        event_days_data = data.get('event_days_data', [])
+        if not event_days_data:
+            return jsonify({
+                'success': False,
+                'error': 'At least one event date is required'
+            }), 400
+
+        event_days = []
+        for day_info in event_days_data:
+            new_event_day = EventDays(
+                EventDate=day_info.get('event_date'),
+                StartTime=day_info.get('start_time'),
+                EndTime=day_info.get('end_time'),
+                EventLocation=day_info.get('event_location'),
+                LocationFederalState=day_info.get('location_federal_state'),
+                consists_of=new_training_course.TrainingID
+            )
+            event_days.append(new_event_day)
+            db.session.add(new_event_day)
+
+        # Commit all changes
+        db.session.commit()
+
+        return jsonify({
+            'success': True,
+            'training_id': new_training_course.TrainingID,
+            'message': 'Event created successfully'
+        })
+
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({
+            'success': False,
+            'error': str(e)
         }), 500
 
 if __name__ == '__main__':
