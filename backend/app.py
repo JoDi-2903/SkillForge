@@ -284,5 +284,182 @@ def get_event_details():
 
     return jsonify(event_details)
 
+@app.route('/api/event-registration-status', methods=['GET'])
+def check_event_registration_status():
+    """
+    Check if a user is registered for a specific event.
+    
+    Query Parameters:
+    - training_id: Training/Event ID (required)
+    - user_id: User ID (required)
+    
+    Returns:
+    JSON response with registration status
+    """
+    # Extract query parameters
+    training_id = request.args.get('training_id', type=int)
+    user_id = request.args.get('user_id', type=int)
+
+    # Validate input parameters
+    if not training_id or not user_id:
+        return jsonify({
+            'error': 'Both training_id and user_id are required'
+        }), 400
+
+    # Check if user is registered for the event
+    registration = Participates.query.filter_by(
+        TrainingID=training_id, 
+        UserID=user_id
+    ).first()
+
+    return jsonify({
+        'is_registered': registration is not None
+    })
+
+@app.route('/api/book-event', methods=['POST'])
+def book_event():
+    """
+    Book an event for a user.
+    
+    JSON Body Parameters:
+    - training_id: Training/Event ID (required)
+    - user_id: User ID (required)
+    
+    Returns:
+    JSON response with booking status and details
+    """
+    # Check content type
+    if not request.is_json:
+        return jsonify({
+            'success': False, 
+            'error': 'Request must be JSON'
+        }), 415
+
+    # Parse request data
+    data = request.get_json()
+    training_id = data.get('training_id')
+    user_id = data.get('user_id')
+
+    # Validate input parameters
+    if not training_id or not user_id:
+        return jsonify({
+            'success': False,
+            'error': 'Both training_id and user_id are required'
+        }), 400
+
+    try:
+        # Check if user is already registered
+        existing_registration = Participates.query.filter_by(
+            TrainingID=training_id, 
+            UserID=user_id
+        ).first()
+
+        if existing_registration:
+            return jsonify({
+                'success': False,
+                'error': 'User is already registered for this event'
+            }), 400
+
+        # Check if training course exists
+        training_course = TrainingCourses.query.get(training_id)
+        if not training_course:
+            return jsonify({
+                'success': False,
+                'error': 'Event not found'
+            }), 404
+
+        # Count current participants
+        current_participants = Participates.query.filter_by(
+            TrainingID=training_id
+        ).count()
+
+        # Check if event is full
+        if current_participants >= training_course.MaxParticipants:
+            return jsonify({
+                'success': False,
+                'error': 'Maximum number of participants reached'
+            }), 400
+
+        # Create new registration
+        new_registration = Participates(
+            TrainingID=training_id, 
+            UserID=user_id
+        )
+        db.session.add(new_registration)
+        db.session.commit()
+
+        return jsonify({
+            'success': True,
+            'message': 'Successfully booked event'
+        })
+
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
+@app.route('/api/cancel-event-registration', methods=['DELETE'])
+def cancel_event_registration():
+    """
+    Cancel a user's registration for an event.
+    
+    JSON Body Parameters:
+    - training_id: Training/Event ID (required)
+    - user_id: User ID (required)
+    
+    Returns:
+    JSON response with cancellation status
+    """
+    # Check content type
+    if not request.is_json:
+        return jsonify({
+            'success': False, 
+            'error': 'Request must be JSON'
+        }), 415
+    
+    # Parse request data
+    data = request.get_json()
+    training_id = data.get('training_id')
+    user_id = data.get('user_id')
+
+    # Validate input parameters
+    if not training_id or not user_id:
+        return jsonify({
+            'success': False,
+            'error': 'Both training_id and user_id are required'
+        }), 400
+
+    try:
+        # Find the existing registration
+        registration = Participates.query.filter_by(
+            TrainingID=training_id, 
+            UserID=user_id
+        ).first()
+
+        # Check if registration exists
+        if not registration:
+            return jsonify({
+                'success': False,
+                'error': 'User is not registered for this event'
+            }), 400
+
+        # Remove the registration
+        db.session.delete(registration)
+        db.session.commit()
+
+        return jsonify({
+            'success': True,
+            'message': 'Successfully cancelled event registration'
+        })
+
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
 if __name__ == '__main__':
     app.run(debug=True)
