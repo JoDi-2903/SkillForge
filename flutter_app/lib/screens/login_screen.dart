@@ -5,7 +5,7 @@ import 'package:crypto/crypto.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:local_captcha/local_captcha.dart';
 import 'package:skill_forge/utils/color_scheme.dart';
-import 'package:skill_forge/screens/youtube_player_screen.dart';
+import 'package:skill_forge/screens/video_player_screen.dart';
 import 'package:skill_forge/main.dart';
 
 // Global user state management
@@ -340,8 +340,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) =>
-                                  const YoutubePlayerScreen()),
+                              builder: (context) => const VideoPlayerScreen()),
                         );
                       },
                       child: Text(

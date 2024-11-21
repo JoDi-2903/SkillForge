@@ -33,7 +33,7 @@ dependencies:
   syncfusion_flutter_calendar: ^27.1.58
   syncfusion_flutter_core: ^27.2.2
   local_captcha: ^1.0.4
-  youtube_player_flutter: ^9.1.1
+  video_player: ^2.9.2
   http: ^0.13.5
   crypto: ^3.0.2
   shared_preferences: ^2.1.1
@@ -93,3 +93,5 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+  assets:
+    - assets/videos/
