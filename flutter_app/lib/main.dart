@@ -175,7 +175,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.arrow_forward, color: AppColorScheme.indigo,),
-            label: 'Forward',
+            label: 'Year',
           ),
         ],
         backgroundColor: AppColorScheme.antiFlash,
@@ -259,15 +259,17 @@ class AutoScalingFactor {
 }
 
 class MonthCalendarCard extends Card{
-  MonthCalendarCard({super.key, required this.context, this.initDate, this.control,}):
-  super(margin: const EdgeInsets.all(7), child: SfCalendarTheme(data: SfCalendarThemeData(todayBackgroundColor:  AppColorScheme.indigo), child: MonthCalendar(context: context, initDate: initDate, control:control)));
+  MonthCalendarCard({super.key, required this.context, this.initDate, this.control, this.factorScaling = 1, this.cellOffset = 0,}):
+  super(margin: const EdgeInsets.all(7), child: SfCalendarTheme(data: SfCalendarThemeData(todayBackgroundColor:  AppColorScheme.indigo), child: MonthCalendar(context: context, initDate: initDate, control: control, factorScaling: factorScaling, cellOffset: cellOffset,)));
   final BuildContext context;
   final DateTime?initDate;
   final CalendarController?control;
+  final double factorScaling; 
+  final double cellOffset;
 }
 
 class MonthCalendar extends SfCalendar {
-  MonthCalendar({super.key, required this.context, DateTime?initDate, this.control}): 
+  MonthCalendar({super.key, required this.context, DateTime?initDate, this.control, required this.factorScaling, required this.cellOffset,}): 
 
   initDate = initDate ?? DateTime(
     DateTime.now().year, 
@@ -282,10 +284,10 @@ class MonthCalendar extends SfCalendar {
     backgroundColor: AppColorScheme.ownWhite, 
     initialDisplayDate: initDate, 
     controller: control,
-    headerHeight:4.5*AutoScalingFactor.cellTextScaler(context),
+    headerHeight:factorScaling*4.5*AutoScalingFactor.cellTextScaler(context),
     viewNavigationMode: ViewNavigationMode.none,
     headerStyle: CalendarHeaderStyle(
-      textStyle: TextStyle(color: AppColorScheme.ownBlack, fontSize: 2.5*AutoScalingFactor.cellTextScaler(context),),
+      textStyle: TextStyle(color: AppColorScheme.ownBlack, fontSize: factorScaling*2.5*AutoScalingFactor.cellTextScaler(context),),
       textAlign: TextAlign.center,
       backgroundColor: AppColorScheme.antiFlash),
     monthViewSettings: MonthViewSettings(
@@ -294,18 +296,18 @@ class MonthCalendar extends SfCalendar {
       monthCellStyle: MonthCellStyle(
         leadingDatesTextStyle: TextStyle(
           color: AppColorScheme.ownBlack, 
-          fontSize: AutoScalingFactor.cellTextScaler(context), 
-          height: -1.01,
+          fontSize: factorScaling*AutoScalingFactor.cellTextScaler(context), 
+          height: -1.01 + cellOffset,
         ),
         textStyle: TextStyle(
           color: AppColorScheme.ownBlack, 
-          fontSize: AutoScalingFactor.cellTextScaler(context), 
-          height: -1.01,
+          fontSize: factorScaling*AutoScalingFactor.cellTextScaler(context), 
+          height: -1.01 + cellOffset,
         ),
         trailingDatesTextStyle: TextStyle(
           color: AppColorScheme.ownBlack, 
-          fontSize: AutoScalingFactor.cellTextScaler(context), 
-          height: -1.01,
+          fontSize: factorScaling*AutoScalingFactor.cellTextScaler(context), 
+          height: -1.01 + cellOffset,
         ),
         leadingDatesBackgroundColor: AppColorScheme.antiFlash,
         trailingDatesBackgroundColor: AppColorScheme.antiFlash,
@@ -313,24 +315,24 @@ class MonthCalendar extends SfCalendar {
     ),
     appointmentTextStyle: TextStyle(
       color: AppColorScheme.ownWhite,
-      fontSize: AutoScalingFactor.cellTextScaler(context),
+      fontSize: factorScaling*AutoScalingFactor.cellTextScaler(context),
     ),
     todayHighlightColor: AppColorScheme.indigo,
     todayTextStyle: TextStyle(
           color: AppColorScheme.ownBlack, 
-          fontSize: AutoScalingFactor.cellTextScaler(context), 
-          height: -1.01,
+          fontSize: factorScaling*AutoScalingFactor.cellTextScaler(context), 
+          height: -1.01 + cellOffset,
     ),
     selectionDecoration: BoxDecoration(
       border: Border.all(color:  AppColorScheme.indigo, width: 2),
     ),
-    viewHeaderHeight: 3*AutoScalingFactor.cellTextScaler(context),
+    viewHeaderHeight: factorScaling*3*AutoScalingFactor.cellTextScaler(context),
     viewHeaderStyle: ViewHeaderStyle(
       backgroundColor:  AppColorScheme.ownWhite,
       dayTextStyle: TextStyle(
           color: AppColorScheme.ownBlack, 
-          fontSize: 2*AutoScalingFactor.cellTextScaler(context), 
-          height: -1.01,
+          fontSize: factorScaling*2*AutoScalingFactor.cellTextScaler(context), 
+          height: -1.01 + cellOffset,
       ),
     )
   );
@@ -338,6 +340,8 @@ class MonthCalendar extends SfCalendar {
   final BuildContext context;
   final DateTime initDate;
   final CalendarController?control;
+  final double factorScaling;
+  final double cellOffset;
 }
 
 class DataSource extends CalendarDataSource {
