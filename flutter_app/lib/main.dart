@@ -155,39 +155,7 @@ class _MyHomePageState extends State<MyHomePage> {
           CalendarButton(),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.arrow_back, color: AppColorScheme.indigo,),
-            label: 'Year',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.arrow_back, color: AppColorScheme.indigo,),
-            label: 'Month',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.reset_tv, color: AppColorScheme.indigo,),
-            label: 'Reset',
-          ),
-                    BottomNavigationBarItem(
-            icon: Icon(Icons.arrow_forward, color: AppColorScheme.indigo,),
-            label: 'Month',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.arrow_forward, color: AppColorScheme.indigo,),
-            label: 'Year',
-          ),
-        ],
-        backgroundColor: AppColorScheme.antiFlash,
-        selectedItemColor: AppColorScheme.indigo,
-        unselectedItemColor: AppColorScheme.indigo,
-        selectedFontSize: 12,
-        unselectedFontSize: 12,
-        type: BottomNavigationBarType.fixed,
-        elevation: 0.0,
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-      ),
+      bottomNavigationBar: MonthNavigationBar(onTapped: _onItemTapped, selectedIndex: _selectedIndex),
       body:
         GridView.count(
           crossAxisCount: AutoScalingFactor.calendarsPerRow(context),
@@ -516,4 +484,43 @@ class AppColorScheme{
       ownWhite = const Color(0xFFFFFFFF);
     }
   }
+}
+
+class MonthNavigationBar extends BottomNavigationBar{
+  MonthNavigationBar({super.key, required this.onTapped(int index), required this.selectedIndex,}):
+  super(
+    items: <BottomNavigationBarItem>[
+      BottomNavigationBarItem(
+        icon: Icon(Icons.arrow_back, color: AppColorScheme.indigo,),
+        label: 'Year',
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.arrow_back, color: AppColorScheme.indigo,),
+        label: 'Month',
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.reset_tv, color: AppColorScheme.indigo,),
+        label: 'Reset',
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.arrow_forward, color: AppColorScheme.indigo,),
+        label: 'Month',
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.arrow_forward, color: AppColorScheme.indigo,),
+        label: 'Year',
+      ),
+    ],
+    backgroundColor: AppColorScheme.antiFlash,
+    selectedItemColor: AppColorScheme.indigo,
+    unselectedItemColor: AppColorScheme.indigo,
+    selectedFontSize: 12,
+    unselectedFontSize: 12,
+    type: BottomNavigationBarType.fixed,
+    elevation: 0.0,
+    currentIndex: selectedIndex,
+    onTap: onTapped,
+  );
+  final Function(int index) onTapped;
+  final int selectedIndex;
 }

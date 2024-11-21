@@ -62,39 +62,7 @@ class _MonthPageState extends State<MonthPage>{
         surfaceTintColor: Colors.transparent,
       ),
       body: MonthCalendarCard(context: context, initDate: DateTime(DateTime.now().year, DateTime.now().month), control: controller, factorScaling: 2, cellOffset: 1.01,),
-      bottomNavigationBar: BottomNavigationBar(
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.arrow_back, color: AppColorScheme.indigo,),
-            label: 'Year',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.arrow_back, color: AppColorScheme.indigo,),
-            label: 'Month',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.reset_tv, color: AppColorScheme.indigo,),
-            label: 'Reset',
-          ),
-                    BottomNavigationBarItem(
-            icon: Icon(Icons.arrow_forward, color: AppColorScheme.indigo,),
-            label: 'Month',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.arrow_forward, color: AppColorScheme.indigo,),
-            label: 'Year',
-          ),
-        ],
-        backgroundColor: AppColorScheme.antiFlash,
-        selectedItemColor: AppColorScheme.indigo,
-        unselectedItemColor: AppColorScheme.indigo,
-        selectedFontSize: 12,
-        unselectedFontSize: 12,
-        type: BottomNavigationBarType.fixed,
-        elevation: 0.0,
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-      ),
+      bottomNavigationBar: MonthNavigationBar(onTapped: _onItemTapped, selectedIndex: _selectedIndex,)
     );
   }
 }
