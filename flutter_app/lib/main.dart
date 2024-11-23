@@ -558,7 +558,7 @@ class WeekCalendar extends SfCalendar {
     ),
     initialDisplayDate: initDate, 
     controller: control,
-    headerHeight:factorScaling*4.5*AutoScalingFactor.cellTextScaler(context),
+    headerHeight:factorScaling*6*AutoScalingFactor.cellTextScaler(context),
     viewNavigationMode: ViewNavigationMode.none,
     headerStyle: CalendarHeaderStyle(
       textStyle: TextStyle(color: AppColorScheme.ownBlack, fontSize: factorScaling*2.5*AutoScalingFactor.cellTextScaler(context),),
