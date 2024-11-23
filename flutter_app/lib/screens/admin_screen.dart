@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:skill_forge/utils/color_scheme.dart';
+import 'package:intl/intl.dart';
 
 class AdminEventScreen extends StatefulWidget {
   const AdminEventScreen({Key? key}) : super(key: key);
@@ -32,19 +33,19 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
   String _eventType = 'Other';
 
   final List<String> _subjectAreas = [
-    'Other',
-    'IT',
-    'Management',
-    'Communication',
-    'Technical Skills'
+    'Computer Science',
+    'Electrical Engineering',
+    'Mechanical Engineering',
+    'Mechatronics',
+    'Other'
   ];
 
   final List<String> _eventTypes = [
-    'Other',
     'Workshop',
     'Seminar',
-    'Training',
-    'Conference'
+    'Lecture',
+    'Further training',
+    'Other'
   ];
 
   @override
@@ -88,26 +89,25 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
         'min_participants': int.parse(_minParticipantsController.text),
         'max_participants': int.parse(_maxParticipantsController.text),
       },
-      'event_info_data': {
-        'name': _autoTranslate
-            ? (_inputLanguage == 'EN'
-                ? _nameEnController.text
-                : _nameDeController.text)
-            : null,
-        'description': _autoTranslate
-            ? (_inputLanguage == 'EN'
-                ? _descriptionEnController.text
-                : _descriptionDeController.text)
-            : null,
-        'name_de': !_autoTranslate ? _nameDeController.text : null,
-        'name_en': !_autoTranslate ? _nameEnController.text : null,
-        'description_de':
-            !_autoTranslate ? _descriptionDeController.text : null,
-        'description_en':
-            !_autoTranslate ? _descriptionEnController.text : null,
-        'subject_area': _subjectArea,
-        'event_type': _eventType,
-      },
+      'event_info_data': _autoTranslate
+          ? {
+              'name': _inputLanguage == 'EN'
+                  ? _nameEnController.text
+                  : _nameDeController.text,
+              'description': _inputLanguage == 'EN'
+                  ? _descriptionEnController.text
+                  : _descriptionDeController.text,
+              'subject_area': _subjectArea,
+              'event_type': _eventType,
+            }
+          : {
+              'name_de': _nameDeController.text,
+              'name_en': _nameEnController.text,
+              'description_de': _descriptionDeController.text,
+              'description_en': _descriptionEnController.text,
+              'subject_area': _subjectArea,
+              'event_type': _eventType,
+            },
       'event_days_data': _eventDayControllers
           .map((dayControllers) => {
                 'event_date': dayControllers['date']!.text,
@@ -201,35 +201,66 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                     },
                   ),
                 // Name and Description Fields
-                TextFormField(
-                  controller: _nameDeController,
-                  decoration: const InputDecoration(labelText: 'Name (German)'),
-                  validator: (value) =>
-                      value!.isEmpty ? 'Please enter a name' : null,
-                ),
-                TextFormField(
-                  controller: _nameEnController,
-                  decoration:
-                      const InputDecoration(labelText: 'Name (English)'),
-                  validator: (value) =>
-                      value!.isEmpty ? 'Please enter a name' : null,
-                ),
-                TextFormField(
-                  controller: _descriptionDeController,
-                  decoration:
-                      const InputDecoration(labelText: 'Description (German)'),
-                  maxLines: 3,
-                  validator: (value) =>
-                      value!.isEmpty ? 'Please enter a description' : null,
-                ),
-                TextFormField(
-                  controller: _descriptionEnController,
-                  decoration:
-                      const InputDecoration(labelText: 'Description (English)'),
-                  maxLines: 3,
-                  validator: (value) =>
-                      value!.isEmpty ? 'Please enter a description' : null,
-                ),
+                if (!_autoTranslate) ...[
+                  TextFormField(
+                    controller: _nameDeController,
+                    decoration:
+                        const InputDecoration(labelText: 'Name (German)'),
+                    validator: (value) =>
+                        value!.isEmpty ? 'Please enter a name' : null,
+                  ),
+                  TextFormField(
+                    controller: _nameEnController,
+                    decoration:
+                        const InputDecoration(labelText: 'Name (English)'),
+                    validator: (value) =>
+                        value!.isEmpty ? 'Please enter a name' : null,
+                  ),
+                  TextFormField(
+                    controller: _descriptionDeController,
+                    decoration: const InputDecoration(
+                        labelText: 'Description (German)'),
+                    maxLines: 3,
+                    validator: (value) =>
+                        value!.isEmpty ? 'Please enter a description' : null,
+                  ),
+                  TextFormField(
+                    controller: _descriptionEnController,
+                    decoration: const InputDecoration(
+                        labelText: 'Description (English)'),
+                    maxLines: 3,
+                    validator: (value) =>
+                        value!.isEmpty ? 'Please enter a description' : null,
+                  ),
+                ] else ...[
+                  TextFormField(
+                    controller: _autoTranslate
+                        ? (_inputLanguage == 'EN'
+                            ? _nameEnController
+                            : _nameDeController)
+                        : _nameEnController,
+                    decoration: InputDecoration(
+                        labelText: _inputLanguage == 'EN'
+                            ? 'Name (English)'
+                            : 'Name (German)'),
+                    validator: (value) =>
+                        value!.isEmpty ? 'Please enter a name' : null,
+                  ),
+                  TextFormField(
+                    controller: _autoTranslate
+                        ? (_inputLanguage == 'EN'
+                            ? _descriptionEnController
+                            : _descriptionDeController)
+                        : _descriptionEnController,
+                    decoration: InputDecoration(
+                        labelText: _inputLanguage == 'EN'
+                            ? 'Description (English)'
+                            : 'Description (German)'),
+                    maxLines: 3,
+                    validator: (value) =>
+                        value!.isEmpty ? 'Please enter a description' : null,
+                  ),
+                ],
                 // Additional Event Details
                 DropdownButtonFormField<String>(
                   value: _subjectArea,
