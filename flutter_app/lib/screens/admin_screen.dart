@@ -78,6 +78,55 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
     });
   }
 
+  Future<void> _selectDate(
+      BuildContext context, TextEditingController controller) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime(2030),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: ColorScheme.light(
+              primary: AppColorScheme.indigo,
+              onPrimary: Colors.white,
+              surface: AppColorScheme.antiFlash,
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+    if (picked != null) {
+      controller.text = DateFormat('yyyy-MM-dd').format(picked);
+    }
+  }
+
+  Future<void> _selectTime(
+      BuildContext context, TextEditingController controller) async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: ColorScheme.light(
+              primary: AppColorScheme.indigo,
+              onPrimary: Colors.white,
+              surface: AppColorScheme.antiFlash,
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+    if (picked != null) {
+      controller.text =
+          '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}:00';
+    }
+  }
+
   Future<void> _createEvent() async {
     if (!_formKey.currentState!.validate()) return;
 
@@ -331,20 +380,40 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                         children: [
                           TextFormField(
                             controller: dayControllers['date'],
-                            decoration: const InputDecoration(
-                                labelText: 'Date (YYYY-MM-DD)'),
+                            decoration: InputDecoration(
+                              labelText: 'Date',
+                              prefixIcon: Icon(Icons.calendar_today),
+                              suffixIcon: IconButton(
+                                icon: Icon(Icons.clear),
+                                onPressed: () =>
+                                    dayControllers['date']!.clear(),
+                              ),
+                            ),
+                            readOnly: true,
+                            onTap: () =>
+                                _selectDate(context, dayControllers['date']!),
                             validator: (value) =>
-                                value!.isEmpty ? 'Enter date' : null,
+                                value!.isEmpty ? 'Please select a date' : null,
                           ),
                           Row(
                             children: [
                               Expanded(
                                 child: TextFormField(
                                   controller: dayControllers['startTime'],
-                                  decoration: const InputDecoration(
-                                      labelText: 'Start Time'),
+                                  decoration: InputDecoration(
+                                    labelText: 'Start Time',
+                                    prefixIcon: Icon(Icons.access_time),
+                                    suffixIcon: IconButton(
+                                      icon: Icon(Icons.clear),
+                                      onPressed: () =>
+                                          dayControllers['startTime']!.clear(),
+                                    ),
+                                  ),
+                                  readOnly: true,
+                                  onTap: () => _selectTime(
+                                      context, dayControllers['startTime']!),
                                   validator: (value) => value!.isEmpty
-                                      ? 'Enter start time'
+                                      ? 'Please select start time'
                                       : null,
                                 ),
                               ),
@@ -352,10 +421,21 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                               Expanded(
                                 child: TextFormField(
                                   controller: dayControllers['endTime'],
-                                  decoration: const InputDecoration(
-                                      labelText: 'End Time'),
-                                  validator: (value) =>
-                                      value!.isEmpty ? 'Enter end time' : null,
+                                  decoration: InputDecoration(
+                                    labelText: 'End Time',
+                                    prefixIcon: Icon(Icons.access_time),
+                                    suffixIcon: IconButton(
+                                      icon: Icon(Icons.clear),
+                                      onPressed: () =>
+                                          dayControllers['endTime']!.clear(),
+                                    ),
+                                  ),
+                                  readOnly: true,
+                                  onTap: () => _selectTime(
+                                      context, dayControllers['endTime']!),
+                                  validator: (value) => value!.isEmpty
+                                      ? 'Please select end time'
+                                      : null,
                                 ),
                               ),
                             ],
