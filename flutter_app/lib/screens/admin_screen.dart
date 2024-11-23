@@ -230,23 +230,56 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
               children: [
                 // Translation Settings
                 SwitchListTile(
-                  title: const Text('Auto Translate'),
+                  title: Text(
+                    'Auto Translate',
+                    style: TextStyle(
+                      color: AppColorScheme.ownBlack,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
                   value: _autoTranslate,
                   onChanged: (bool value) {
                     setState(() {
                       _autoTranslate = value;
                     });
                   },
+                  activeColor: AppColorScheme.indigo,
+                  activeTrackColor: AppColorScheme.lapisLazuli,
+                  inactiveThumbColor: AppColorScheme.battleShip,
+                  inactiveTrackColor: AppColorScheme.antiFlash,
+                  contentPadding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 ),
                 if (_autoTranslate)
                   DropdownButtonFormField<String>(
                     value: _inputLanguage,
-                    decoration:
-                        const InputDecoration(labelText: 'Input Language'),
+                    decoration: InputDecoration(
+                      labelText: 'Input Language',
+                      labelStyle: TextStyle(color: AppColorScheme.ownBlack),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(color: AppColorScheme.slate),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(color: AppColorScheme.indigo),
+                      ),
+                    ),
+                    dropdownColor: AppColorScheme.ownWhite,
+                    style: TextStyle(color: AppColorScheme.ownBlack),
+                    icon: Icon(Icons.arrow_drop_down,
+                        color: AppColorScheme.indigo),
                     items: ['EN', 'DE'].map((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
-                        child: Text(value),
+                        child: Text(
+                          value,
+                          style: TextStyle(color: AppColorScheme.ownBlack),
+                        ),
                       );
                     }).toList(),
                     onChanged: (String? newValue) {
@@ -259,30 +292,93 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                 if (!_autoTranslate) ...[
                   TextFormField(
                     controller: _nameDeController,
-                    decoration:
-                        const InputDecoration(labelText: 'Name (German)'),
+                    decoration: InputDecoration(
+                      labelText: 'Name (German)',
+                      labelStyle: TextStyle(color: AppColorScheme.ownBlack),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(color: AppColorScheme.slate),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(color: AppColorScheme.indigo),
+                      ),
+                    ),
+                    style: TextStyle(color: AppColorScheme.ownBlack),
+                    cursorColor: AppColorScheme.indigo,
                     validator: (value) =>
                         value!.isEmpty ? 'Please enter a name' : null,
                   ),
+                  const SizedBox(height: 16),
                   TextFormField(
                     controller: _nameEnController,
-                    decoration:
-                        const InputDecoration(labelText: 'Name (English)'),
+                    decoration: InputDecoration(
+                      labelText: 'Name (English)',
+                      labelStyle: TextStyle(color: AppColorScheme.ownBlack),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(color: AppColorScheme.slate),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(color: AppColorScheme.indigo),
+                      ),
+                    ),
+                    style: TextStyle(color: AppColorScheme.ownBlack),
+                    cursorColor: AppColorScheme.indigo,
                     validator: (value) =>
                         value!.isEmpty ? 'Please enter a name' : null,
                   ),
+                  const SizedBox(height: 16),
                   TextFormField(
                     controller: _descriptionDeController,
-                    decoration: const InputDecoration(
-                        labelText: 'Description (German)'),
+                    decoration: InputDecoration(
+                      labelText: 'Description (German)',
+                      labelStyle: TextStyle(color: AppColorScheme.ownBlack),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(color: AppColorScheme.slate),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(color: AppColorScheme.indigo),
+                      ),
+                    ),
+                    style: TextStyle(color: AppColorScheme.ownBlack),
+                    cursorColor: AppColorScheme.indigo,
                     maxLines: 3,
                     validator: (value) =>
                         value!.isEmpty ? 'Please enter a description' : null,
                   ),
+                  const SizedBox(height: 16),
                   TextFormField(
                     controller: _descriptionEnController,
-                    decoration: const InputDecoration(
-                        labelText: 'Description (English)'),
+                    decoration: InputDecoration(
+                      labelText: 'Description (English)',
+                      labelStyle: TextStyle(color: AppColorScheme.ownBlack),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(color: AppColorScheme.slate),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(color: AppColorScheme.indigo),
+                      ),
+                    ),
+                    style: TextStyle(color: AppColorScheme.ownBlack),
+                    cursorColor: AppColorScheme.indigo,
                     maxLines: 3,
                     validator: (value) =>
                         value!.isEmpty ? 'Please enter a description' : null,
@@ -295,12 +391,28 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                             : _nameDeController)
                         : _nameEnController,
                     decoration: InputDecoration(
-                        labelText: _inputLanguage == 'EN'
-                            ? 'Name (English)'
-                            : 'Name (German)'),
+                      labelText: _inputLanguage == 'EN'
+                          ? 'Name (English)'
+                          : 'Name (German)',
+                      labelStyle: TextStyle(color: AppColorScheme.ownBlack),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(color: AppColorScheme.slate),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(color: AppColorScheme.indigo),
+                      ),
+                    ),
+                    style: TextStyle(color: AppColorScheme.ownBlack),
+                    cursorColor: AppColorScheme.indigo,
                     validator: (value) =>
                         value!.isEmpty ? 'Please enter a name' : null,
                   ),
+                  const SizedBox(height: 16),
                   TextFormField(
                     controller: _autoTranslate
                         ? (_inputLanguage == 'EN'
@@ -308,9 +420,24 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                             : _descriptionDeController)
                         : _descriptionEnController,
                     decoration: InputDecoration(
-                        labelText: _inputLanguage == 'EN'
-                            ? 'Description (English)'
-                            : 'Description (German)'),
+                      labelText: _inputLanguage == 'EN'
+                          ? 'Description (English)'
+                          : 'Description (German)',
+                      labelStyle: TextStyle(color: AppColorScheme.ownBlack),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(color: AppColorScheme.slate),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(color: AppColorScheme.indigo),
+                      ),
+                    ),
+                    style: TextStyle(color: AppColorScheme.ownBlack),
+                    cursorColor: AppColorScheme.indigo,
                     maxLines: 3,
                     validator: (value) =>
                         value!.isEmpty ? 'Please enter a description' : null,
@@ -319,11 +446,32 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                 // Additional Event Details
                 DropdownButtonFormField<String>(
                   value: _subjectArea,
-                  decoration: const InputDecoration(labelText: 'Subject Area'),
+                  decoration: InputDecoration(
+                    labelText: 'Subject Area',
+                    labelStyle: TextStyle(color: AppColorScheme.ownBlack),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(color: AppColorScheme.slate),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(color: AppColorScheme.indigo),
+                    ),
+                  ),
+                  dropdownColor: AppColorScheme.ownWhite,
+                  style: TextStyle(color: AppColorScheme.ownBlack),
+                  icon:
+                      Icon(Icons.arrow_drop_down, color: AppColorScheme.indigo),
                   items: _subjectAreas.map((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
-                      child: Text(value),
+                      child: Text(
+                        value,
+                        style: TextStyle(color: AppColorScheme.ownBlack),
+                      ),
                     );
                   }).toList(),
                   onChanged: (String? newValue) {
@@ -332,13 +480,35 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                     });
                   },
                 ),
+                const SizedBox(height: 16),
                 DropdownButtonFormField<String>(
                   value: _eventType,
-                  decoration: const InputDecoration(labelText: 'Event Type'),
+                  decoration: InputDecoration(
+                    labelText: 'Event Type',
+                    labelStyle: TextStyle(color: AppColorScheme.ownBlack),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(color: AppColorScheme.slate),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(color: AppColorScheme.indigo),
+                    ),
+                  ),
+                  dropdownColor: AppColorScheme.ownWhite,
+                  style: TextStyle(color: AppColorScheme.ownBlack),
+                  icon:
+                      Icon(Icons.arrow_drop_down, color: AppColorScheme.indigo),
                   items: _eventTypes.map((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
-                      child: Text(value),
+                      child: Text(
+                        value,
+                        style: TextStyle(color: AppColorScheme.ownBlack),
+                      ),
                     );
                   }).toList(),
                   onChanged: (String? newValue) {
@@ -411,8 +581,12 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                 ),
                 // Event Days Section
                 const SizedBox(height: 16),
-                Text('Event Days',
-                    style: Theme.of(context).textTheme.titleMedium),
+                Text(
+                  'Event Days',
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        color: AppColorScheme.ownBlack,
+                      ),
+                ),
                 ...List.generate(_eventDayControllers.length, (index) {
                   final dayControllers = _eventDayControllers[index];
                   return Card(
@@ -610,9 +784,10 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                     ),
                   );
                 }),
+                const SizedBox(height: 16),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColorScheme.indigo,
+                    backgroundColor: AppColorScheme.lapisLazuli,
                     foregroundColor: AppColorScheme.ownWhite,
                     padding: const EdgeInsets.symmetric(
                         vertical: 16, horizontal: 24),
@@ -623,7 +798,7 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                   ),
                   onPressed: _addEventDay,
                   child: const Text(
-                    'Add Another Event Day',
+                    'Add another Event Day',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
@@ -639,9 +814,12 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                     foregroundColor: AppColorScheme.ownWhite,
                     padding: const EdgeInsets.symmetric(vertical: 16),
                   ),
-                  child: Text(
+                  child: const Text(
                     'Create Event',
-                    style: TextStyle(color: AppColorScheme.ownWhite),
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ),
               ],
