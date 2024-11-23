@@ -1,9 +1,9 @@
-
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:skill_forge/utils/color_scheme.dart';
 import 'main.dart';
 
-class ButtonBack extends StatefulWidget{
+class ButtonBack extends StatefulWidget {
   final Function() backFunction;
   const ButtonBack({super.key, required this.backFunction()});
 
@@ -11,7 +11,7 @@ class ButtonBack extends StatefulWidget{
   State<ButtonBack> createState() => _ButtonBackState();
 }
 
-class _ButtonBackState extends State<ButtonBack>{
+class _ButtonBackState extends State<ButtonBack> {
   @override
   Widget build(BuildContext context) {
     return Column(

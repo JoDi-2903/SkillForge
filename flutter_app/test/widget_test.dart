@@ -7,24 +7,26 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:flutter_application_1/main.dart';
+import 'package:skill_forge/main.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
+  testWidgets('Initial app test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
     await tester.pumpWidget(const MyApp());
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    // Verify basic app structure
+    expect(find.byType(MaterialApp), findsOneWidget);
+    expect(find.byType(MyHomePage), findsOneWidget);
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    // Test navigation bar presence
+    expect(find.byType(BottomNavigationBar), findsOneWidget);
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // Test calendar presence
+    expect(find.byType(GridView), findsOneWidget);
+
+    // Test app bar buttons
+    expect(find.byType(LoginButton), findsOneWidget);
+    expect(find.byType(MonthButton), findsOneWidget);
+    expect(find.byType(ToggleSwitch), findsOneWidget);
   });
 }
