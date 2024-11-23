@@ -1,6 +1,3 @@
-// lib/utils/color_scheme.dart
-import 'package:flutter/material.dart';
-
 class AppColorScheme {
   static Color indigo = const Color(0xFF034875);
   static Color lapisLazuli = const Color(0xFF799BB2);
@@ -12,14 +9,14 @@ class AppColorScheme {
   static Color ownWhite = const Color(0xFFFFFFFF);
   static void setDarkmode(bool darkmode) {
     if (darkmode) {
-      indigo = const Color(0xFFAD450D);
+      indigo = const Color(0xFFE05408);
       lapisLazuli = const Color(0xFF799BB2);
       payne = const Color(0xFF4E7187);
       slate = const Color(0xFF034875);
       battleShip = const Color(0xFFEEEEEE);
-      antiFlash = const Color(0xFF032F4C);
+      antiFlash = const Color(0xFF001D31);
       ownBlack = const Color(0xFFFFFFFF);
-      ownWhite = const Color(0xFF1C2C36);
+      ownWhite = const Color(0xFF00171F);
     } else {
       indigo = const Color(0xFF034875);
       lapisLazuli = const Color(0xFF799BB2);
