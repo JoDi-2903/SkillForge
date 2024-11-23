@@ -7,6 +7,7 @@ import 'package:local_captcha/local_captcha.dart';
 import 'package:skill_forge/utils/color_scheme.dart';
 import 'package:skill_forge/screens/video_player_screen.dart';
 import 'package:skill_forge/main.dart';
+import 'package:skill_forge/utils/languages.dart';
 
 // Global user state management
 class UserState {
@@ -83,7 +84,7 @@ class _LoginScreenState extends State<LoginScreen> {
         _captchaTextController.clear();
       });
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Invalid captcha. Please try again.')),
+        SnackBar(content: Text(AppStrings.wrongCaptcha)),
       );
       return;
     }
@@ -111,7 +112,7 @@ class _LoginScreenState extends State<LoginScreen> {
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-                builder: (context) => MyHomePage(title: 'Skill Forge')));
+                builder: (context) => MyHomePage(title: AppStrings.hompageTitle)));
       } else {
         // Refresh captcha and clear captcha text field on failed login
         setState(() {
@@ -121,7 +122,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(responseData['error'] ?? 'Login failed'),
+            content: Text(responseData['error'] ?? AppStrings.failedLogin),
             backgroundColor: Colors.red,
           ),
         );
@@ -135,7 +136,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Network error. Please try again.'),
+          content: Text(AppStrings.networkError),
           backgroundColor: Colors.red,
         ),
       );
@@ -162,7 +163,7 @@ class _LoginScreenState extends State<LoginScreen> {
         shadowColor: AppColorScheme.indigo,
         surfaceTintColor: Colors.transparent,
         title: Text(
-          'Anmelden',
+          AppStrings.login,
           style: TextStyle(color: AppColorScheme.ownBlack),
         ),
         leading: IconButton(
@@ -191,7 +192,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     TextFormField(
                       controller: _usernameController,
                       decoration: InputDecoration(
-                        labelText: 'Benutzername',
+                        labelText: AppStrings.username,
                         prefixIcon:
                             Icon(Icons.person, color: AppColorScheme.indigo),
                         border: OutlineInputBorder(
@@ -208,7 +209,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Bitte geben Sie einen Benutzernamen ein';
+                          return AppStrings.insertUsername;
                         }
                         return null;
                       },
@@ -218,7 +219,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       controller: _passwordController,
                       obscureText: !_isPasswordVisible,
                       decoration: InputDecoration(
-                        labelText: 'Passwort',
+                        labelText: AppStrings.password,
                         prefixIcon:
                             Icon(Icons.lock, color: AppColorScheme.indigo),
                         suffixIcon: IconButton(
@@ -248,7 +249,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Bitte geben Sie ein Passwort ein';
+                          return AppStrings.insertPassword;
                         }
                         return null;
                       },
@@ -278,7 +279,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             child: TextFormField(
                               controller: _captchaTextController,
                               decoration: InputDecoration(
-                                labelText: 'Captcha eingeben',
+                                labelText: AppStrings.captcha,
                                 suffixIcon: IconButton(
                                   icon: Icon(Icons.refresh,
                                       color: AppColorScheme.indigo),
@@ -287,14 +288,14 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return 'Bitte geben Sie den Captcha-Code ein';
+                                  return AppStrings.insertCaptcha;
                                 }
                                 // Korrigierte Validierung
                                 final validation =
                                     _captchaController.validate(value);
                                 if (validation !=
                                     LocalCaptchaValidation.valid) {
-                                  return 'Ungültiger Captcha-Code';
+                                  return AppStrings.wrongCaptcha;
                                 }
                                 return null;
                               },
@@ -316,7 +317,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           activeColor: AppColorScheme.indigo,
                         ),
                         Text(
-                          'Angemeldet bleiben',
+                          AppStrings.rememberMe,
                           style: TextStyle(color: AppColorScheme.ownBlack),
                         ),
                       ],
@@ -332,7 +333,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                       onPressed: _performLogin,
-                      child: const Text('Anmelden'),
+                      child: Text(AppStrings.login),
                     ),
                     const SizedBox(height: 16),
                     TextButton(
@@ -344,7 +345,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         );
                       },
                       child: Text(
-                        'Passwort vergessen?',
+                        AppStrings.forgotPassword,
                         style: TextStyle(color: AppColorScheme.indigo),
                       ),
                     ),

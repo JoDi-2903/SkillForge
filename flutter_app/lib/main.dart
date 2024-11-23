@@ -6,6 +6,7 @@ import 'package:skill_forge/screens/login_screen.dart';
 import 'package:skill_forge/utils/color_scheme.dart';
 import 'monthPage.dart';
 import 'weekPage.dart';
+import 'package:skill_forge/utils/languages.dart';
 
 void main() {
   runApp(const MyApp());
@@ -80,7 +81,7 @@ class _MyHomePageState extends State<MyHomePage> {
     CalendarController(),
     CalendarController(),
   ];
-  static Locale language = const Locale('en');
+  static Locale language = Locale(AppStrings.english);
 
   @override
   void initState() {
@@ -128,6 +129,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   dynamic refresh() {
     setState(() {});
+    AppStrings.refreshLanguage(language.toString());
   }
   
   dynamic setLocale(String code){
@@ -193,10 +195,10 @@ class _MyHomePageState extends State<MyHomePage> {
         GlobalCupertinoLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
       ],
-      supportedLocales: const <Locale>[
-        Locale('zh'),
-        Locale('en'),
-        Locale('de'),
+      supportedLocales: <Locale>[
+        Locale(AppStrings.chinese),
+        Locale(AppStrings.english),
+        Locale(AppStrings.german),
       ],
       locale: language,
       home: Scaffold(
@@ -208,9 +210,10 @@ class _MyHomePageState extends State<MyHomePage> {
         shadowColor: AppColorScheme.indigo,
         surfaceTintColor: Colors.transparent,
         actions: <Widget>[
-          LoginButton(),
-          WeekButton(),
-          MonthButton(),
+          const LoginButton(),
+          LanguageButton(language: setLocale),
+          const WeekButton(),
+          const MonthButton(),
         ],
       ),
       bottomNavigationBar: MonthNavigationBar(onTapped: _onItemTapped, selectedIndex: _selectedIndex),
@@ -487,8 +490,8 @@ class LanguageButton extends StatefulWidget {
 
 class _LanguageButtonState extends State<LanguageButton> {
   
-final List<String> list = <String>['de','en'];
-String dropdownValue = 'en';
+final List<String> list = <String>[AppStrings.german, AppStrings.english, AppStrings.chinese];
+String dropdownValue = AppStrings.english;
   @override
   Widget build(BuildContext context) {
     return DropdownButton<String>(
@@ -565,23 +568,23 @@ class MonthNavigationBar extends BottomNavigationBar{
     items: <BottomNavigationBarItem>[
       BottomNavigationBarItem(
         icon: Icon(Icons.arrow_back, color: AppColorScheme.indigo,),
-        label: 'Year',
+        label: AppStrings.yearLabel,
       ),
       BottomNavigationBarItem(
         icon: Icon(Icons.arrow_back, color: AppColorScheme.indigo,),
-        label: 'Month',
+        label: AppStrings.monthLabel,
       ),
       BottomNavigationBarItem(
         icon: Icon(Icons.reset_tv, color: AppColorScheme.indigo,),
-        label: 'Reset',
+        label: AppStrings.resetLabel,
       ),
       BottomNavigationBarItem(
         icon: Icon(Icons.arrow_forward, color: AppColorScheme.indigo,),
-        label: 'Month',
+        label: AppStrings.monthLabel,
       ),
       BottomNavigationBarItem(
         icon: Icon(Icons.arrow_forward, color: AppColorScheme.indigo,),
-        label: 'Year',
+        label: AppStrings.yearLabel,
       ),
     ],
     backgroundColor: AppColorScheme.antiFlash,
@@ -676,15 +679,15 @@ class WeekNavigationBar extends BottomNavigationBar{
     items: <BottomNavigationBarItem>[
       BottomNavigationBarItem(
         icon: Icon(Icons.arrow_back, color: AppColorScheme.indigo,),
-        label: 'Week',
+        label: AppStrings.weekLabel,
       ),
       BottomNavigationBarItem(
         icon: Icon(Icons.reset_tv, color: AppColorScheme.indigo,),
-        label: 'Reset',
+        label: AppStrings.resetLabel,
       ),
       BottomNavigationBarItem(
         icon: Icon(Icons.arrow_forward, color: AppColorScheme.indigo,),
-        label: 'Week',
+        label: AppStrings.weekLabel,
       ),
 
     ],
