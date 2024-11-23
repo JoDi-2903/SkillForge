@@ -490,22 +490,34 @@ class LanguageButton extends StatefulWidget {
 
 class _LanguageButtonState extends State<LanguageButton> {
   
-final List<String> list = <String>[AppStrings.german, AppStrings.english, AppStrings.chinese];
-String dropdownValue = AppStrings.english;
+final List<Language> list = <Language>[german, english, chinese];
+Language dropdownValue = english;
   @override
   Widget build(BuildContext context) {
-    return DropdownButton<String>(
+    return DropdownButton<Language>(
       value: dropdownValue,
-      onChanged: (String? value) {
+      icon: const Visibility (visible:false, child: Icon(Icons.arrow_downward)),
+      dropdownColor: AppColorScheme.antiFlash,
+      focusColor: AppColorScheme.antiFlash,
+      underline: Container(
+        height: 0,
+        color: AppColorScheme.antiFlash,
+      ),
+      style: const TextStyle(
+        fontSize: 24,
+        fontFamily: 'Noto Color Emoji',
+        fontFamilyFallback: ['Noto Color Emoji'],
+      ),
+      onChanged: (Language? lang) {
         setState(() {
-          dropdownValue = value!;
+          dropdownValue = lang!;
         });
-        widget.language(dropdownValue);
+        widget.language(dropdownValue.identifier);
       },
-      items: list.map<DropdownMenuItem<String>>((String value) {
-        return DropdownMenuItem<String>(
+      items: list.map<DropdownMenuItem<Language>>((Language value) {
+        return DropdownMenuItem<Language>(
           value: value,
-          child: Text(value),
+          child: Text(value.icon),
         );
       }).toList(),
     );
