@@ -26,7 +26,7 @@ void main() {
 
     // Test app bar buttons
     expect(find.byType(LoginButton), findsOneWidget);
-    expect(find.byType(CalendarButton), findsOneWidget);
+    expect(find.byType(MonthButton), findsOneWidget);
     expect(find.byType(ToggleSwitch), findsOneWidget);
   });
 }
