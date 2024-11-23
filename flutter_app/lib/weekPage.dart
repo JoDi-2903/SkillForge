@@ -3,15 +3,17 @@ import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'buttons.dart';
 import 'main.dart';
 
-class MonthPage extends StatefulWidget{
-  const MonthPage({super.key});
+class WeekPage extends StatefulWidget{
+  const WeekPage({super.key});
 
   @override
-  State<MonthPage> createState() => _MonthPageState();
+  State<WeekPage> createState() => _WeekPageState();
 }
 
-class _MonthPageState extends State<MonthPage>{
+class _WeekPageState extends State<WeekPage>{
   int _selectedIndex = 0;
+  int weekOffset = 0;
+  int monthOffset = 0;
   late CalendarController controller;
 
   @override
@@ -24,23 +26,13 @@ class _MonthPageState extends State<MonthPage>{
     setState(() {
       _selectedIndex = index;
       if (index == 0){
-        for (var j = 0; j < 12; j++){
-          controller.backward!();
-        }
+        controller.backward!(); 
       }
-      else if (index == 4){
-        for (var j = 0; j < 12; j++){
-          controller.forward!();
-        }
-      }
-      else if (index == 3){  
+      else if (index == 2){
         controller.forward!();
       }
-      else if (index == 1){
-        controller.backward!();
-      }
       else{ 
-        controller.displayDate = DateTime(DateTime.now().year, DateTime.now().month);
+        controller.displayDate = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
       }
     });
   }
@@ -60,8 +52,8 @@ class _MonthPageState extends State<MonthPage>{
         shadowColor:  AppColorScheme.indigo,
         surfaceTintColor: Colors.transparent,
       ),
-      body: MonthCalendarCard(context: context, initDate: DateTime(DateTime.now().year, DateTime.now().month), control: controller, factorScaling: 2, cellOffset: 1.01,),
-      bottomNavigationBar: MonthNavigationBar(onTapped: _onItemTapped, selectedIndex: _selectedIndex,)
+      body: WeekCalendarCard(context: context, initDate: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day,), control: controller, factorScaling: 1.5, cellOffset: 1.01,),
+      bottomNavigationBar: WeekNavigationBar(onTapped: _onItemTapped, selectedIndex: _selectedIndex,)
     );
   }
 }
