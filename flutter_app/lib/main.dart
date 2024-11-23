@@ -176,7 +176,7 @@ class _MyHomePageState extends State<MyHomePage> {
           actions: <Widget>[
             LanguageButton(language: setLocale),
             const LoginButton(),
-            const CalendarButton(),
+            const MonthButton(),
           ],
         ),
         bottomNavigationBar: BottomNavigationBar(
@@ -438,8 +438,8 @@ class _ToggleSwitchState extends State<ToggleSwitch> {
   }
 }
 
-class CalendarButton extends StatefulWidget {
-  const CalendarButton({super.key,});
+class MonthButton extends StatefulWidget {
+  const MonthButton({super.key,});
 
   @override
   State<MonthButton> createState() => _MonthButtonState();
@@ -728,7 +728,7 @@ class WeekNavigationBar extends BottomNavigationBar{
 }
 
 class WeekButton extends StatefulWidget {
-  WeekButton({super.key});
+  const WeekButton({super.key});
 
   @override
   State<WeekButton> createState() => _WeekButtonState();
