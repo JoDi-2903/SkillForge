@@ -251,6 +251,7 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                   contentPadding:
                       const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 ),
+                const SizedBox(height: 16),
                 if (_autoTranslate)
                   DropdownButtonFormField<String>(
                     value: _inputLanguage,
@@ -288,6 +289,7 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                       });
                     },
                   ),
+                const SizedBox(height: 16),
                 // Name and Description Fields
                 if (!_autoTranslate) ...[
                   TextFormField(
@@ -444,6 +446,7 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                   ),
                 ],
                 // Additional Event Details
+                const SizedBox(height: 16),
                 DropdownButtonFormField<String>(
                   value: _subjectArea,
                   decoration: InputDecoration(
@@ -517,12 +520,13 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                     });
                   },
                 ),
+                const SizedBox(height: 16),
                 // Participant Limits
                 Row(
                   children: [
                     Expanded(
                       child: TextFormField(
-                        controller: _maxParticipantsController,
+                        controller: _minParticipantsController,
                         decoration: InputDecoration(
                           labelText: 'Min Participants',
                           labelStyle: TextStyle(color: AppColorScheme.ownBlack),
