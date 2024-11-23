@@ -90,7 +90,7 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
           data: Theme.of(context).copyWith(
             colorScheme: ColorScheme.light(
               primary: AppColorScheme.indigo,
-              onPrimary: Colors.white,
+              onPrimary: AppColorScheme.ownWhite,
               surface: AppColorScheme.antiFlash,
             ),
           ),
@@ -208,11 +208,17 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColorScheme.ownWhite,
       appBar: AppBar(
-        title: Text('Create New Event',
-            style: TextStyle(color: AppColorScheme.ownBlack)),
         backgroundColor: AppColorScheme.antiFlash,
-        iconTheme: IconThemeData(color: AppColorScheme.indigo),
+        foregroundColor: AppColorScheme.ownBlack,
+        elevation: 5,
+        shadowColor: AppColorScheme.indigo,
+        surfaceTintColor: Colors.transparent,
+        title: Text(
+          'Admin Panel for creating Events',
+          style: TextStyle(color: AppColorScheme.ownBlack),
+        ),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -346,9 +352,27 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                   children: [
                     Expanded(
                       child: TextFormField(
-                        controller: _minParticipantsController,
-                        decoration: const InputDecoration(
-                            labelText: 'Min Participants'),
+                        controller: _maxParticipantsController,
+                        decoration: InputDecoration(
+                          labelText: 'Min Participants',
+                          labelStyle: TextStyle(color: AppColorScheme.ownBlack),
+                          prefixIcon:
+                              Icon(Icons.people, color: AppColorScheme.indigo),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(color: AppColorScheme.slate),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide:
+                                BorderSide(color: AppColorScheme.indigo),
+                          ),
+                        ),
+                        style: TextStyle(color: AppColorScheme.ownBlack),
+                        cursorColor: AppColorScheme.indigo,
                         keyboardType: TextInputType.number,
                         validator: (value) =>
                             value!.isEmpty ? 'Enter min participants' : null,
@@ -358,8 +382,26 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                     Expanded(
                       child: TextFormField(
                         controller: _maxParticipantsController,
-                        decoration: const InputDecoration(
-                            labelText: 'Max Participants'),
+                        decoration: InputDecoration(
+                          labelText: 'Max Participants',
+                          labelStyle: TextStyle(color: AppColorScheme.ownBlack),
+                          prefixIcon:
+                              Icon(Icons.people, color: AppColorScheme.indigo),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(color: AppColorScheme.slate),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide:
+                                BorderSide(color: AppColorScheme.indigo),
+                          ),
+                        ),
+                        style: TextStyle(color: AppColorScheme.ownBlack),
+                        cursorColor: AppColorScheme.indigo,
                         keyboardType: TextInputType.number,
                         validator: (value) =>
                             value!.isEmpty ? 'Enter max participants' : null,
@@ -374,27 +416,52 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                 ...List.generate(_eventDayControllers.length, (index) {
                   final dayControllers = _eventDayControllers[index];
                   return Card(
+                    elevation: 2,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      side: BorderSide(color: AppColorScheme.slate, width: 1),
+                    ),
+                    color: AppColorScheme.ownWhite,
                     child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(16.0),
                       child: Column(
                         children: [
                           TextFormField(
                             controller: dayControllers['date'],
                             decoration: InputDecoration(
                               labelText: 'Date',
-                              prefixIcon: Icon(Icons.calendar_today),
+                              labelStyle:
+                                  TextStyle(color: AppColorScheme.ownBlack),
+                              prefixIcon: Icon(Icons.calendar_today,
+                                  color: AppColorScheme.indigo),
                               suffixIcon: IconButton(
-                                icon: Icon(Icons.clear),
+                                icon: Icon(Icons.clear,
+                                    color: AppColorScheme.indigo),
                                 onPressed: () =>
                                     dayControllers['date']!.clear(),
                               ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide:
+                                    BorderSide(color: AppColorScheme.slate),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide:
+                                    BorderSide(color: AppColorScheme.indigo),
+                              ),
                             ),
+                            style: TextStyle(color: AppColorScheme.ownBlack),
                             readOnly: true,
                             onTap: () =>
                                 _selectDate(context, dayControllers['date']!),
                             validator: (value) =>
                                 value!.isEmpty ? 'Please select a date' : null,
                           ),
+                          const SizedBox(height: 16),
                           Row(
                             children: [
                               Expanded(
@@ -402,13 +469,32 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                                   controller: dayControllers['startTime'],
                                   decoration: InputDecoration(
                                     labelText: 'Start Time',
-                                    prefixIcon: Icon(Icons.access_time),
+                                    labelStyle: TextStyle(
+                                        color: AppColorScheme.ownBlack),
+                                    prefixIcon: Icon(Icons.access_time,
+                                        color: AppColorScheme.indigo),
                                     suffixIcon: IconButton(
-                                      icon: Icon(Icons.clear),
+                                      icon: Icon(Icons.clear,
+                                          color: AppColorScheme.indigo),
                                       onPressed: () =>
                                           dayControllers['startTime']!.clear(),
                                     ),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                      borderSide: BorderSide(
+                                          color: AppColorScheme.slate),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                      borderSide: BorderSide(
+                                          color: AppColorScheme.indigo),
+                                    ),
                                   ),
+                                  style:
+                                      TextStyle(color: AppColorScheme.ownBlack),
                                   readOnly: true,
                                   onTap: () => _selectTime(
                                       context, dayControllers['startTime']!),
@@ -423,13 +509,32 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                                   controller: dayControllers['endTime'],
                                   decoration: InputDecoration(
                                     labelText: 'End Time',
-                                    prefixIcon: Icon(Icons.access_time),
+                                    labelStyle: TextStyle(
+                                        color: AppColorScheme.ownBlack),
+                                    prefixIcon: Icon(Icons.access_time,
+                                        color: AppColorScheme.indigo),
                                     suffixIcon: IconButton(
-                                      icon: Icon(Icons.clear),
+                                      icon: Icon(Icons.clear,
+                                          color: AppColorScheme.indigo),
                                       onPressed: () =>
                                           dayControllers['endTime']!.clear(),
                                     ),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                      borderSide: BorderSide(
+                                          color: AppColorScheme.slate),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                      borderSide: BorderSide(
+                                          color: AppColorScheme.indigo),
+                                    ),
                                   ),
+                                  style:
+                                      TextStyle(color: AppColorScheme.ownBlack),
                                   readOnly: true,
                                   onTap: () => _selectTime(
                                       context, dayControllers['endTime']!),
@@ -440,22 +545,63 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                               ),
                             ],
                           ),
+                          const SizedBox(height: 16),
                           TextFormField(
                             controller: dayControllers['location'],
-                            decoration:
-                                const InputDecoration(labelText: 'Location'),
+                            decoration: InputDecoration(
+                              labelText: 'Location',
+                              labelStyle:
+                                  TextStyle(color: AppColorScheme.ownBlack),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide:
+                                    BorderSide(color: AppColorScheme.slate),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide:
+                                    BorderSide(color: AppColorScheme.indigo),
+                              ),
+                            ),
+                            style: TextStyle(color: AppColorScheme.ownBlack),
                             validator: (value) =>
                                 value!.isEmpty ? 'Enter location' : null,
                           ),
+                          const SizedBox(height: 16),
                           TextFormField(
                             controller: dayControllers['federalState'],
-                            decoration: const InputDecoration(
-                                labelText: 'Federal State'),
+                            decoration: InputDecoration(
+                              labelText: 'Federal State',
+                              labelStyle:
+                                  TextStyle(color: AppColorScheme.ownBlack),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide:
+                                    BorderSide(color: AppColorScheme.slate),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide:
+                                    BorderSide(color: AppColorScheme.indigo),
+                              ),
+                            ),
+                            style: TextStyle(color: AppColorScheme.ownBlack),
                             validator: (value) =>
                                 value!.isEmpty ? 'Enter federal state' : null,
                           ),
                           if (_eventDayControllers.length > 1)
                             TextButton(
+                              style: TextButton.styleFrom(
+                                foregroundColor: Colors.red,
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 8, horizontal: 16),
+                              ),
                               onPressed: () => _removeEventDay(index),
                               child: const Text('Remove Day'),
                             ),
@@ -465,8 +611,24 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                   );
                 }),
                 ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColorScheme.indigo,
+                    foregroundColor: AppColorScheme.ownWhite,
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 16, horizontal: 24),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    elevation: 2,
+                  ),
                   onPressed: _addEventDay,
-                  child: const Text('Add Another Event Day'),
+                  child: const Text(
+                    'Add Another Event Day',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
                 ),
                 // Submit Button
                 const SizedBox(height: 16),
@@ -474,10 +636,13 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                   onPressed: _createEvent,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColorScheme.indigo,
-                    foregroundColor: Colors.white,
+                    foregroundColor: AppColorScheme.ownWhite,
                     padding: const EdgeInsets.symmetric(vertical: 16),
                   ),
-                  child: const Text('Create Event'),
+                  child: Text(
+                    'Create Event',
+                    style: TextStyle(color: AppColorScheme.ownWhite),
+                  ),
                 ),
               ],
             ),
