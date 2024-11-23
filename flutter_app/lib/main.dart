@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
-import 'package:skill_forge/screens/login_screen.dart';
+import 'package:skill_forge/screens/login_screen.dart' as login;
+import 'package:skill_forge/screens/admin_screen.dart' as admin;
 import 'package:skill_forge/utils/color_scheme.dart';
 import 'monthPage.dart';
 import 'weekPage.dart';
@@ -90,6 +91,7 @@ class _MyHomePageState extends State<MyHomePage> {
       _ToggleSwitchState.light = true;
       AppColorScheme.setDarkmode(true);
     }
+    _checkAdminStatus();
   }
 
   void _onItemTapped(int index) {
@@ -125,6 +127,15 @@ class _MyHomePageState extends State<MyHomePage> {
 
   dynamic refresh() {
     setState(() {});
+  }
+
+  bool _isAdmin = false;
+
+  Future<void> _checkAdminStatus() async {
+    await login.UserState().loadUserData();
+    setState(() {
+      _isAdmin = login.UserState().isAdmin ?? false;
+    });
   }
 
   @override
@@ -188,6 +199,7 @@ class _MyHomePageState extends State<MyHomePage> {
         shadowColor: AppColorScheme.indigo,
         surfaceTintColor: Colors.transparent,
         actions: <Widget>[
+          if (_isAdmin) AdminButon(),
           LoginButton(),
           WeekButton(),
           MonthButton(),
@@ -509,7 +521,38 @@ class _LoginButtonState extends State<LoginButton> {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const LoginScreen()),
+              MaterialPageRoute(
+                  builder: (context) => const login.LoginScreen()),
+            );
+          },
+        ),
+      ],
+    );
+  }
+}
+
+class AdminButon extends StatefulWidget {
+  AdminButon({super.key});
+
+  @override
+  State<AdminButon> createState() => _AdminButonState();
+}
+
+class _AdminButonState extends State<AdminButon> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        IconButton(
+          icon: const Icon(Icons.library_add),
+          color: AppColorScheme.indigo,
+          iconSize: 35,
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const admin.AdminEventScreen()),
             );
           },
         ),
