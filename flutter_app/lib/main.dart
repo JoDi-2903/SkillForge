@@ -86,9 +86,14 @@ class _MyHomePageState extends State<MyHomePage> {
       controllers[i] = CalendarController();
     }
     super.initState();
+    if (DateTime.now().hour > 18 || DateTime.now().hour <= 6){
+      _ToggleSwitchState.light = true;
+      AppColorScheme.setDarkmode(true);
+    }
   }
-
+  
   void _onItemTapped(int index) {
+
     setState(() {
       _selectedIndex = index;
       if (index == 0){
@@ -146,7 +151,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       backgroundColor:  AppColorScheme.ownWhite,
       appBar: AppBar(
-        leading: ToggleSwitch(notifyParent: refresh),
+        leading: ToggleSwitch(notifyParent: refresh,),
         backgroundColor:  AppColorScheme.antiFlash,
         elevation: 5,
         shadowColor:  AppColorScheme.indigo,
@@ -345,7 +350,7 @@ class ToggleSwitch extends StatefulWidget {
 }
 
 class _ToggleSwitchState extends State<ToggleSwitch> {
-  bool light = false;
+  static bool light = false;
 
   @override
   Widget build(BuildContext context) {
@@ -365,6 +370,13 @@ class _ToggleSwitchState extends State<ToggleSwitch> {
           return null;
         }
         return AppColorScheme.ownWhite;
+        },
+      ),
+      thumbIcon: WidgetStateProperty.resolveWith((final Set<WidgetState> states) {
+        if (states.contains(WidgetState.selected)) {
+          return  Icon(Icons.light_mode, color: AppColorScheme.indigo);
+        }
+        return Icon(Icons.dark_mode, color: AppColorScheme.indigo);
         },
       ),
       onChanged: (bool value) {setState(() {
@@ -467,14 +479,16 @@ class AppColorScheme{
   static Color ownWhite = const Color(0xFFFFFFFF);
   static void setDarkmode(bool darkmode){
     if (darkmode){
-      indigo = const Color(0xFF5EB0C4);
+
+      indigo = const Color(0xFFE05408);
       lapisLazuli = const Color(0xFF799BB2);
       payne = const Color(0xFF4E7187);
       slate = const Color(0xFF034875);
       battleShip = const Color(0xFFEEEEEE);
-      antiFlash = const Color(0xFF111111);
+      antiFlash = const Color(0xFF001D31);
       ownBlack = const Color(0xFFFFFFFF);
-      ownWhite = const Color(0xFF000000);
+      ownWhite = const Color(0xFF00171F);
+
     }
     else{
       indigo = const Color(0xFF034875);
