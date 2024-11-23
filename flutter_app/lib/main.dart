@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
-import 'package:skill_forge/screens/login_screen.dart' as login;
-import 'package:skill_forge/screens/admin_screen.dart' as admin;
+import 'package:skill_forge/screens/login_screen.dart';
 import 'package:skill_forge/utils/color_scheme.dart';
 import 'monthPage.dart';
 import 'weekPage.dart';
-
 
 void main() {
   runApp(const MyApp());
@@ -20,7 +18,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Skill Forge',
+      title: 'Flutter Demo',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -88,23 +86,13 @@ class _MyHomePageState extends State<MyHomePage> {
       controllers[i] = CalendarController();
     }
     super.initState();
-    _checkAdminStatus();
-    if (DateTime.now().hour > 18 || DateTime.now().hour <= 6){
+    if (DateTime.now().hour > 18 || DateTime.now().hour <= 6) {
       _ToggleSwitchState.light = true;
       AppColorScheme.setDarkmode(true);
     }
-
-  bool _isAdmin = false;
-
-  Future<void> _checkAdminStatus() async {
-    await login.UserState().loadUserData();
-    setState(() {
-      _isAdmin = login.UserState().isAdmin ?? false;
-    });
   }
-  
-  void _onItemTapped(int index) {
 
+  void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
       if (index == 0) {
@@ -200,32 +188,30 @@ class _MyHomePageState extends State<MyHomePage> {
         shadowColor: AppColorScheme.indigo,
         surfaceTintColor: Colors.transparent,
         actions: <Widget>[
-          if (_isAdmin) AdminButon(),
           LoginButton(),
           WeekButton(),
           MonthButton(),
         ],
       ),
-      bottomNavigationBar: MonthNavigationBar(onTapped: _onItemTapped, selectedIndex: _selectedIndex),
-      body:
-        GridView.count(
-          crossAxisCount: AutoScalingFactor.calendarsPerRow(context),
-          children: <Widget>[
-            yearCalendar[0],
-            yearCalendar[1], 
-            yearCalendar[2],
-            yearCalendar[3],
-            yearCalendar[4],
-            yearCalendar[5],
-            yearCalendar[6],
-            yearCalendar[7],
-            yearCalendar[8],
-            yearCalendar[9],
-            yearCalendar[10],
-            yearCalendar[11],
-
-          ],
-        ),
+      bottomNavigationBar: MonthNavigationBar(
+          onTapped: _onItemTapped, selectedIndex: _selectedIndex),
+      body: GridView.count(
+        crossAxisCount: AutoScalingFactor.calendarsPerRow(context),
+        children: <Widget>[
+          yearCalendar[0],
+          yearCalendar[1],
+          yearCalendar[2],
+          yearCalendar[3],
+          yearCalendar[4],
+          yearCalendar[5],
+          yearCalendar[6],
+          yearCalendar[7],
+          yearCalendar[8],
+          yearCalendar[9],
+          yearCalendar[10],
+          yearCalendar[11],
+        ],
+      ),
     );
   }
 }
@@ -283,89 +269,120 @@ class AutoScalingFactor {
   }
 }
 
-class MonthCalendarCard extends Card{
-  MonthCalendarCard({super.key, required this.context, this.initDate, this.control, this.factorScaling = 1, this.cellOffset = 0,}):
-  super(margin: const EdgeInsets.all(7), child: SfCalendarTheme(data: SfCalendarThemeData(todayBackgroundColor:  AppColorScheme.indigo), child: MonthCalendar(context: context, initDate: initDate, control: control, factorScaling: factorScaling, cellOffset: cellOffset,)));
+class MonthCalendarCard extends Card {
+  MonthCalendarCard({
+    super.key,
+    required this.context,
+    this.initDate,
+    this.control,
+    this.factorScaling = 1,
+    this.cellOffset = 0,
+  }) : super(
+            margin: const EdgeInsets.all(7),
+            child: SfCalendarTheme(
+                data: SfCalendarThemeData(
+                    todayBackgroundColor: AppColorScheme.indigo),
+                child: MonthCalendar(
+                  context: context,
+                  initDate: initDate,
+                  control: control,
+                  factorScaling: factorScaling,
+                  cellOffset: cellOffset,
+                )));
   final BuildContext context;
-  final DateTime?initDate;
-  final CalendarController?control;
-  final double factorScaling; 
+  final DateTime? initDate;
+  final CalendarController? control;
+  final double factorScaling;
   final double cellOffset;
 }
 
 class MonthCalendar extends SfCalendar {
-  MonthCalendar({super.key, required this.context, DateTime?initDate, this.control, required this.factorScaling, required this.cellOffset,}): 
-
-  initDate = initDate ?? DateTime(
-    DateTime.now().year, 
-    DateTime.now().month, 
-    DateTime.now().day,
-    08, 
-    45
-  ), 
-  super(
-    view: CalendarView.month, 
-    firstDayOfWeek: 1,
-    dataSource: _getCalendarDataSource(),
-    backgroundColor: AppColorScheme.ownWhite, 
-    initialDisplayDate: initDate, 
-    controller: control,
-    headerHeight:factorScaling*4.5*AutoScalingFactor.cellTextScaler(context),
-    viewNavigationMode: ViewNavigationMode.none,
-    headerStyle: CalendarHeaderStyle(
-      textStyle: TextStyle(color: AppColorScheme.ownBlack, fontSize: factorScaling*2.5*AutoScalingFactor.cellTextScaler(context),),
-      textAlign: TextAlign.center,
-      backgroundColor: AppColorScheme.antiFlash),
-    monthViewSettings: MonthViewSettings(
-      appointmentDisplayMode: MonthAppointmentDisplayMode.appointment,
-      appointmentDisplayCount: 2,
-      monthCellStyle: MonthCellStyle(
-        leadingDatesTextStyle: TextStyle(
-          color: AppColorScheme.ownBlack, 
-          fontSize: factorScaling*AutoScalingFactor.cellTextScaler(context), 
-          height: -1.01 + cellOffset,
-        ),
-        textStyle: TextStyle(
-          color: AppColorScheme.ownBlack, 
-          fontSize: factorScaling*AutoScalingFactor.cellTextScaler(context), 
-          height: -1.01 + cellOffset,
-        ),
-        trailingDatesTextStyle: TextStyle(
-          color: AppColorScheme.ownBlack, 
-          fontSize: factorScaling*AutoScalingFactor.cellTextScaler(context), 
-          height: -1.01 + cellOffset,
-        ),
-        leadingDatesBackgroundColor: AppColorScheme.antiFlash,
-        trailingDatesBackgroundColor: AppColorScheme.antiFlash,
-      ),
-    ),
-    appointmentTextStyle: TextStyle(
-      color: AppColorScheme.ownWhite,
-      fontSize: factorScaling*AutoScalingFactor.cellTextScaler(context),
-    ),
-    todayHighlightColor: AppColorScheme.indigo,
-    todayTextStyle: TextStyle(
-          color: AppColorScheme.ownBlack, 
-          fontSize: factorScaling*AutoScalingFactor.cellTextScaler(context), 
-          height: -1.01 + cellOffset,
-    ),
-    selectionDecoration: BoxDecoration(
-      border: Border.all(color:  AppColorScheme.indigo, width: 2),
-    ),
-    viewHeaderHeight: factorScaling*3*AutoScalingFactor.cellTextScaler(context),
-    viewHeaderStyle: ViewHeaderStyle(
-      backgroundColor:  AppColorScheme.ownWhite,
-      dayTextStyle: TextStyle(
-          color: AppColorScheme.ownBlack, 
-          fontSize: factorScaling*2*AutoScalingFactor.cellTextScaler(context), 
-          height: -1.01 + cellOffset,
-      ),
-    )
-  );
+  MonthCalendar({
+    super.key,
+    required this.context,
+    DateTime? initDate,
+    this.control,
+    required this.factorScaling,
+    required this.cellOffset,
+  })  : initDate = initDate ??
+            DateTime(DateTime.now().year, DateTime.now().month,
+                DateTime.now().day, 08, 45),
+        super(
+            view: CalendarView.month,
+            firstDayOfWeek: 1,
+            dataSource: _getCalendarDataSource(),
+            backgroundColor: AppColorScheme.ownWhite,
+            initialDisplayDate: initDate,
+            controller: control,
+            headerHeight:
+                factorScaling * 4.5 * AutoScalingFactor.cellTextScaler(context),
+            viewNavigationMode: ViewNavigationMode.none,
+            headerStyle: CalendarHeaderStyle(
+                textStyle: TextStyle(
+                  color: AppColorScheme.ownBlack,
+                  fontSize: factorScaling *
+                      2.5 *
+                      AutoScalingFactor.cellTextScaler(context),
+                ),
+                textAlign: TextAlign.center,
+                backgroundColor: AppColorScheme.antiFlash),
+            monthViewSettings: MonthViewSettings(
+              appointmentDisplayMode: MonthAppointmentDisplayMode.appointment,
+              appointmentDisplayCount: 2,
+              monthCellStyle: MonthCellStyle(
+                leadingDatesTextStyle: TextStyle(
+                  color: AppColorScheme.ownBlack,
+                  fontSize:
+                      factorScaling * AutoScalingFactor.cellTextScaler(context),
+                  height: -1.01 + cellOffset,
+                ),
+                textStyle: TextStyle(
+                  color: AppColorScheme.ownBlack,
+                  fontSize:
+                      factorScaling * AutoScalingFactor.cellTextScaler(context),
+                  height: -1.01 + cellOffset,
+                ),
+                trailingDatesTextStyle: TextStyle(
+                  color: AppColorScheme.ownBlack,
+                  fontSize:
+                      factorScaling * AutoScalingFactor.cellTextScaler(context),
+                  height: -1.01 + cellOffset,
+                ),
+                leadingDatesBackgroundColor: AppColorScheme.antiFlash,
+                trailingDatesBackgroundColor: AppColorScheme.antiFlash,
+              ),
+            ),
+            appointmentTextStyle: TextStyle(
+              color: AppColorScheme.ownWhite,
+              fontSize:
+                  factorScaling * AutoScalingFactor.cellTextScaler(context),
+            ),
+            todayHighlightColor: AppColorScheme.indigo,
+            todayTextStyle: TextStyle(
+              color: AppColorScheme.ownBlack,
+              fontSize:
+                  factorScaling * AutoScalingFactor.cellTextScaler(context),
+              height: -1.01 + cellOffset,
+            ),
+            selectionDecoration: BoxDecoration(
+              border: Border.all(color: AppColorScheme.indigo, width: 2),
+            ),
+            viewHeaderHeight:
+                factorScaling * 3 * AutoScalingFactor.cellTextScaler(context),
+            viewHeaderStyle: ViewHeaderStyle(
+              backgroundColor: AppColorScheme.ownWhite,
+              dayTextStyle: TextStyle(
+                color: AppColorScheme.ownBlack,
+                fontSize: factorScaling *
+                    2 *
+                    AutoScalingFactor.cellTextScaler(context),
+                height: -1.01 + cellOffset,
+              ),
+            ));
 
   final BuildContext context;
   final DateTime initDate;
-  final CalendarController?control;
+  final CalendarController? control;
   final double factorScaling;
   final double cellOffset;
 }
@@ -377,18 +394,18 @@ class DataSource extends CalendarDataSource {
 }
 
 DataSource _getCalendarDataSource() {
-   List<Appointment> appointments = <Appointment>[];
-   appointments.add(Appointment(
-     startTime: DateTime.now().subtract(Duration(hours:1)),
-     endTime: DateTime.now().add(Duration(hours:1)),
-     isAllDay: true,
-     subject: 'Meeting',
-     color: Colors.blue,
-     startTimeZone: '',
-     endTimeZone: '',
-   ));
+  List<Appointment> appointments = <Appointment>[];
+  appointments.add(Appointment(
+    startTime: DateTime.now().subtract(Duration(hours: 1)),
+    endTime: DateTime.now().add(Duration(hours: 1)),
+    isAllDay: true,
+    subject: 'Meeting',
+    color: Colors.blue,
+    startTimeZone: '',
+    endTimeZone: '',
+  ));
 
-   return DataSource(appointments);
+  return DataSource(appointments);
 }
 
 class ToggleSwitch extends StatefulWidget {
@@ -424,11 +441,12 @@ class _ToggleSwitchState extends State<ToggleSwitch> {
           return AppColorScheme.ownWhite;
         },
       ),
-      thumbIcon: WidgetStateProperty.resolveWith((final Set<WidgetState> states) {
-        if (states.contains(WidgetState.selected)) {
-          return  Icon(Icons.light_mode, color: AppColorScheme.indigo);
-        }
-        return Icon(Icons.dark_mode, color: AppColorScheme.indigo);
+      thumbIcon: WidgetStateProperty.resolveWith(
+        (final Set<WidgetState> states) {
+          if (states.contains(WidgetState.selected)) {
+            return Icon(Icons.light_mode, color: AppColorScheme.indigo);
+          }
+          return Icon(Icons.dark_mode, color: AppColorScheme.indigo);
         },
       ),
       onChanged: (bool value) {
@@ -491,38 +509,7 @@ class _LoginButtonState extends State<LoginButton> {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(
-                  builder: (context) => const login.LoginScreen()),
-            );
-          },
-        ),
-      ],
-    );
-  }
-}
-
-class AdminButon extends StatefulWidget {
-  AdminButon({super.key});
-
-  @override
-  State<AdminButon> createState() => _AdminButonState();
-}
-
-class _AdminButonState extends State<AdminButon> {
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        IconButton(
-          icon: const Icon(Icons.library_add),
-          color: AppColorScheme.indigo,
-          iconSize: 35,
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const admin.AdminEventScreen()),
+              MaterialPageRoute(builder: (context) => const LoginScreen()),
             );
           },
         ),
@@ -552,145 +539,205 @@ class RoutePage extends StatelessWidget {
   }
 }
 
-class MonthNavigationBar extends BottomNavigationBar{
-  MonthNavigationBar({super.key, required this.onTapped(int index), required this.selectedIndex,}):
-  super(
-    items: <BottomNavigationBarItem>[
-      BottomNavigationBarItem(
-        icon: Icon(Icons.arrow_back, color: AppColorScheme.indigo,),
-        label: 'Year',
-      ),
-      BottomNavigationBarItem(
-        icon: Icon(Icons.arrow_back, color: AppColorScheme.indigo,),
-        label: 'Month',
-      ),
-      BottomNavigationBarItem(
-        icon: Icon(Icons.reset_tv, color: AppColorScheme.indigo,),
-        label: 'Reset',
-      ),
-      BottomNavigationBarItem(
-        icon: Icon(Icons.arrow_forward, color: AppColorScheme.indigo,),
-        label: 'Month',
-      ),
-      BottomNavigationBarItem(
-        icon: Icon(Icons.arrow_forward, color: AppColorScheme.indigo,),
-        label: 'Year',
-      ),
-    ],
-    backgroundColor: AppColorScheme.antiFlash,
-    selectedItemColor: AppColorScheme.indigo,
-    unselectedItemColor: AppColorScheme.indigo,
-    selectedFontSize: 12,
-    unselectedFontSize: 12,
-    type: BottomNavigationBarType.fixed,
-    elevation: 0.0,
-    currentIndex: selectedIndex,
-    onTap: onTapped,
-  );
+class MonthNavigationBar extends BottomNavigationBar {
+  MonthNavigationBar({
+    super.key,
+    required this.onTapped(int index),
+    required this.selectedIndex,
+  }) : super(
+          items: <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.arrow_back,
+                color: AppColorScheme.indigo,
+              ),
+              label: 'Year',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.arrow_back,
+                color: AppColorScheme.indigo,
+              ),
+              label: 'Month',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.reset_tv,
+                color: AppColorScheme.indigo,
+              ),
+              label: 'Reset',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.arrow_forward,
+                color: AppColorScheme.indigo,
+              ),
+              label: 'Month',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.arrow_forward,
+                color: AppColorScheme.indigo,
+              ),
+              label: 'Year',
+            ),
+          ],
+          backgroundColor: AppColorScheme.antiFlash,
+          selectedItemColor: AppColorScheme.indigo,
+          unselectedItemColor: AppColorScheme.indigo,
+          selectedFontSize: 12,
+          unselectedFontSize: 12,
+          type: BottomNavigationBarType.fixed,
+          elevation: 0.0,
+          currentIndex: selectedIndex,
+          onTap: onTapped,
+        );
   final Function(int index) onTapped;
   final int selectedIndex;
 }
 
-class WeekCalendarCard extends Card{
-  WeekCalendarCard({super.key, required this.context, this.initDate, this.control, this.factorScaling = 1, this.cellOffset = 0,}):
-  super(margin: const EdgeInsets.all(7), child: SfCalendarTheme(data: SfCalendarThemeData(todayBackgroundColor:  AppColorScheme.indigo), child: WeekCalendar(context: context, initDate: initDate, control: control, factorScaling: factorScaling, cellOffset: cellOffset,)));
+class WeekCalendarCard extends Card {
+  WeekCalendarCard({
+    super.key,
+    required this.context,
+    this.initDate,
+    this.control,
+    this.factorScaling = 1,
+    this.cellOffset = 0,
+  }) : super(
+            margin: const EdgeInsets.all(7),
+            child: SfCalendarTheme(
+                data: SfCalendarThemeData(
+                    todayBackgroundColor: AppColorScheme.indigo),
+                child: WeekCalendar(
+                  context: context,
+                  initDate: initDate,
+                  control: control,
+                  factorScaling: factorScaling,
+                  cellOffset: cellOffset,
+                )));
   final BuildContext context;
-  final DateTime?initDate;
-  final CalendarController?control;
-  final double factorScaling; 
-  final double cellOffset;
-}
-
-class WeekCalendar extends SfCalendar {
-  WeekCalendar({super.key, required this.context, DateTime?initDate, this.control, required this.factorScaling, required this.cellOffset,}): 
-
-  initDate = initDate ?? DateTime(
-    DateTime.now().year, 
-    DateTime.now().month, 
-    DateTime.now().day,
-    08, 
-    45
-  ), 
-  super(
-    view: CalendarView.week, 
-    firstDayOfWeek: 1,
-    dataSource: _getCalendarDataSource(),
-    backgroundColor: AppColorScheme.ownWhite, 
-    timeSlotViewSettings: TimeSlotViewSettings(
-      timeTextStyle: TextStyle(color: AppColorScheme.ownBlack,)
-    ),
-    initialDisplayDate: initDate, 
-    controller: control,
-    headerHeight:factorScaling*6*AutoScalingFactor.cellTextScaler(context),
-    viewNavigationMode: ViewNavigationMode.none,
-    headerStyle: CalendarHeaderStyle(
-      textStyle: TextStyle(color: AppColorScheme.ownBlack, fontSize: factorScaling*2.5*AutoScalingFactor.cellTextScaler(context),),
-      textAlign: TextAlign.center,
-      backgroundColor: AppColorScheme.antiFlash),
-    appointmentTextStyle: TextStyle(
-      color: AppColorScheme.ownWhite,
-      fontSize: factorScaling*AutoScalingFactor.cellTextScaler(context),
-    ),
-    todayHighlightColor: AppColorScheme.indigo,
-    todayTextStyle: TextStyle(
-          color: AppColorScheme.ownBlack, 
-          fontSize: factorScaling*AutoScalingFactor.cellTextScaler(context), 
-          height: -1.01 + cellOffset,
-    ),
-    selectionDecoration: BoxDecoration(
-      border: Border.all(color:  AppColorScheme.indigo, width: 2),
-    ),
-    viewHeaderHeight: factorScaling*8*AutoScalingFactor.cellTextScaler(context),
-    viewHeaderStyle: ViewHeaderStyle(
-      backgroundColor: AppColorScheme.ownWhite,
-      dayTextStyle: TextStyle(
-          color: AppColorScheme.ownBlack, 
-          fontSize: factorScaling*2*AutoScalingFactor.cellTextScaler(context), 
-          height: -1.01 + cellOffset,
-      ),
-      dateTextStyle: TextStyle(
-          color: AppColorScheme.ownBlack, 
-          fontSize: factorScaling*2*AutoScalingFactor.cellTextScaler(context), 
-          height: -1.01 + cellOffset,
-      ),
-    )
-  );
-
-  final BuildContext context;
-  final DateTime initDate;
-  final CalendarController?control;
+  final DateTime? initDate;
+  final CalendarController? control;
   final double factorScaling;
   final double cellOffset;
 }
 
-class WeekNavigationBar extends BottomNavigationBar{
-  WeekNavigationBar({super.key, required this.onTapped(int index), required this.selectedIndex,}):
-  super(
-    items: <BottomNavigationBarItem>[
-      BottomNavigationBarItem(
-        icon: Icon(Icons.arrow_back, color: AppColorScheme.indigo,),
-        label: 'Week',
-      ),
-      BottomNavigationBarItem(
-        icon: Icon(Icons.reset_tv, color: AppColorScheme.indigo,),
-        label: 'Reset',
-      ),
-      BottomNavigationBarItem(
-        icon: Icon(Icons.arrow_forward, color: AppColorScheme.indigo,),
-        label: 'Week',
-      ),
+class WeekCalendar extends SfCalendar {
+  WeekCalendar({
+    super.key,
+    required this.context,
+    DateTime? initDate,
+    this.control,
+    required this.factorScaling,
+    required this.cellOffset,
+  })  : initDate = initDate ??
+            DateTime(DateTime.now().year, DateTime.now().month,
+                DateTime.now().day, 08, 45),
+        super(
+            view: CalendarView.week,
+            firstDayOfWeek: 1,
+            dataSource: _getCalendarDataSource(),
+            backgroundColor: AppColorScheme.ownWhite,
+            timeSlotViewSettings: TimeSlotViewSettings(
+                timeTextStyle: TextStyle(
+              color: AppColorScheme.ownBlack,
+            )),
+            initialDisplayDate: initDate,
+            controller: control,
+            headerHeight:
+                factorScaling * 6 * AutoScalingFactor.cellTextScaler(context),
+            viewNavigationMode: ViewNavigationMode.none,
+            headerStyle: CalendarHeaderStyle(
+                textStyle: TextStyle(
+                  color: AppColorScheme.ownBlack,
+                  fontSize: factorScaling *
+                      2.5 *
+                      AutoScalingFactor.cellTextScaler(context),
+                ),
+                textAlign: TextAlign.center,
+                backgroundColor: AppColorScheme.antiFlash),
+            appointmentTextStyle: TextStyle(
+              color: AppColorScheme.ownWhite,
+              fontSize:
+                  factorScaling * AutoScalingFactor.cellTextScaler(context),
+            ),
+            todayHighlightColor: AppColorScheme.indigo,
+            todayTextStyle: TextStyle(
+              color: AppColorScheme.ownBlack,
+              fontSize:
+                  factorScaling * AutoScalingFactor.cellTextScaler(context),
+              height: -1.01 + cellOffset,
+            ),
+            selectionDecoration: BoxDecoration(
+              border: Border.all(color: AppColorScheme.indigo, width: 2),
+            ),
+            viewHeaderHeight:
+                factorScaling * 8 * AutoScalingFactor.cellTextScaler(context),
+            viewHeaderStyle: ViewHeaderStyle(
+              backgroundColor: AppColorScheme.ownWhite,
+              dayTextStyle: TextStyle(
+                color: AppColorScheme.ownBlack,
+                fontSize: factorScaling *
+                    2 *
+                    AutoScalingFactor.cellTextScaler(context),
+                height: -1.01 + cellOffset,
+              ),
+              dateTextStyle: TextStyle(
+                color: AppColorScheme.ownBlack,
+                fontSize: factorScaling *
+                    2 *
+                    AutoScalingFactor.cellTextScaler(context),
+                height: -1.01 + cellOffset,
+              ),
+            ));
 
-    ],
-    backgroundColor: AppColorScheme.antiFlash,
-    selectedItemColor: AppColorScheme.indigo,
-    unselectedItemColor: AppColorScheme.indigo,
-    selectedFontSize: 12,
-    unselectedFontSize: 12,
-    type: BottomNavigationBarType.fixed,
-    elevation: 0.0,
-    currentIndex: selectedIndex,
-    onTap: onTapped,
-  );
+  final BuildContext context;
+  final DateTime initDate;
+  final CalendarController? control;
+  final double factorScaling;
+  final double cellOffset;
+}
+
+class WeekNavigationBar extends BottomNavigationBar {
+  WeekNavigationBar({
+    super.key,
+    required this.onTapped(int index),
+    required this.selectedIndex,
+  }) : super(
+          items: <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.arrow_back,
+                color: AppColorScheme.indigo,
+              ),
+              label: 'Week',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.reset_tv,
+                color: AppColorScheme.indigo,
+              ),
+              label: 'Reset',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.arrow_forward,
+                color: AppColorScheme.indigo,
+              ),
+              label: 'Week',
+            ),
+          ],
+          backgroundColor: AppColorScheme.antiFlash,
+          selectedItemColor: AppColorScheme.indigo,
+          unselectedItemColor: AppColorScheme.indigo,
+          selectedFontSize: 12,
+          unselectedFontSize: 12,
+          type: BottomNavigationBarType.fixed,
+          elevation: 0.0,
+          currentIndex: selectedIndex,
+          onTap: onTapped,
+        );
   final Function(int index) onTapped;
   final int selectedIndex;
 }
