@@ -28,7 +28,7 @@ class _WeekPageState extends State<WeekPage>{
       if (index == 0){
         controller.backward!(); 
       }
-      else if (index == 1){
+      else if (index == 2){
         controller.forward!();
       }
       else{ 
@@ -52,7 +52,7 @@ class _WeekPageState extends State<WeekPage>{
         shadowColor:  AppColorScheme.indigo,
         surfaceTintColor: Colors.transparent,
       ),
-      body: WeekCalendarCard(context: context, initDate: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day,), control: controller, factorScaling: 2, cellOffset: 1.01,),
+      body: WeekCalendarCard(context: context, initDate: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day,), control: controller, factorScaling: 1.5, cellOffset: 1.01,),
       bottomNavigationBar: WeekNavigationBar(onTapped: _onItemTapped, selectedIndex: _selectedIndex,)
     );
   }

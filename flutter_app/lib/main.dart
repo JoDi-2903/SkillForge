@@ -250,6 +250,7 @@ class MonthCalendar extends SfCalendar {
   ), 
   super(
     view: CalendarView.month, 
+    firstDayOfWeek: 1,
     dataSource: _getCalendarDataSource(),
     backgroundColor: AppColorScheme.ownWhite, 
     initialDisplayDate: initDate, 
@@ -549,6 +550,7 @@ class WeekCalendar extends SfCalendar {
   ), 
   super(
     view: CalendarView.week, 
+    firstDayOfWeek: 1,
     dataSource: _getCalendarDataSource(),
     backgroundColor: AppColorScheme.ownWhite, 
     timeSlotViewSettings: TimeSlotViewSettings(
@@ -575,7 +577,7 @@ class WeekCalendar extends SfCalendar {
     selectionDecoration: BoxDecoration(
       border: Border.all(color:  AppColorScheme.indigo, width: 2),
     ),
-    viewHeaderHeight: factorScaling*6*AutoScalingFactor.cellTextScaler(context),
+    viewHeaderHeight: factorScaling*8*AutoScalingFactor.cellTextScaler(context),
     viewHeaderStyle: ViewHeaderStyle(
       backgroundColor: AppColorScheme.ownWhite,
       dayTextStyle: TextStyle(
