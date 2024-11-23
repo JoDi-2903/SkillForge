@@ -1,3 +1,6 @@
+// lib/utils/color_scheme.dart
+import 'package:flutter/material.dart';
+
 class AppColorScheme {
   static Color indigo = const Color(0xFF034875);
   static Color lapisLazuli = const Color(0xFF799BB2);
