@@ -1,20 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:skill_forge/utils/color_scheme.dart';
-import 'buttons.dart';
-import 'main.dart';
+import '../utils/buttons.dart';
+import 'package:skill_forge/utils/interfaces.dart';
 
-class WeekPage extends StatefulWidget {
-  const WeekPage({super.key});
+class MonthPage extends StatefulWidget {
+  const MonthPage({super.key});
 
   @override
-  State<WeekPage> createState() => _WeekPageState();
+  State<MonthPage> createState() => _MonthPageState();
 }
 
-class _WeekPageState extends State<WeekPage> {
+class _MonthPageState extends State<MonthPage> {
   int _selectedIndex = 0;
-  int weekOffset = 0;
-  int monthOffset = 0;
   late CalendarController controller;
 
   @override
@@ -27,12 +25,20 @@ class _WeekPageState extends State<WeekPage> {
     setState(() {
       _selectedIndex = index;
       if (index == 0) {
-        controller.backward!();
-      } else if (index == 2) {
+        for (var j = 0; j < 12; j++) {
+          controller.backward!();
+        }
+      } else if (index == 4) {
+        for (var j = 0; j < 12; j++) {
+          controller.forward!();
+        }
+      } else if (index == 3) {
         controller.forward!();
+      } else if (index == 1) {
+        controller.backward!();
       } else {
-        controller.displayDate = DateTime(
-            DateTime.now().year, DateTime.now().month, DateTime.now().day);
+        controller.displayDate =
+            DateTime(DateTime.now().year, DateTime.now().month);
       }
     });
   }
@@ -52,18 +58,14 @@ class _WeekPageState extends State<WeekPage> {
           shadowColor: AppColorScheme.indigo,
           surfaceTintColor: Colors.transparent,
         ),
-        body: WeekCalendarCard(
+        body: MonthCalendarCard(
           context: context,
-          initDate: DateTime(
-            DateTime.now().year,
-            DateTime.now().month,
-            DateTime.now().day,
-          ),
+          initDate: DateTime(DateTime.now().year, DateTime.now().month),
           control: controller,
-          factorScaling: 1.5,
+          factorScaling: 2,
           cellOffset: 1.01,
         ),
-        bottomNavigationBar: WeekNavigationBar(
+        bottomNavigationBar: MonthNavigationBar(
           onTapped: _onItemTapped,
           selectedIndex: _selectedIndex,
         ));
