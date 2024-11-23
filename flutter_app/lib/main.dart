@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:skill_forge/screens/login_screen.dart' as login;
 import 'package:skill_forge/screens/admin_screen.dart' as admin;
 import 'package:skill_forge/utils/color_scheme.dart';
 import 'monthPage.dart';
 import 'weekPage.dart';
+import 'package:skill_forge/utils/languages.dart';
 
 void main() {
   runApp(const MyApp());
@@ -80,6 +82,7 @@ class _MyHomePageState extends State<MyHomePage> {
     CalendarController(),
     CalendarController(),
   ];
+  static Locale language = Locale(AppStrings.english);
 
   @override
   void initState() {
@@ -127,6 +130,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
   dynamic refresh() {
     setState(() {});
+    AppStrings.refreshLanguage(language.toString());
+  }
+
+  dynamic setLocale(String code) {
+    language = Locale(code);
+    refresh();
   }
 
   bool _isAdmin = false;
@@ -190,39 +199,53 @@ class _MyHomePageState extends State<MyHomePage> {
           initDate: DateTime(DateTime.now().year, 12),
           control: controllers[11]),
     ];
-    return Scaffold(
-      backgroundColor: AppColorScheme.ownWhite,
-      appBar: AppBar(
-        leading: ToggleSwitch(notifyParent: refresh),
-        backgroundColor: AppColorScheme.antiFlash,
-        elevation: 5,
-        shadowColor: AppColorScheme.indigo,
-        surfaceTintColor: Colors.transparent,
-        actions: <Widget>[
-          if (_isAdmin) AdminButon(),
-          LoginButton(),
-          WeekButton(),
-          MonthButton(),
-        ],
-      ),
-      bottomNavigationBar: MonthNavigationBar(
-          onTapped: _onItemTapped, selectedIndex: _selectedIndex),
-      body: GridView.count(
-        crossAxisCount: AutoScalingFactor.calendarsPerRow(context),
-        children: <Widget>[
-          yearCalendar[0],
-          yearCalendar[1],
-          yearCalendar[2],
-          yearCalendar[3],
-          yearCalendar[4],
-          yearCalendar[5],
-          yearCalendar[6],
-          yearCalendar[7],
-          yearCalendar[8],
-          yearCalendar[9],
-          yearCalendar[10],
-          yearCalendar[11],
-        ],
+    return MaterialApp(
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      supportedLocales: <Locale>[
+        Locale(AppStrings.chinese),
+        Locale(AppStrings.english),
+        Locale(AppStrings.german),
+      ],
+      locale: language,
+      home: Scaffold(
+        backgroundColor: AppColorScheme.ownWhite,
+        appBar: AppBar(
+          leading: ToggleSwitch(notifyParent: refresh),
+          backgroundColor: AppColorScheme.antiFlash,
+          elevation: 5,
+          shadowColor: AppColorScheme.indigo,
+          surfaceTintColor: Colors.transparent,
+          actions: <Widget>[
+            if (_isAdmin) AdminButon(),
+            LoginButton(),
+            LanguageButton(language: setLocale),
+            WeekButton(),
+            MonthButton(),
+          ],
+        ),
+        bottomNavigationBar: MonthNavigationBar(
+            onTapped: _onItemTapped, selectedIndex: _selectedIndex),
+        body: GridView.count(
+          crossAxisCount: AutoScalingFactor.calendarsPerRow(context),
+          children: <Widget>[
+            yearCalendar[0],
+            yearCalendar[1],
+            yearCalendar[2],
+            yearCalendar[3],
+            yearCalendar[4],
+            yearCalendar[5],
+            yearCalendar[6],
+            yearCalendar[7],
+            yearCalendar[8],
+            yearCalendar[9],
+            yearCalendar[10],
+            yearCalendar[11],
+          ],
+        ),
       ),
     );
   }
@@ -473,7 +496,9 @@ class _ToggleSwitchState extends State<ToggleSwitch> {
 }
 
 class MonthButton extends StatefulWidget {
-  MonthButton({super.key});
+  const MonthButton({
+    super.key,
+  });
 
   @override
   State<MonthButton> createState() => _MonthButtonState();
@@ -501,8 +526,54 @@ class _MonthButtonState extends State<MonthButton> {
   }
 }
 
+class LanguageButton extends StatefulWidget {
+  final Function(String code) language;
+  const LanguageButton({
+    super.key,
+    required this.language,
+  });
+
+  @override
+  State<LanguageButton> createState() => _LanguageButtonState();
+}
+
+class _LanguageButtonState extends State<LanguageButton> {
+  final List<Language> list = <Language>[german, english, chinese];
+  Language dropdownValue = english;
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButton<Language>(
+      value: dropdownValue,
+      icon: const Visibility(visible: false, child: Icon(Icons.arrow_downward)),
+      dropdownColor: AppColorScheme.antiFlash,
+      focusColor: AppColorScheme.antiFlash,
+      underline: Container(
+        height: 0,
+        color: AppColorScheme.antiFlash,
+      ),
+      style: const TextStyle(
+        fontSize: 24,
+        fontFamily: 'Noto Color Emoji',
+        fontFamilyFallback: ['Noto Color Emoji'],
+      ),
+      onChanged: (Language? lang) {
+        setState(() {
+          dropdownValue = lang!;
+        });
+        widget.language(dropdownValue.identifier);
+      },
+      items: list.map<DropdownMenuItem<Language>>((Language value) {
+        return DropdownMenuItem<Language>(
+          value: value,
+          child: Text(value.icon),
+        );
+      }).toList(),
+    );
+  }
+}
+
 class LoginButton extends StatefulWidget {
-  LoginButton({super.key});
+  const LoginButton({super.key});
 
   @override
   State<LoginButton> createState() => _LoginButtonState();
@@ -575,7 +646,7 @@ class RoutePage extends StatelessWidget {
           onPressed: () {
             Navigator.pop(context);
           },
-          child: const Text('Go back!'),
+          child: Text(Localizations.localeOf(context).toString()),
         ),
       ),
     );
@@ -594,35 +665,35 @@ class MonthNavigationBar extends BottomNavigationBar {
                 Icons.arrow_back,
                 color: AppColorScheme.indigo,
               ),
-              label: 'Year',
+              label: AppStrings.yearLabel,
             ),
             BottomNavigationBarItem(
               icon: Icon(
                 Icons.arrow_back,
                 color: AppColorScheme.indigo,
               ),
-              label: 'Month',
+              label: AppStrings.monthLabel,
             ),
             BottomNavigationBarItem(
               icon: Icon(
                 Icons.reset_tv,
                 color: AppColorScheme.indigo,
               ),
-              label: 'Reset',
+              label: AppStrings.resetLabel,
             ),
             BottomNavigationBarItem(
               icon: Icon(
                 Icons.arrow_forward,
                 color: AppColorScheme.indigo,
               ),
-              label: 'Month',
+              label: AppStrings.monthLabel,
             ),
             BottomNavigationBarItem(
               icon: Icon(
                 Icons.arrow_forward,
                 color: AppColorScheme.indigo,
               ),
-              label: 'Year',
+              label: AppStrings.yearLabel,
             ),
           ],
           backgroundColor: AppColorScheme.antiFlash,
@@ -754,21 +825,21 @@ class WeekNavigationBar extends BottomNavigationBar {
                 Icons.arrow_back,
                 color: AppColorScheme.indigo,
               ),
-              label: 'Week',
+              label: AppStrings.weekLabel,
             ),
             BottomNavigationBarItem(
               icon: Icon(
                 Icons.reset_tv,
                 color: AppColorScheme.indigo,
               ),
-              label: 'Reset',
+              label: AppStrings.resetLabel,
             ),
             BottomNavigationBarItem(
               icon: Icon(
                 Icons.arrow_forward,
                 color: AppColorScheme.indigo,
               ),
-              label: 'Week',
+              label: AppStrings.weekLabel,
             ),
           ],
           backgroundColor: AppColorScheme.antiFlash,
@@ -786,7 +857,7 @@ class WeekNavigationBar extends BottomNavigationBar {
 }
 
 class WeekButton extends StatefulWidget {
-  WeekButton({super.key});
+  const WeekButton({super.key});
 
   @override
   State<WeekButton> createState() => _WeekButtonState();
