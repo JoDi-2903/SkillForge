@@ -133,7 +133,7 @@ class _MyHomePageState extends State<MyHomePage> {
     AppStrings.refreshLanguage(language.toString());
   }
 
-  dynamic setLocale(String code){
+  dynamic setLocale(String code) {
     language = Locale(code);
     refresh();
   }
@@ -212,39 +212,40 @@ class _MyHomePageState extends State<MyHomePage> {
       ],
       locale: language,
       home: Scaffold(
-      backgroundColor: AppColorScheme.ownWhite,
-      appBar: AppBar(
-        leading: ToggleSwitch(notifyParent: refresh),
-        backgroundColor: AppColorScheme.antiFlash,
-        elevation: 5,
-        shadowColor: AppColorScheme.indigo,
-        surfaceTintColor: Colors.transparent,
-        actions: <Widget>[
-          if (_isAdmin) AdminButon(),
-          LoginButton(),
-          LanguageButton(language: setLocale),
-          WeekButton(),
-          MonthButton(),
-        ],
-      ),
-      bottomNavigationBar: MonthNavigationBar(
-          onTapped: _onItemTapped, selectedIndex: _selectedIndex),
-      body: GridView.count(
-        crossAxisCount: AutoScalingFactor.calendarsPerRow(context),
-        children: <Widget>[
-          yearCalendar[0],
-          yearCalendar[1],
-          yearCalendar[2],
-          yearCalendar[3],
-          yearCalendar[4],
-          yearCalendar[5],
-          yearCalendar[6],
-          yearCalendar[7],
-          yearCalendar[8],
-          yearCalendar[9],
-          yearCalendar[10],
-          yearCalendar[11],
-        ],
+        backgroundColor: AppColorScheme.ownWhite,
+        appBar: AppBar(
+          leading: ToggleSwitch(notifyParent: refresh),
+          backgroundColor: AppColorScheme.antiFlash,
+          elevation: 5,
+          shadowColor: AppColorScheme.indigo,
+          surfaceTintColor: Colors.transparent,
+          actions: <Widget>[
+            if (_isAdmin) AdminButon(),
+            LoginButton(),
+            LanguageButton(language: setLocale),
+            WeekButton(),
+            MonthButton(),
+          ],
+        ),
+        bottomNavigationBar: MonthNavigationBar(
+            onTapped: _onItemTapped, selectedIndex: _selectedIndex),
+        body: GridView.count(
+          crossAxisCount: AutoScalingFactor.calendarsPerRow(context),
+          children: <Widget>[
+            yearCalendar[0],
+            yearCalendar[1],
+            yearCalendar[2],
+            yearCalendar[3],
+            yearCalendar[4],
+            yearCalendar[5],
+            yearCalendar[6],
+            yearCalendar[7],
+            yearCalendar[8],
+            yearCalendar[9],
+            yearCalendar[10],
+            yearCalendar[11],
+          ],
+        ),
       ),
     );
   }
@@ -495,7 +496,9 @@ class _ToggleSwitchState extends State<ToggleSwitch> {
 }
 
 class MonthButton extends StatefulWidget {
-  const MonthButton({super.key,});
+  const MonthButton({
+    super.key,
+  });
 
   @override
   State<MonthButton> createState() => _MonthButtonState();
@@ -525,21 +528,23 @@ class _MonthButtonState extends State<MonthButton> {
 
 class LanguageButton extends StatefulWidget {
   final Function(String code) language;
-  const LanguageButton({super.key, required this.language,});
+  const LanguageButton({
+    super.key,
+    required this.language,
+  });
 
   @override
   State<LanguageButton> createState() => _LanguageButtonState();
 }
 
 class _LanguageButtonState extends State<LanguageButton> {
-  
-final List<Language> list = <Language>[german, english, chinese];
-Language dropdownValue = english;
+  final List<Language> list = <Language>[german, english, chinese];
+  Language dropdownValue = english;
   @override
   Widget build(BuildContext context) {
     return DropdownButton<Language>(
       value: dropdownValue,
-      icon: const Visibility (visible:false, child: Icon(Icons.arrow_downward)),
+      icon: const Visibility(visible: false, child: Icon(Icons.arrow_downward)),
       dropdownColor: AppColorScheme.antiFlash,
       focusColor: AppColorScheme.antiFlash,
       underline: Container(
@@ -647,7 +652,6 @@ class RoutePage extends StatelessWidget {
     );
   }
 }
-
 
 class MonthNavigationBar extends BottomNavigationBar {
   MonthNavigationBar({
