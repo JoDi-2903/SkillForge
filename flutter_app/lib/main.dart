@@ -2,6 +2,11 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flag/flag.dart';
+
+
+
 void main() {
   runApp(const MyApp());
 }
@@ -75,7 +80,7 @@ class _MyHomePageState extends State<MyHomePage> {
     CalendarController(),
     CalendarController(),
   ];
-
+  static Locale language = const Locale('en');
 
   @override
   void initState() {
@@ -128,6 +133,11 @@ class _MyHomePageState extends State<MyHomePage> {
   dynamic refresh(){
     setState(() {});
   }
+  
+  dynamic setLocale(String code){
+    language = Locale(code);
+    refresh();
+  }
   @override
   Widget build(BuildContext context) {
     final yearCalendar = <MonthCalendarCard>[
@@ -144,71 +154,84 @@ class _MyHomePageState extends State<MyHomePage> {
     MonthCalendarCard(context: context, initDate: DateTime(DateTime.now().year, 11), control:controllers[10]),
     MonthCalendarCard(context: context, initDate: DateTime(DateTime.now().year, 12), control:controllers[11]),
   ];
-    return Scaffold(
-      backgroundColor:  AppColorScheme.ownWhite,
-      appBar: AppBar(
-        leading: ToggleSwitch(notifyParent: refresh,),
-        backgroundColor:  AppColorScheme.antiFlash,
-        elevation: 5,
-        shadowColor:  AppColorScheme.indigo,
-        surfaceTintColor: Colors.transparent,
-        actions: <Widget>[
-          LoginButton(),
-          CalendarButton(),
-        ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.arrow_back, color: AppColorScheme.indigo,),
-            label: 'Year',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.arrow_back, color: AppColorScheme.indigo,),
-            label: 'Month',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.reset_tv, color: AppColorScheme.indigo,),
-            label: 'Reset',
-          ),
-                    BottomNavigationBarItem(
-            icon: Icon(Icons.arrow_forward, color: AppColorScheme.indigo,),
-            label: 'Month',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.arrow_forward, color: AppColorScheme.indigo,),
-            label: 'Forward',
-          ),
-        ],
-        backgroundColor: AppColorScheme.antiFlash,
-        selectedItemColor: AppColorScheme.indigo,
-        unselectedItemColor: AppColorScheme.indigo,
-        selectedFontSize: 12,
-        unselectedFontSize: 12,
-        type: BottomNavigationBarType.fixed,
-        elevation: 0.0,
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-      ),
-      body:
-        GridView.count(
-          crossAxisCount: AutoScalingFactor.calendarsPerRow(context),
-          children: <Widget>[
-            yearCalendar[0],
-            yearCalendar[1], 
-            yearCalendar[2],
-            yearCalendar[3],
-            yearCalendar[4],
-            yearCalendar[5],
-            yearCalendar[6],
-            yearCalendar[7],
-            yearCalendar[8],
-            yearCalendar[9],
-            yearCalendar[10],
-            yearCalendar[11],
-
+    return MaterialApp(
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      supportedLocales: const <Locale>[
+        Locale('zh'),
+        Locale('en'),
+        Locale('de'),
+      ],
+      locale: language,
+      home:Scaffold(
+        backgroundColor:  AppColorScheme.ownWhite,
+        appBar: AppBar(
+          leading: ToggleSwitch(notifyParent: refresh,),
+          backgroundColor:  AppColorScheme.antiFlash,
+          elevation: 5,
+          shadowColor:  AppColorScheme.indigo,
+          surfaceTintColor: Colors.transparent,
+          actions: <Widget>[
+            LanguageButton(language: setLocale),
+            const LoginButton(),
+            const CalendarButton(),
           ],
         ),
+        bottomNavigationBar: BottomNavigationBar(
+          items: <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.arrow_back, color: AppColorScheme.indigo,),
+              label: 'Year',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.arrow_back, color: AppColorScheme.indigo,),
+              label: 'Month',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.reset_tv, color: AppColorScheme.indigo,),
+              label: 'Reset',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.arrow_forward, color: AppColorScheme.indigo,),
+              label: 'Month',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.arrow_forward, color: AppColorScheme.indigo,),
+              label: 'Forward',
+            ),
+          ],
+          backgroundColor: AppColorScheme.antiFlash,
+          selectedItemColor: AppColorScheme.indigo,
+          unselectedItemColor: AppColorScheme.indigo,
+          selectedFontSize: 12,
+          unselectedFontSize: 12,
+          type: BottomNavigationBarType.fixed,
+          elevation: 0.0,
+          currentIndex: _selectedIndex,
+          onTap: _onItemTapped,
+        ),
+        body:
+          GridView.count(
+            crossAxisCount: AutoScalingFactor.calendarsPerRow(context),
+            children: <Widget>[
+              yearCalendar[0],
+              yearCalendar[1], 
+              yearCalendar[2],
+              yearCalendar[3],
+              yearCalendar[4],
+              yearCalendar[5],
+              yearCalendar[6],
+              yearCalendar[7],
+              yearCalendar[8],
+              yearCalendar[9],
+              yearCalendar[10],
+              yearCalendar[11],
+          ],
+        ),
+      ),
     );
   }
 }
@@ -413,7 +436,7 @@ class _ToggleSwitchState extends State<ToggleSwitch> {
 
 
 class CalendarButton extends StatefulWidget {
-  CalendarButton({super.key});
+  const CalendarButton({super.key,});
 
   @override
   State<CalendarButton> createState() => _CalendarButtonState();
@@ -430,8 +453,7 @@ class _CalendarButtonState extends State<CalendarButton> {
           color: AppColorScheme.indigo,
           iconSize: 35,
           onPressed: () {
-            setState(() {
-            });
+            setState(() {});
           },
         ),
       ],
@@ -439,8 +461,40 @@ class _CalendarButtonState extends State<CalendarButton> {
   }
 }
 
+class LanguageButton extends StatefulWidget {
+  final Function(String code) language;
+  const LanguageButton({super.key, required this.language,});
+
+  @override
+  State<LanguageButton> createState() => _LanguageButtonState();
+}
+
+class _LanguageButtonState extends State<LanguageButton> {
+  
+final List<String> list = <String>['de','en'];
+String dropdownValue = 'en';
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButton<String>(
+      value: dropdownValue,
+      onChanged: (String? value) {
+        setState(() {
+          dropdownValue = value!;
+        });
+        widget.language(dropdownValue);
+      },
+      items: list.map<DropdownMenuItem<String>>((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(value),
+        );
+      }).toList(),
+    );
+  }
+}
+
 class LoginButton extends StatefulWidget {
-  LoginButton({super.key});
+  const LoginButton({super.key});
 
   @override
   State<LoginButton> createState() => _LoginButtonState();
@@ -482,7 +536,7 @@ class RoutePage extends StatelessWidget {
           onPressed: () {
             Navigator.pop(context);
           },
-          child: const Text('Go back!'),
+          child: Text(Localizations.localeOf(context).toString()),
         ),
       ),
     );
@@ -522,3 +576,4 @@ class AppColorScheme{
     }
   }
 }
+
