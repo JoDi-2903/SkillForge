@@ -52,7 +52,12 @@ class _FilterDialogState extends State<FilterDialog> {
       padding: MediaQuery.of(context).viewInsets,
       child: SingleChildScrollView(
         child: Container(
-          color: AppColorScheme.ownWhite,
+          decoration: BoxDecoration(
+            color: AppColorScheme.ownWhite,
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(20),
+            ),
+          ),
           padding: const EdgeInsets.all(16.0),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -68,7 +73,13 @@ class _FilterDialogState extends State<FilterDialog> {
               const SizedBox(height: 16),
               // User ID Filter
               CheckboxListTile(
-                title: Text(AppStrings.filterByUser),
+                activeColor: AppColorScheme.indigo,
+                checkColor: AppColorScheme.ownWhite,
+                tileColor: AppColorScheme.antiFlash,
+                title: Text(
+                  AppStrings.filterByUser,
+                  style: TextStyle(color: AppColorScheme.ownBlack),
+                ),
                 value: _filterByUser,
                 onChanged: isUserLoggedIn
                     ? (value) {
@@ -87,11 +98,21 @@ class _FilterDialogState extends State<FilterDialog> {
               const SizedBox(height: 16),
               // Event Type Filter
               ExpansionTile(
-                title: Text(AppStrings.eventType),
+                title: Text(
+                  AppStrings.eventType,
+                  style: TextStyle(color: AppColorScheme.ownBlack),
+                ),
+                iconColor: AppColorScheme.indigo,
                 initiallyExpanded: _selectedEventTypes.isNotEmpty,
                 children: _eventTypes.map((type) {
                   return CheckboxListTile(
-                    title: Text(type),
+                    activeColor: AppColorScheme.indigo,
+                    checkColor: AppColorScheme.ownWhite,
+                    tileColor: AppColorScheme.antiFlash,
+                    title: Text(
+                      type,
+                      style: TextStyle(color: AppColorScheme.ownBlack),
+                    ),
                     value: _selectedEventTypes.contains(type),
                     onChanged: (value) {
                       setState(() {
@@ -109,11 +130,21 @@ class _FilterDialogState extends State<FilterDialog> {
               const SizedBox(height: 16),
               // Subject Area Filter
               ExpansionTile(
-                title: Text(AppStrings.subjectArea),
+                title: Text(
+                  AppStrings.subjectArea,
+                  style: TextStyle(color: AppColorScheme.ownBlack),
+                ),
+                iconColor: AppColorScheme.indigo,
                 initiallyExpanded: _selectedSubjectAreas.isNotEmpty,
                 children: _subjectAreas.map((area) {
                   return CheckboxListTile(
-                    title: Text(area),
+                    activeColor: AppColorScheme.indigo,
+                    checkColor: AppColorScheme.ownWhite,
+                    tileColor: AppColorScheme.antiFlash,
+                    title: Text(
+                      area,
+                      style: TextStyle(color: AppColorScheme.ownBlack),
+                    ),
                     value: _selectedSubjectAreas.contains(area),
                     onChanged: (value) {
                       setState(() {
@@ -143,15 +174,14 @@ class _FilterDialogState extends State<FilterDialog> {
                       });
                       // Apply cleared filters
                       Navigator.pop(context, {
-                        'user_id': _filterByUser
-                            ? login.UserState().userId.toString()
-                            : null,
-                        'event_type': _selectedEventTypes,
-                        'subject_area': _selectedSubjectAreas,
+                        'user_id': null,
+                        'event_type': [],
+                        'subject_area': [],
                       });
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColorScheme.battleShip,
+                      foregroundColor: AppColorScheme.ownWhite,
                     ),
                     child: Text(AppStrings.clearFilters),
                   ),
@@ -168,6 +198,7 @@ class _FilterDialogState extends State<FilterDialog> {
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColorScheme.indigo,
+                      foregroundColor: AppColorScheme.ownWhite,
                     ),
                     child: Text(AppStrings.applyFilters),
                   ),

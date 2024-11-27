@@ -181,7 +181,7 @@ Future<DataSource> _getCalendarDataSource(Map<String, dynamic> filters) async {
           endTime: endTime,
           subject: event['title'],
           color: color,
-          notes: event['training_id'].toString(),
+          notes: dateInfo['day_id'].toString(),
         ));
       }
     }
@@ -327,7 +327,7 @@ class MonthCalendar extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (context) => AppointmentDetailScreen(
-                      trainingId: appointment.notes!,
+                      dayId: appointment.notes!,
                     ),
                   ),
                 );
@@ -469,7 +469,7 @@ class WeekCalendar extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (context) => AppointmentDetailScreen(
-                      trainingId: appointment.notes!,
+                      dayId: appointment.notes!,
                     ),
                   ),
                 );

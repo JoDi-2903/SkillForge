@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class AppointmentDetailScreen extends StatelessWidget {
-  final String trainingId;
+  final String dayId;
 
-  const AppointmentDetailScreen({super.key, required this.trainingId});
+  const AppointmentDetailScreen({super.key, required this.dayId});
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +13,7 @@ class AppointmentDetailScreen extends StatelessWidget {
         title: Text('Appointment Details'),
       ),
       body: Center(
-        child: Text('Training ID: $trainingId'),
+        child: Text('Day ID: $dayId'),
       ),
     );
   }
