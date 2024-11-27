@@ -114,7 +114,7 @@ class DataSource extends CalendarDataSource {
   }
 }
 
-Future<DataSource> _getCalendarDataSource() async {
+Future<DataSource> _getCalendarDataSource(Map<String, dynamic> filters) async {
   // Prepare the language parameter
   String language = MyApp.language.languageCode.toUpperCase();
   if (language == 'ZH') {
@@ -124,10 +124,18 @@ Future<DataSource> _getCalendarDataSource() async {
   // Optional parameters
   Map<String, String> params = {
     'language': language,
-    // 'user_id': '',
-    // 'event_type': '',
-    // 'subject_area': '',
   };
+
+  // Add filters to params
+  if (filters['user_id'] != null) {
+    params['user_id'] = filters['user_id'];
+  }
+  if (filters['event_type'] != null && filters['event_type'].isNotEmpty) {
+    params['event_type'] = filters['event_type'].join(',');
+  }
+  if (filters['subject_area'] != null && filters['subject_area'].isNotEmpty) {
+    params['subject_area'] = filters['subject_area'].join(',');
+  }
 
   // Build the URI with query parameters
   Uri uri = Uri.http('127.0.0.1:5000', '/api/calendar-events', params);
@@ -192,6 +200,7 @@ class MonthCalendarCard extends Card {
     this.control,
     this.factorScaling = 1,
     this.cellOffset = 0,
+    required this.filters,
   }) : super(
             margin: const EdgeInsets.all(7),
             child: SfCalendarTheme(
@@ -203,12 +212,14 @@ class MonthCalendarCard extends Card {
                   control: control,
                   factorScaling: factorScaling,
                   cellOffset: cellOffset,
+                  filters: filters,
                 )));
   final BuildContext context;
   final DateTime? initDate;
   final CalendarController? control;
   final double factorScaling;
   final double cellOffset;
+  final Map<String, dynamic> filters;
 }
 
 class MonthCalendar extends StatelessWidget {
@@ -219,6 +230,7 @@ class MonthCalendar extends StatelessWidget {
     this.control,
     required this.factorScaling,
     required this.cellOffset,
+    required this.filters,
   }) : initDate = initDate ??
             DateTime(DateTime.now().year, DateTime.now().month,
                 DateTime.now().day, 08, 45);
@@ -228,11 +240,12 @@ class MonthCalendar extends StatelessWidget {
   final CalendarController? control;
   final double factorScaling;
   final double cellOffset;
+  final Map<String, dynamic> filters;
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<DataSource>(
-      future: _getCalendarDataSource(), // Fetch the data source
+      future: _getCalendarDataSource(filters), // Fetch the data source
       builder: (BuildContext context, AsyncSnapshot<DataSource> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           // Show a loading indicator while waiting for the data
@@ -338,6 +351,7 @@ class WeekCalendarCard extends Card {
     this.control,
     this.factorScaling = 1,
     this.cellOffset = 0,
+    required this.filters,
   }) : super(
             margin: const EdgeInsets.all(7),
             child: SfCalendarTheme(
@@ -349,12 +363,14 @@ class WeekCalendarCard extends Card {
                   control: control,
                   factorScaling: factorScaling,
                   cellOffset: cellOffset,
+                  filters: filters,
                 )));
   final BuildContext context;
   final DateTime? initDate;
   final CalendarController? control;
   final double factorScaling;
   final double cellOffset;
+  final Map<String, dynamic> filters;
 }
 
 class WeekCalendar extends StatelessWidget {
@@ -365,6 +381,7 @@ class WeekCalendar extends StatelessWidget {
     this.control,
     required this.factorScaling,
     required this.cellOffset,
+    required this.filters,
   }) : initDate = initDate ??
             DateTime(DateTime.now().year, DateTime.now().month,
                 DateTime.now().day, 08, 45);
@@ -374,11 +391,12 @@ class WeekCalendar extends StatelessWidget {
   final CalendarController? control;
   final double factorScaling;
   final double cellOffset;
+  final Map<String, dynamic> filters;
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<DataSource>(
-      future: _getCalendarDataSource(), // Fetch the data source
+      future: _getCalendarDataSource(filters), // Fetch the data source
       builder: (BuildContext context, AsyncSnapshot<DataSource> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           // Show a loading indicator while waiting for the data

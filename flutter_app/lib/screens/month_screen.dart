@@ -5,7 +5,9 @@ import '../utils/buttons.dart';
 import 'package:skill_forge/utils/interfaces.dart';
 
 class MonthPage extends StatefulWidget {
-  const MonthPage({super.key});
+  const MonthPage({super.key, required this.filters});
+
+  final Map<String, dynamic> filters;
 
   @override
   State<MonthPage> createState() => _MonthPageState();
@@ -64,6 +66,7 @@ class _MonthPageState extends State<MonthPage> {
           control: controller,
           factorScaling: 2,
           cellOffset: 1.01,
+          filters: widget.filters,
         ),
         bottomNavigationBar: MonthNavigationBar(
           onTapped: _onItemTapped,
