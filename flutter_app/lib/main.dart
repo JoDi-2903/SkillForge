@@ -13,6 +13,7 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+  static Locale get language => _MyHomePageState.language;
 
   // This widget is the root of your application.
   @override
