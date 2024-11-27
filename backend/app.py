@@ -120,8 +120,8 @@ def get_calendar_events():
     Query Parameters:
     - language: 'DE' or 'EN' (required)
     - user_id: Optional user ID to filter events
-    - event_type: Optional event type filter
-    - subject_area: Optional subject area filter
+    - event_type: Optional event types filter (comma-separated list)
+    - subject_area: Optional subject areas filter (comma-separated list)
     
     Returns:
     JSON response with filtered calendar events
@@ -129,8 +129,14 @@ def get_calendar_events():
     # Extract query parameters
     language = request.args.get('language', 'EN').upper()
     user_id = request.args.get('user_id', type=int)
-    event_type = request.args.get('event_type')
-    subject_area = request.args.get('subject_area')
+    
+    # Parse comma-separated lists into arrays
+    event_types = request.args.get('event_type', '').split(',') if request.args.get('event_type') else []
+    subject_areas = request.args.get('subject_area', '').split(',') if request.args.get('subject_area') else []
+    
+    # Remove empty strings from arrays
+    event_types = [et.strip() for et in event_types if et.strip()]
+    subject_areas = [sa.strip() for sa in subject_areas if sa.strip()]
 
     # Base query to join relevant tables
     query = db.session.query(
@@ -152,11 +158,12 @@ def get_calendar_events():
             TrainingCourses.TrainingID == Participates.TrainingID
         ).filter(Participates.UserID == user_id)
 
-    if event_type:
-        query = query.filter(EventInformation.EventType == event_type)
+    # Apply IN filters for multiple values
+    if event_types:
+        query = query.filter(EventInformation.EventType.in_(event_types))
 
-    if subject_area:
-        query = query.filter(EventInformation.SubjectArea == subject_area)
+    if subject_areas:
+        query = query.filter(EventInformation.SubjectArea.in_(subject_areas))
 
     # Execute query
     results = query.all()
@@ -164,7 +171,7 @@ def get_calendar_events():
     # Prepare response
     calendar_events = []
     for training, event_info, event_day in results:
-        # Select name and description based on language
+        # Select name based on language
         name = event_info.NameEN if language == 'EN' else event_info.NameDE
 
         event = {
