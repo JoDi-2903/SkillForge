@@ -174,6 +174,8 @@ Future<DataSource> _getCalendarDataSource(Map<String, dynamic> filters) async {
             DateTime.parse('${dateInfo['date']} ${dateInfo['start_time']}');
         DateTime endTime =
             DateTime.parse('${dateInfo['date']} ${dateInfo['end_time']}');
+        String location =
+            '${dateInfo['location']}, ${dateInfo['federal_state']}';
 
         // Create Appointment
         appointments.add(Appointment(
@@ -182,6 +184,7 @@ Future<DataSource> _getCalendarDataSource(Map<String, dynamic> filters) async {
           subject: event['title'],
           color: color,
           notes: dateInfo['day_id'].toString(),
+          location: location,
         ));
       }
     }
@@ -279,13 +282,19 @@ class MonthCalendar extends StatelessWidget {
               appointmentDisplayCount: 2,
               monthCellStyle: MonthCellStyle(
                 leadingDatesTextStyle: TextStyle(
-                  color: AppColorScheme.ownBlack,
+                  fontSize:
+                      factorScaling * AutoScalingFactor.cellTextScaler(context),
                   height: -1.01 + cellOffset,
                 ),
                 textStyle: TextStyle(
+                  color: AppColorScheme.ownBlack,
+                  fontSize:
+                      factorScaling * AutoScalingFactor.cellTextScaler(context),
                   height: -1.01 + cellOffset,
                 ),
                 trailingDatesTextStyle: TextStyle(
+                  fontSize:
+                      factorScaling * AutoScalingFactor.cellTextScaler(context),
                   height: -1.01 + cellOffset,
                 ),
                 leadingDatesBackgroundColor: AppColorScheme.antiFlash,
@@ -327,7 +336,11 @@ class MonthCalendar extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (context) => AppointmentDetailScreen(
-                      dayId: appointment.notes!,
+                      subject: appointment.subject,
+                      startTime: appointment.startTime,
+                      endTime: appointment.endTime,
+                      location: appointment.location!,
+                      color: appointment.color,
                     ),
                   ),
                 );
@@ -469,7 +482,11 @@ class WeekCalendar extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (context) => AppointmentDetailScreen(
-                      dayId: appointment.notes!,
+                      subject: appointment.subject,
+                      startTime: appointment.startTime,
+                      endTime: appointment.endTime,
+                      location: appointment.location!,
+                      color: appointment.color,
                     ),
                   ),
                 );
