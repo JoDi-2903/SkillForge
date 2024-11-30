@@ -171,6 +171,7 @@ class _LoginScreenState extends State<LoginScreen> {
           icon: Icon(Icons.arrow_back, color: AppColorScheme.indigo),
           onPressed: () => Navigator.pop(context),
         ),
+        centerTitle: true,
       ),
       body: Center(
         child: SingleChildScrollView(

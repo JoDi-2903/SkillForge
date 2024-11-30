@@ -90,8 +90,10 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     for (var i = 0; i < 12; i++) {
       controllers[i] = CalendarController();
+      controllers[i].displayDate = DateTime(DateTime.now().year, i + 1);
     }
     super.initState();
+
     if (DateTime.now().hour > 18 || DateTime.now().hour <= 6) {
       AppColorScheme.setDarkmode(true);
     }

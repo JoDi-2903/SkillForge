@@ -87,7 +87,8 @@ class AppointmentDetailScreen extends StatelessWidget {
             // Build your appointment detail screen here
             return Scaffold(
               appBar: AppBar(
-                title: const Center(child: Text('Appointment Details')),
+                title: const Text('Appointment Details'),
+                centerTitle: true,
                 backgroundColor: snapshot.data?.color,
               ),
               body: Center(
