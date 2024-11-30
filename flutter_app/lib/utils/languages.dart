@@ -88,7 +88,13 @@ class AppStrings {
         rememberMe = '記住帳號';
         forgotPassword = '忘記密碼？';
         resetPassword = '重設密碼';
-      // ToDo @Arne: Add missing chinese translations for filter dialog
+        filterOptions = '過濾器選項';
+        filterByUser = '只顯示我的約會';
+        loginToFilter = '請登入以按預訂的約會進行篩選。';
+        eventType = '事件類型';
+        subjectArea = '部門';
+        clearFilters = '清除過濾器';
+        applyFilters = '應用過濾器';
       default:
         appTitle = 'Skillforge';
         hompageTitle = 'Skillforge';
