@@ -112,7 +112,8 @@ class _LoginScreenState extends State<LoginScreen> {
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-                builder: (context) => MyHomePage(title: AppStrings.hompageTitle)));
+                builder: (context) =>
+                    MyHomePage(title: AppStrings.hompageTitle)));
       } else {
         // Refresh captcha and clear captcha text field on failed login
         setState(() {
@@ -263,7 +264,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: Column(
                         children: [
                           LocalCaptcha(
-                            key: ValueKey('captcha'),
+                            key: const ValueKey('captcha'),
                             controller: _captchaController,
                             height: 150,
                             width: 300,

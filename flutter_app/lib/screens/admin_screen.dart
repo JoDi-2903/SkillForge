@@ -5,10 +5,10 @@ import 'package:skill_forge/utils/color_scheme.dart';
 import 'package:intl/intl.dart';
 
 class AdminEventScreen extends StatefulWidget {
-  const AdminEventScreen({Key? key}) : super(key: key);
+  const AdminEventScreen({super.key});
 
   @override
-  _AdminEventScreenState createState() => _AdminEventScreenState();
+  State<AdminEventScreen> createState() => _AdminEventScreenState();
 }
 
 class _AdminEventScreenState extends State<AdminEventScreen> {

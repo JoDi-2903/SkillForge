@@ -8,6 +8,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:skill_forge/main.dart';
+import 'package:skill_forge/utils/buttons.dart';
 
 void main() {
   testWidgets('Initial app test', (WidgetTester tester) async {
