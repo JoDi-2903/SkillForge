@@ -5,7 +5,9 @@ import '../utils/buttons.dart';
 import 'package:skill_forge/utils/interfaces.dart';
 
 class WeekPage extends StatefulWidget {
-  const WeekPage({super.key});
+  const WeekPage({super.key, required this.filters});
+
+  final Map<String, dynamic> filters;
 
   @override
   State<WeekPage> createState() => _WeekPageState();
@@ -13,8 +15,6 @@ class WeekPage extends StatefulWidget {
 
 class _WeekPageState extends State<WeekPage> {
   int _selectedIndex = 0;
-  int weekOffset = 0;
-  int monthOffset = 0;
   late CalendarController controller;
 
   @override
@@ -64,6 +64,7 @@ class _WeekPageState extends State<WeekPage> {
           control: controller,
           factorScaling: 1.5,
           cellOffset: 1.01,
+          filters: widget.filters,
         ),
         bottomNavigationBar: WeekNavigationBar(
           onTapped: _onItemTapped,

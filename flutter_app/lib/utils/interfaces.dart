@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:skill_forge/utils/color_scheme.dart';
 import 'package:skill_forge/utils/languages.dart';
 import 'package:skill_forge/main.dart';
 import 'package:skill_forge/utils/holidays.dart';
+import 'package:skill_forge/screens/appointment_detail_screen.dart';
 
 class MonthNavigationBar extends BottomNavigationBar {
   MonthNavigationBar({
@@ -112,19 +115,85 @@ class DataSource extends CalendarDataSource {
   }
 }
 
-DataSource _getCalendarDataSource() {
-  List<Appointment> appointments = <Appointment>[];
-  appointments.add(Appointment(
-    startTime: DateTime.now().subtract(const Duration(hours: 1)),
-    endTime: DateTime.now().add(const Duration(hours: 1)),
-    isAllDay: true,
-    subject: 'Meeting',
-    color: Colors.blue,
-    startTimeZone: '',
-    endTimeZone: '',
-  ));
+Future<DataSource> _getCalendarDataSource(Map<String, dynamic> filters) async {
+  // Prepare the language parameter
+  String language = MyApp.language.languageCode.toUpperCase();
+  if (language == 'ZH') {
+    language = 'EN';
+  }
 
-  return DataSource(appointments);
+  // Optional parameters
+  Map<String, String> params = {
+    'language': language,
+  };
+
+  // Add filters to params
+  if (filters['user_id'] != null) {
+    params['user_id'] = filters['user_id'];
+  }
+  if (filters['event_type'] != null && filters['event_type'].isNotEmpty) {
+    params['event_type'] = filters['event_type'].join(',');
+  }
+  if (filters['subject_area'] != null && filters['subject_area'].isNotEmpty) {
+    params['subject_area'] = filters['subject_area'].join(',');
+  }
+
+  // Build the URI with query parameters
+  Uri uri = Uri.http('127.0.0.1:5000', '/api/calendar-events', params);
+
+  // Fetch data from the API
+  final response = await http.get(uri);
+
+  if (response.statusCode == 200) {
+    List<dynamic> data = json.decode(response.body);
+
+    List<Appointment> appointments = [];
+
+    for (var event in data) {
+      // Determine the color based on 'subject_area'
+      Color color;
+      switch (event['subject_area']) {
+        case 'Computer Science':
+          color = AppColorScheme.computerScience;
+          break;
+        case 'Electrical Engineering':
+          color = AppColorScheme.electricalEngineering;
+          break;
+        case 'Mechanical Engineering':
+          color = AppColorScheme.mechanicalEngineering;
+          break;
+        case 'Mechatronics':
+          color = AppColorScheme.mechatronics;
+          break;
+        default:
+          color = AppColorScheme.otherSubject;
+      }
+
+      // Parse dates
+      for (var dateInfo in event['dates']) {
+        DateTime startTime =
+            DateTime.parse('${dateInfo['date']} ${dateInfo['start_time']}');
+        DateTime endTime =
+            DateTime.parse('${dateInfo['date']} ${dateInfo['end_time']}');
+        String location =
+            '${dateInfo['location']}, ${dateInfo['federal_state']}';
+
+        // Create Appointment
+        appointments.add(Appointment(
+          startTime: startTime,
+          endTime: endTime,
+          subject: event['title'],
+          color: color,
+          notes: dateInfo['day_id'].toString(),
+          location: location,
+        ));
+      }
+    }
+
+    return DataSource(appointments);
+  } else {
+    throw Exception('Failed to load appointments');
+  }
 }
 
 class MonthCalendarCard extends Card {
@@ -135,6 +204,7 @@ class MonthCalendarCard extends Card {
     this.control,
     this.factorScaling = 1,
     this.cellOffset = 0,
+    required this.filters,
   }) : super(
             margin: const EdgeInsets.all(7),
             child: SfCalendarTheme(
@@ -146,15 +216,17 @@ class MonthCalendarCard extends Card {
                   control: control,
                   factorScaling: factorScaling,
                   cellOffset: cellOffset,
+                  filters: filters,
                 )));
   final BuildContext context;
   final DateTime? initDate;
   final CalendarController? control;
   final double factorScaling;
   final double cellOffset;
+  final Map<String, dynamic> filters;
 }
 
-class MonthCalendar extends SfCalendar {
+class MonthCalendar extends StatelessWidget {
   MonthCalendar({
     super.key,
     required this.context,
@@ -162,13 +234,35 @@ class MonthCalendar extends SfCalendar {
     this.control,
     required this.factorScaling,
     required this.cellOffset,
-  })  : initDate = initDate ??
+    required this.filters,
+  }) : initDate = initDate ??
             DateTime(DateTime.now().year, DateTime.now().month,
-                DateTime.now().day, 08, 45),
-        super(
+                DateTime.now().day, 08, 45);
+
+  final BuildContext context;
+  final DateTime initDate;
+  final CalendarController? control;
+  final double factorScaling;
+  final double cellOffset;
+  final Map<String, dynamic> filters;
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<DataSource>(
+      future: _getCalendarDataSource(filters), // Fetch the data source
+      builder: (BuildContext context, AsyncSnapshot<DataSource> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          // Show a loading indicator while waiting for the data
+          return Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          // Display an error message if something went wrong
+          return Center(child: Text('Error: ${snapshot.error}'));
+        } else if (snapshot.hasData) {
+          // Build the SfCalendar with the fetched data
+          return SfCalendar(
             view: CalendarView.month,
             firstDayOfWeek: 1,
-            dataSource: _getCalendarDataSource(),
+            dataSource: snapshot.data,
             backgroundColor: AppColorScheme.ownWhite,
             initialDisplayDate: initDate,
             controller: control,
@@ -189,7 +283,6 @@ class MonthCalendar extends SfCalendar {
               appointmentDisplayCount: 2,
               monthCellStyle: MonthCellStyle(
                 leadingDatesTextStyle: TextStyle(
-                  color: AppColorScheme.ownBlack,
                   fontSize:
                       factorScaling * AutoScalingFactor.cellTextScaler(context),
                   height: -1.01 + cellOffset,
@@ -201,7 +294,6 @@ class MonthCalendar extends SfCalendar {
                   height: -1.01 + cellOffset,
                 ),
                 trailingDatesTextStyle: TextStyle(
-                  color: AppColorScheme.ownBlack,
                   fontSize:
                       factorScaling * AutoScalingFactor.cellTextScaler(context),
                   height: -1.01 + cellOffset,
@@ -231,18 +323,34 @@ class MonthCalendar extends SfCalendar {
               backgroundColor: AppColorScheme.ownWhite,
               dayTextStyle: TextStyle(
                 color: AppColorScheme.ownBlack,
-                fontSize: factorScaling *
-                    2 *
-                    AutoScalingFactor.cellTextScaler(context),
+                fontSize:
+                    factorScaling * AutoScalingFactor.cellTextScaler(context),
                 height: -1.01 + cellOffset,
               ),
-            ));
-
-  final BuildContext context;
-  final DateTime initDate;
-  final CalendarController? control;
-  final double factorScaling;
-  final double cellOffset;
+            ),
+            // Handle appointment taps
+            onTap: (CalendarTapDetails details) {
+              if (details.appointments != null &&
+                  details.appointments!.isNotEmpty) {
+                Appointment appointment = details.appointments!.first;
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AppointmentDetailScreen(
+                      dayId: appointment.notes!,
+                    ),
+                  ),
+                );
+              }
+            },
+          );
+        } else {
+          // In case there's no data
+          return Center(child: Text('No appointments available'));
+        }
+      },
+    );
+  }
 }
 
 class WeekCalendarCard extends Card {
@@ -253,6 +361,7 @@ class WeekCalendarCard extends Card {
     this.control,
     this.factorScaling = 1,
     this.cellOffset = 0,
+    required this.filters,
   }) : super(
             margin: const EdgeInsets.all(7),
             child: SfCalendarTheme(
@@ -264,15 +373,17 @@ class WeekCalendarCard extends Card {
                   control: control,
                   factorScaling: factorScaling,
                   cellOffset: cellOffset,
+                  filters: filters,
                 )));
   final BuildContext context;
   final DateTime? initDate;
   final CalendarController? control;
   final double factorScaling;
   final double cellOffset;
+  final Map<String, dynamic> filters;
 }
 
-class WeekCalendar extends SfCalendar {
+class WeekCalendar extends StatelessWidget {
   WeekCalendar({
     super.key,
     required this.context,
@@ -280,14 +391,36 @@ class WeekCalendar extends SfCalendar {
     this.control,
     required this.factorScaling,
     required this.cellOffset,
-  })  : initDate = initDate ??
+    required this.filters,
+  }) : initDate = initDate ??
             DateTime(DateTime.now().year, DateTime.now().month,
-                DateTime.now().day, 08, 45),
-        super(
+                DateTime.now().day, 08, 45);
+
+  final BuildContext context;
+  final DateTime initDate;
+  final CalendarController? control;
+  final double factorScaling;
+  final double cellOffset;
+  final Map<String, dynamic> filters;
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<DataSource>(
+      future: _getCalendarDataSource(filters), // Fetch the data source
+      builder: (BuildContext context, AsyncSnapshot<DataSource> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          // Show a loading indicator while waiting for the data
+          return Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          // Display an error message if something went wrong
+          return Center(child: Text('Error: ${snapshot.error}'));
+        } else if (snapshot.hasData) {
+          // Build the SfCalendar with the fetched data
+          return SfCalendar(
             view: CalendarView.week,
             firstDayOfWeek: 1,
             specialRegions: getWeekTimeRegions(control?.displayDate, 'None'),
-            dataSource: _getCalendarDataSource(),
+            dataSource: snapshot.data,
             backgroundColor: AppColorScheme.ownWhite,
             timeSlotViewSettings: TimeSlotViewSettings(
                 timeTextStyle: TextStyle(
@@ -301,9 +434,8 @@ class WeekCalendar extends SfCalendar {
             headerStyle: CalendarHeaderStyle(
                 textStyle: TextStyle(
                   color: AppColorScheme.ownBlack,
-                  fontSize: factorScaling *
-                      2.5 *
-                      AutoScalingFactor.cellTextScaler(context),
+                  fontSize:
+                      factorScaling * AutoScalingFactor.cellTextScaler(context),
                 ),
                 textAlign: TextAlign.center,
                 backgroundColor: AppColorScheme.antiFlash),
@@ -328,22 +460,38 @@ class WeekCalendar extends SfCalendar {
               backgroundColor: AppColorScheme.ownWhite,
               dayTextStyle: TextStyle(
                 color: AppColorScheme.ownBlack,
-                fontSize: factorScaling *
-                    2 *
-                    AutoScalingFactor.cellTextScaler(context),
+                fontSize:
+                    factorScaling * AutoScalingFactor.cellTextScaler(context),
                 height: -1.01 + cellOffset,
               ),
               dateTextStyle: TextStyle(
                 color: AppColorScheme.ownBlack,
-                fontSize: factorScaling *
-                    2 *
-                    AutoScalingFactor.cellTextScaler(context),
+                fontSize:
+                    factorScaling * AutoScalingFactor.cellTextScaler(context),
                 height: -1.01 + cellOffset,
               ),
-            ));
-  final BuildContext context;
-  final DateTime initDate;
-  final CalendarController? control;
-  final double factorScaling;
-  final double cellOffset;
+            ),
+            // Handle appointment taps
+            onTap: (CalendarTapDetails details) {
+              if (details.appointments != null &&
+                  details.appointments!.isNotEmpty) {
+                Appointment appointment = details.appointments!.first;
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AppointmentDetailScreen(
+                      dayId: appointment.notes!,
+                    ),
+                  ),
+                );
+              }
+            },
+          );
+        } else {
+          // In case there's no data
+          return Center(child: Text('No appointments available'));
+        }
+      },
+    );
+  }
 }
