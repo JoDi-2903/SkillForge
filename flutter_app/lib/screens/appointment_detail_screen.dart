@@ -177,6 +177,7 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColorScheme.ownWhite,
       appBar: AppBar(
         title: Text(AppStrings.appointmentDetails),
         backgroundColor: appBarColor,
@@ -203,7 +204,7 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
                         eventDetails?['name'] ?? '',
                         style: TextStyle(
                           fontSize: 20,
-                          color: AppColorScheme.payne,
+                          color: AppColorScheme.indigo,
                         ),
                       ),
                       SizedBox(height: 16),
@@ -220,7 +221,8 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
                       isUserLoggedIn
                           ? ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: appBarColor,
+                                backgroundColor: AppColorScheme.indigo,
+                                foregroundColor: AppColorScheme.ownWhite,
                               ),
                               onPressed: isRegistered
                                   ? _cancelRegistration
@@ -233,7 +235,8 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
                             )
                           : ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: appBarColor,
+                                backgroundColor: AppColorScheme.indigo,
+                                foregroundColor: AppColorScheme.ownWhite,
                               ),
                               onPressed: null,
                               child: Text(AppStrings.loginRequired),
@@ -302,7 +305,7 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
       children: [
         Column(
           children: [
-            Icon(Icons.person_outline, color: AppColorScheme.indigo),
+            Icon(Icons.person_outline, color: appBarColor),
             SizedBox(height: 4),
             Text(
               '${eventDetails?['min_participants']}',
@@ -316,7 +319,7 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
         ),
         Column(
           children: [
-            Icon(Icons.person, color: AppColorScheme.indigo),
+            Icon(Icons.person, color: appBarColor),
             SizedBox(height: 4),
             Text(
               '${eventDetails?['current_participants'] ?? 0}',
@@ -330,7 +333,7 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
         ),
         Column(
           children: [
-            Icon(Icons.group, color: AppColorScheme.indigo),
+            Icon(Icons.group, color: appBarColor),
             SizedBox(height: 4),
             Text(
               '${eventDetails?['max_participants']}',
