@@ -22,12 +22,13 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
   bool isLoading = true;
   bool isRegistered = false;
   bool isUserLoggedIn = false;
+  late Color appBarColor;
 
   @override
   void initState() {
     super.initState();
-    _fetchEventDetails();
     _checkUserLoginStatus();
+    _fetchEventDetails();
   }
 
   Future<void> _fetchEventDetails() async {
@@ -44,6 +45,7 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
         setState(() {
           eventDetails = json.decode(response.body);
           isLoading = false;
+          _setAppBarColor();
         });
         if (isUserLoggedIn) {
           _checkRegistrationStatus();
@@ -53,6 +55,27 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
       }
     } catch (e) {
       _showErrorSnackBar(AppStrings.networkError);
+    }
+  }
+
+  void _setAppBarColor() {
+    // Determine the color based on 'subject_area'
+    String subjectArea = eventDetails?['subject_area'] ?? '';
+    switch (subjectArea) {
+      case 'Computer Science':
+        appBarColor = AppColorScheme.computerScience;
+        break;
+      case 'Electrical Engineering':
+        appBarColor = AppColorScheme.electricalEngineering;
+        break;
+      case 'Mechanical Engineering':
+        appBarColor = AppColorScheme.mechanicalEngineering;
+        break;
+      case 'Mechatronics':
+        appBarColor = AppColorScheme.mechatronics;
+        break;
+      default:
+        appBarColor = AppColorScheme.otherSubject;
     }
   }
 
@@ -139,12 +162,20 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
     );
   }
 
+  String _formatTime(String timeString) {
+    // Parses time string and returns in HH:MM format
+    TimeOfDay time = TimeOfDay(
+        hour: int.parse(timeString.split(":")[0]),
+        minute: int.parse(timeString.split(":")[1]));
+    return time.format(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(AppStrings.appointmentDetails),
-        backgroundColor: AppColorScheme.indigo,
+        backgroundColor: appBarColor,
       ),
       body: isLoading
           ? Center(child: CircularProgressIndicator())
@@ -163,6 +194,14 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
                           color: AppColorScheme.ownBlack,
                         ),
                       ),
+                      SizedBox(height: 8),
+                      Text(
+                        eventDetails?['name'] ?? '',
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: AppColorScheme.payne,
+                        ),
+                      ),
                       SizedBox(height: 16),
                       Text(
                         eventDetails?['description'] ?? '',
@@ -177,7 +216,7 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
                       isUserLoggedIn
                           ? ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: AppColorScheme.indigo,
+                                backgroundColor: appBarColor,
                               ),
                               onPressed: isRegistered
                                   ? _cancelRegistration
@@ -190,7 +229,7 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
                             )
                           : ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: AppColorScheme.indigo,
+                                backgroundColor: appBarColor,
                               ),
                               onPressed: null,
                               child: Text(AppStrings.loginRequired),
@@ -207,10 +246,17 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
       children: [
         _buildInfoRow(AppStrings.eventType, eventDetails?['event_type']),
         _buildInfoRow(AppStrings.subjectArea, eventDetails?['subject_area']),
-        _buildInfoRow(
-          AppStrings.participants,
-          '${eventDetails?['current_participants']}/${eventDetails?['max_participants']}',
+        SizedBox(height: 16),
+        Text(
+          AppStrings.participantInfo,
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: AppColorScheme.ownBlack,
+          ),
         ),
+        SizedBox(height: 8),
+        _buildParticipantRow(),
         SizedBox(height: 16),
         Text(
           AppStrings.eventDates,
@@ -229,10 +275,10 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
             return ListTile(
               leading: Icon(
                 Icons.calendar_today,
-                color: AppColorScheme.indigo,
+                color: appBarColor,
               ),
               title: Text(
-                '${dateInfo['date']} ${dateInfo['start_time']} - ${dateInfo['end_time']}',
+                '${dateInfo['date']} ${_formatTime(dateInfo['start_time'])} - ${_formatTime(dateInfo['end_time'])}',
                 style: TextStyle(color: AppColorScheme.ownBlack),
               ),
               subtitle: Text(
@@ -241,6 +287,56 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
               ),
             );
           },
+        ),
+      ],
+    );
+  }
+
+  Widget _buildParticipantRow() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        Column(
+          children: [
+            Icon(Icons.person_outline, color: AppColorScheme.indigo),
+            SizedBox(height: 4),
+            Text(
+              '${eventDetails?['min_participants']}',
+              style: TextStyle(color: AppColorScheme.ownBlack),
+            ),
+            Text(
+              AppStrings.minParticipants,
+              style: TextStyle(color: AppColorScheme.ownBlack, fontSize: 12),
+            ),
+          ],
+        ),
+        Column(
+          children: [
+            Icon(Icons.person, color: AppColorScheme.indigo),
+            SizedBox(height: 4),
+            Text(
+              '${eventDetails?['current_participants'] ?? 0}',
+              style: TextStyle(color: AppColorScheme.ownBlack),
+            ),
+            Text(
+              AppStrings.currentParticipants,
+              style: TextStyle(color: AppColorScheme.ownBlack, fontSize: 12),
+            ),
+          ],
+        ),
+        Column(
+          children: [
+            Icon(Icons.group, color: AppColorScheme.indigo),
+            SizedBox(height: 4),
+            Text(
+              '${eventDetails?['max_participants']}',
+              style: TextStyle(color: AppColorScheme.ownBlack),
+            ),
+            Text(
+              AppStrings.maxParticipants,
+              style: TextStyle(color: AppColorScheme.ownBlack, fontSize: 12),
+            ),
+          ],
         ),
       ],
     );

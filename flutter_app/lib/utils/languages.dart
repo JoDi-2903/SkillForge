@@ -45,6 +45,10 @@ class AppStrings {
   static String loginRequired = 'Login required to perform this action.';
   static String participants = 'Participants';
   static String eventDates = 'Event Dates';
+  static String minParticipants = 'Min Participants';
+  static String maxParticipants = 'Max Participants';
+  static String currentParticipants = 'Current Participants';
+  static String participantInfo = 'Participant Information';
 
   static void refreshLanguage(String language) {
     switch (language) {
@@ -96,6 +100,10 @@ class AppStrings {
         loginRequired = 'Anmeldung erforderlich, um diese Aktion auszuführen.';
         participants = 'Teilnehmer';
         eventDates = 'Veranstaltungstermine';
+        minParticipants = 'Minimale Teilnehmer';
+        maxParticipants = 'Maximale Teilnehmer';
+        currentParticipants = 'Aktuelle Teilnehmer';
+        participantInfo = 'Teilnehmerinformationen';
         break;
       case 'zh':
         appTitle = '技能鍛造';
@@ -175,6 +183,10 @@ class AppStrings {
         loginRequired = 'Login required to perform this action.';
         participants = 'Participants';
         eventDates = 'Event Dates';
+        minParticipants = 'Min Participants';
+        maxParticipants = 'Max Participants';
+        currentParticipants = 'Current Participants';
+        participantInfo = 'Participant Information';
     }
   }
 }
