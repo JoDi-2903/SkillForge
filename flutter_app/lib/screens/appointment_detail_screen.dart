@@ -114,10 +114,12 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
       );
       final data = json.decode(response.body);
       if (data['success']) {
-        _showSuccessSnackBar(AppStrings.registrationSuccessful);
         setState(() {
           isRegistered = true;
+          eventDetails?['current_participants'] =
+              (eventDetails?['current_participants'] ?? 0) + 1;
         });
+        _showSuccessSnackBar(AppStrings.registrationSuccessful);
       } else {
         _showErrorSnackBar(data['error'] ?? AppStrings.registrationFailed);
       }
@@ -138,10 +140,12 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
       );
       final data = json.decode(response.body);
       if (data['success']) {
-        _showSuccessSnackBar(AppStrings.cancellationSuccessful);
         setState(() {
           isRegistered = false;
+          eventDetails?['current_participants'] =
+              (eventDetails?['current_participants'] ?? 1) - 1;
         });
+        _showSuccessSnackBar(AppStrings.cancellationSuccessful);
       } else {
         _showErrorSnackBar(data['error'] ?? AppStrings.cancellationFailed);
       }
