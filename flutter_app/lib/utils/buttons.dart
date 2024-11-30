@@ -94,9 +94,9 @@ class _ToggleSwitchState extends State<ToggleSwitch> {
 }
 
 class MonthButton extends StatefulWidget {
-  const MonthButton({
-    super.key,
-  });
+  final Map<String, dynamic> filters;
+
+  const MonthButton({super.key, required this.filters});
 
   @override
   State<MonthButton> createState() => _MonthButtonState();
@@ -105,21 +105,18 @@ class MonthButton extends StatefulWidget {
 class _MonthButtonState extends State<MonthButton> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        IconButton(
-          icon: const Icon(Icons.calendar_month_rounded),
-          color: AppColorScheme.indigo,
-          iconSize: 35,
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const MonthPage()),
-            );
-          },
-        ),
-      ],
+    return IconButton(
+      icon: const Icon(Icons.calendar_month_rounded),
+      color: AppColorScheme.indigo,
+      iconSize: 35,
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MonthPage(filters: widget.filters),
+          ),
+        );
+      },
     );
   }
 }
@@ -231,7 +228,9 @@ class _AdminButtonState extends State<AdminButton> {
 }
 
 class WeekButton extends StatefulWidget {
-  const WeekButton({super.key});
+  final Map<String, dynamic> filters;
+
+  const WeekButton({super.key, required this.filters});
 
   @override
   State<WeekButton> createState() => _WeekButtonState();
@@ -240,21 +239,18 @@ class WeekButton extends StatefulWidget {
 class _WeekButtonState extends State<WeekButton> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        IconButton(
-          icon: const Icon(Icons.calendar_view_week_rounded),
-          color: AppColorScheme.indigo,
-          iconSize: 35,
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const WeekPage()),
-            );
-          },
-        ),
-      ],
+    return IconButton(
+      icon: const Icon(Icons.calendar_view_week_rounded),
+      color: AppColorScheme.indigo,
+      iconSize: 35,
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => WeekPage(filters: widget.filters),
+          ),
+        );
+      },
     );
   }
 }

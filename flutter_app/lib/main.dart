@@ -6,6 +6,7 @@ import 'package:skill_forge/utils/color_scheme.dart';
 import 'package:skill_forge/utils/languages.dart';
 import 'package:skill_forge/utils/buttons.dart';
 import 'package:skill_forge/utils/interfaces.dart';
+import 'package:skill_forge/utils/filter_dialog.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,6 +14,7 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+  static Locale get language => _MyHomePageState.language;
 
   // This widget is the root of your application.
   @override
@@ -144,57 +146,104 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  Map<String, dynamic> _filters = {
+    'user_id': null,
+    'event_type': [],
+    'subject_area': [],
+  };
+
+  // Function to open the filter dialog
+  void _openFilterDialog() async {
+    final result = await showModalBottomSheet<Map<String, dynamic>>(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) => FilterDialog(
+        initialFilters: _filters,
+      ),
+    );
+
+    if (result != null) {
+      setState(() {
+        _filters = result;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final yearCalendar = <MonthCalendarCard>[
       MonthCalendarCard(
-          context: context,
-          initDate: DateTime(DateTime.now().year, 1),
-          control: controllers[0]),
+        context: context,
+        initDate: DateTime(DateTime.now().year, 1),
+        control: controllers[0],
+        filters: _filters,
+      ),
       MonthCalendarCard(
-          context: context,
-          initDate: DateTime(DateTime.now().year, 2),
-          control: controllers[1]),
+        context: context,
+        initDate: DateTime(DateTime.now().year, 2),
+        control: controllers[1],
+        filters: _filters,
+      ),
       MonthCalendarCard(
-          context: context,
-          initDate: DateTime(DateTime.now().year, 3),
-          control: controllers[2]),
+        context: context,
+        initDate: DateTime(DateTime.now().year, 3),
+        control: controllers[2],
+        filters: _filters,
+      ),
       MonthCalendarCard(
-          context: context,
-          initDate: DateTime(DateTime.now().year, 4),
-          control: controllers[3]),
+        context: context,
+        initDate: DateTime(DateTime.now().year, 4),
+        control: controllers[3],
+        filters: _filters,
+      ),
       MonthCalendarCard(
-          context: context,
-          initDate: DateTime(DateTime.now().year, 5),
-          control: controllers[4]),
+        context: context,
+        initDate: DateTime(DateTime.now().year, 5),
+        control: controllers[4],
+        filters: _filters,
+      ),
       MonthCalendarCard(
-          context: context,
-          initDate: DateTime(DateTime.now().year, 6),
-          control: controllers[5]),
+        context: context,
+        initDate: DateTime(DateTime.now().year, 6),
+        control: controllers[5],
+        filters: _filters,
+      ),
       MonthCalendarCard(
-          context: context,
-          initDate: DateTime(DateTime.now().year, 7),
-          control: controllers[6]),
+        context: context,
+        initDate: DateTime(DateTime.now().year, 7),
+        control: controllers[6],
+        filters: _filters,
+      ),
       MonthCalendarCard(
-          context: context,
-          initDate: DateTime(DateTime.now().year, 8),
-          control: controllers[7]),
+        context: context,
+        initDate: DateTime(DateTime.now().year, 8),
+        control: controllers[7],
+        filters: _filters,
+      ),
       MonthCalendarCard(
-          context: context,
-          initDate: DateTime(DateTime.now().year, 9),
-          control: controllers[8]),
+        context: context,
+        initDate: DateTime(DateTime.now().year, 9),
+        control: controllers[8],
+        filters: _filters,
+      ),
       MonthCalendarCard(
-          context: context,
-          initDate: DateTime(DateTime.now().year, 10),
-          control: controllers[9]),
+        context: context,
+        initDate: DateTime(DateTime.now().year, 10),
+        control: controllers[9],
+        filters: _filters,
+      ),
       MonthCalendarCard(
-          context: context,
-          initDate: DateTime(DateTime.now().year, 11),
-          control: controllers[10]),
+        context: context,
+        initDate: DateTime(DateTime.now().year, 11),
+        control: controllers[10],
+        filters: _filters,
+      ),
       MonthCalendarCard(
-          context: context,
-          initDate: DateTime(DateTime.now().year, 12),
-          control: controllers[11]),
+        context: context,
+        initDate: DateTime(DateTime.now().year, 12),
+        control: controllers[11],
+        filters: _filters,
+      ),
     ];
     return MaterialApp(
       localizationsDelegates: const [
@@ -211,19 +260,18 @@ class _MyHomePageState extends State<MyHomePage> {
       home: Scaffold(
         backgroundColor: AppColorScheme.ownWhite,
         appBar: AppBar(
-          leading: ToggleSwitch(notifyParent: refresh),
-          backgroundColor: AppColorScheme.antiFlash,
-          elevation: 5,
-          shadowColor: AppColorScheme.indigo,
-          surfaceTintColor: Colors.transparent,
-          actions: <Widget>[
-            if (_isAdmin) const AdminButton(),
-            const LoginButton(),
-            LanguageButton(language: setLocale),
-            const WeekButton(),
-            const MonthButton(),
-          ],
-        ),
+            leading: ToggleSwitch(notifyParent: refresh),
+            backgroundColor: AppColorScheme.antiFlash,
+            elevation: 5,
+            shadowColor: AppColorScheme.indigo,
+            surfaceTintColor: Colors.transparent,
+            actions: <Widget>[
+              if (_isAdmin) const AdminButton(),
+              const LoginButton(),
+              LanguageButton(language: setLocale),
+              WeekButton(filters: _filters),
+              MonthButton(filters: _filters),
+            ]),
         bottomNavigationBar: MonthNavigationBar(
             onTapped: _onItemTapped, selectedIndex: _selectedIndex),
         body: GridView.count(
@@ -242,6 +290,11 @@ class _MyHomePageState extends State<MyHomePage> {
             yearCalendar[10],
             yearCalendar[11],
           ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: _openFilterDialog,
+          backgroundColor: AppColorScheme.indigo,
+          child: Icon(Icons.filter_alt, color: AppColorScheme.ownWhite),
         ),
       ),
     );
