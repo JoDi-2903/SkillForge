@@ -29,6 +29,22 @@ class AppStrings {
   static String subjectArea = 'Subject Area';
   static String clearFilters = 'Clear Filters';
   static String applyFilters = 'Apply Filters';
+  static String failedToLoadEventDetails = 'Failed to load event details.';
+  static String failedToCheckRegistrationStatus =
+      'Failed to check registration status.';
+  static String registrationSuccessful =
+      'Successfully registered for the event.';
+  static String registrationFailed = 'Registration failed.';
+  static String cancellationSuccessful =
+      'Successfully canceled your registration.';
+  static String cancellationFailed = 'Cancellation failed.';
+  static String appointmentDetails = 'Appointment Details';
+  static String noEventDetails = 'No event details available.';
+  static String cancelRegistration = 'Cancel Registration';
+  static String registerForEvent = 'Register for Event';
+  static String loginRequired = 'Login required to perform this action.';
+  static String participants = 'Participants';
+  static String eventDates = 'Event Dates';
 
   static void refreshLanguage(String language) {
     switch (language) {
@@ -64,6 +80,23 @@ class AppStrings {
         subjectArea = 'Fachbereich';
         clearFilters = 'Filter löschen';
         applyFilters = 'Filter anwenden';
+        failedToLoadEventDetails =
+            'Veranstaltungsdetails konnten nicht geladen werden.';
+        failedToCheckRegistrationStatus =
+            'Anmeldestatus konnte nicht überprüft werden.';
+        registrationSuccessful =
+            'Erfolgreich für die Veranstaltung angemeldet.';
+        registrationFailed = 'Anmeldung fehlgeschlagen.';
+        cancellationSuccessful = 'Anmeldung erfolgreich storniert.';
+        cancellationFailed = 'Stornierung fehlgeschlagen.';
+        appointmentDetails = 'Veranstaltungsdetails';
+        noEventDetails = 'Keine Veranstaltungsdetails verfügbar.';
+        cancelRegistration = 'Anmeldung stornieren';
+        registerForEvent = 'Für Veranstaltung anmelden';
+        loginRequired = 'Anmeldung erforderlich, um diese Aktion auszuführen.';
+        participants = 'Teilnehmer';
+        eventDates = 'Veranstaltungstermine';
+        break;
       case 'zh':
         appTitle = '技能鍛造';
         hompageTitle = '技能鍛造';
@@ -95,6 +128,8 @@ class AppStrings {
         subjectArea = '部門';
         clearFilters = '清除過濾器';
         applyFilters = '應用過濾器';
+        // ToDo: Add Chinese translations here
+        break;
       default:
         appTitle = 'Skillforge';
         hompageTitle = 'Skillforge';
@@ -126,6 +161,20 @@ class AppStrings {
         subjectArea = 'Subject Area';
         clearFilters = 'Clear Filters';
         applyFilters = 'Apply Filters';
+        failedToLoadEventDetails = 'Failed to load event details.';
+        failedToCheckRegistrationStatus =
+            'Failed to check registration status.';
+        registrationSuccessful = 'Successfully registered for the event.';
+        registrationFailed = 'Registration failed.';
+        cancellationSuccessful = 'Successfully canceled your registration.';
+        cancellationFailed = 'Cancellation failed.';
+        appointmentDetails = 'Appointment Details';
+        noEventDetails = 'No event details available.';
+        cancelRegistration = 'Cancel Registration';
+        registerForEvent = 'Register for Event';
+        loginRequired = 'Login required to perform this action.';
+        participants = 'Participants';
+        eventDates = 'Event Dates';
     }
   }
 }

@@ -1,205 +1,241 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:skill_forge/utils/color_scheme.dart';
-import 'package:skill_forge/main.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:skill_forge/utils/color_scheme.dart';
+import 'package:skill_forge/main.dart';
+import 'package:skill_forge/screens/login_screen.dart' as login;
+import 'package:skill_forge/utils/languages.dart';
 
-class Event {
+class AppointmentDetailScreen extends StatefulWidget {
   final String dayId;
-  final String subject;
-  final String description;
-  /*final DateTime startTime;
-  final DateTime endTime;
-  final String location;*/
-  final Color color;
-  Event(this.dayId, this.subject, this.description,
-      /*this.startTime, this.endTime, this.location,*/ this.color);
+
+  const AppointmentDetailScreen({Key? key, required this.dayId})
+      : super(key: key);
+
+  @override
+  _AppointmentDetailScreenState createState() =>
+      _AppointmentDetailScreenState();
 }
 
-Future<Event> _getEventInfo(String dayId) async {
-  String language = MyApp.language.languageCode.toUpperCase();
-  if (language == 'ZH') {
-    language = 'EN';
+class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
+  Map<String, dynamic>? eventDetails;
+  bool isLoading = true;
+  bool isRegistered = false;
+  bool isUserLoggedIn = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchEventDetails();
+    _checkUserLoginStatus();
   }
 
-  Map<String, String> params = {
-    'language': language,
-    'day_id': dayId,
-  };
-
-  Uri uri = Uri.http('127.0.0.1:5000', '/api/event-details', params);
-
-  final response = await http.get(uri);
-
-  if (response.statusCode == 200) {
-    dynamic data = json.decode(response.body);
-
-    Color color;
-    switch (data['subject_area']) {
-      case 'Computer Science':
-        color = AppColorScheme.computerScience;
-        break;
-      case 'Electrical Engineering':
-        color = AppColorScheme.electricalEngineering;
-        break;
-      case 'Mechanical Engineering':
-        color = AppColorScheme.mechanicalEngineering;
-        break;
-      case 'Mechatronics':
-        color = AppColorScheme.mechatronics;
-        break;
-      default:
-        color = AppColorScheme.otherSubject;
+  Future<void> _fetchEventDetails() async {
+    // Prepare the language parameter
+    String language = MyApp.language.languageCode.toUpperCase();
+    if (language == 'ZH') {
+      language = 'EN';
     }
 
-    //Try to access location does not work
-    /*
-    String location;
-    String locations = data['locations'];
-    location = locations[0];
-    */
-
-    Event eventInfo = Event(dayId, data['title'], data['description'], color);
-    return eventInfo;
-  } else {
-    throw Exception('Failed to load details');
+    try {
+      final response = await http.get(Uri.parse(
+          'http://127.0.0.1:5000/api/event-details?day_id=${widget.dayId}&language=${language}'));
+      if (response.statusCode == 200) {
+        setState(() {
+          eventDetails = json.decode(response.body);
+          isLoading = false;
+        });
+        if (isUserLoggedIn) {
+          _checkRegistrationStatus();
+        }
+      } else {
+        _showErrorSnackBar(AppStrings.failedToLoadEventDetails);
+      }
+    } catch (e) {
+      _showErrorSnackBar(AppStrings.networkError);
+    }
   }
-}
 
-class AppointmentDetailScreen extends StatelessWidget {
-  final String dayId;
+  void _checkUserLoginStatus() {
+    setState(() {
+      isUserLoggedIn = login.UserState().username != null;
+    });
+  }
 
-  const AppointmentDetailScreen({super.key, required this.dayId});
+  Future<void> _checkRegistrationStatus() async {
+    try {
+      final response = await http.get(Uri.parse(
+          'http://127.0.0.1:5000/api/event-registration-status?training_id=${eventDetails?['training_id']}&user_id=${login.UserState().userId}'));
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        setState(() {
+          isRegistered = data['is_registered'];
+        });
+      } else {
+        _showErrorSnackBar(AppStrings.failedToCheckRegistrationStatus);
+      }
+    } catch (e) {
+      _showErrorSnackBar(AppStrings.networkError);
+    }
+  }
+
+  Future<void> _registerForEvent() async {
+    try {
+      final response = await http.post(
+        Uri.parse('http://127.0.0.1:5000/api/book-event'),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode({
+          'training_id': eventDetails?['training_id'],
+          'user_id': login.UserState().userId,
+        }),
+      );
+      final data = json.decode(response.body);
+      if (data['success']) {
+        _showSuccessSnackBar(AppStrings.registrationSuccessful);
+        setState(() {
+          isRegistered = true;
+        });
+      } else {
+        _showErrorSnackBar(data['error'] ?? AppStrings.registrationFailed);
+      }
+    } catch (e) {
+      _showErrorSnackBar(AppStrings.networkError);
+    }
+  }
+
+  Future<void> _cancelRegistration() async {
+    try {
+      final response = await http.delete(
+        Uri.parse('http://127.0.0.1:5000/api/cancel-event-registration'),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode({
+          'training_id': eventDetails?['training_id'],
+          'user_id': login.UserState().userId,
+        }),
+      );
+      final data = json.decode(response.body);
+      if (data['success']) {
+        _showSuccessSnackBar(AppStrings.cancellationSuccessful);
+        setState(() {
+          isRegistered = false;
+        });
+      } else {
+        _showErrorSnackBar(data['error'] ?? AppStrings.cancellationFailed);
+      }
+    } catch (e) {
+      _showErrorSnackBar(AppStrings.networkError);
+    }
+  }
+
+  void _showErrorSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message), backgroundColor: Colors.red),
+    );
+  }
+
+  void _showSuccessSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message), backgroundColor: Colors.green),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<Event>(
-        future: _getEventInfo(dayId), // Fetch the data source
-        builder: (BuildContext context, AsyncSnapshot<Event> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            // Show a loading indicator while waiting for the data
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            // Display an error message if something went wrong
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else if (snapshot.hasData) {
-            // Build your appointment detail screen here
-            return Scaffold(
-              appBar: AppBar(
-                title: const Center(child: Text('Appointment Details')),
-                backgroundColor: snapshot.data?.color,
-              ),
-              body: Center(
-                child: Container(
-                  child: Column(children: [
-                    Divider(
-                      height: 10,
-                      color: AppColorScheme.ownBlack,
-                    ),
-                    Row(mainAxisSize: MainAxisSize.min, children: [
-                      Icon(
-                        Icons.lightbulb,
-                        color: AppColorScheme.ownBlack,
-                        size: 20,
-                      ),
+    final isDarkMode =
+        MediaQuery.of(context).platformBrightness == Brightness.dark;
+    final theme = isDarkMode ? AppColorScheme.dark : AppColorScheme.light;
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(AppStrings.appointmentDetails),
+        backgroundColor: theme.primaryColor,
+      ),
+      body: isLoading
+          ? Center(child: CircularProgressIndicator())
+          : eventDetails == null
+              ? Center(child: Text(AppStrings.noEventDetails))
+              : SingleChildScrollView(
+                  padding: EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
                       Text(
-                        (snapshot.data?.subject)!,
+                        eventDetails?['title'] ?? '',
                         style: TextStyle(
-                          color: AppColorScheme.ownBlack,
-                        ),
+                            fontSize: 24, fontWeight: FontWeight.bold),
                       ),
-                    ]),
-                    Divider(
-                      height: 10,
-                      color: AppColorScheme.ownBlack,
-                    ),
-                    Row(mainAxisSize: MainAxisSize.min, children: [
-                      Icon(
-                        Icons.calendar_month,
-                        color: AppColorScheme.ownBlack,
-                        size: 20,
-                      ),
+                      SizedBox(height: 16),
                       Text(
-                        DateFormat('yyyy-MM-dd').format(DateTime.now()),
-                        style: TextStyle(
-                          color: AppColorScheme.ownBlack,
-                        ),
+                        eventDetails?['description'] ?? '',
+                        style: TextStyle(fontSize: 16),
                       ),
-                    ]),
-                    Divider(
-                      height: 10,
-                      color: AppColorScheme.ownBlack,
-                    ),
-                    Row(mainAxisSize: MainAxisSize.min, children: [
-                      Icon(
-                        Icons.punch_clock,
-                        color: AppColorScheme.ownBlack,
-                        size: 20,
-                      ),
-                      Text(
-                        DateFormat('kk:mm').format(DateTime.now()),
-                        style: TextStyle(
-                          color: AppColorScheme.ownBlack,
-                        ),
-                      ),
-                      Icon(
-                        Icons.arrow_forward,
-                        color: AppColorScheme.ownBlack,
-                        size: 20,
-                      ),
-                      Text(
-                        DateFormat('kk:mm').format(DateTime.now()),
-                        style: TextStyle(
-                          color: AppColorScheme.ownBlack,
-                        ),
-                      ),
-                    ]),
-                    Divider(
-                      height: 10,
-                      color: AppColorScheme.ownBlack,
-                    ),
-                    Row(mainAxisSize: MainAxisSize.min, children: [
-                      Icon(
-                        Icons.map,
-                        color: AppColorScheme.ownBlack,
-                        size: 20,
-                      ),
-                      Text(
-                        'hier',
-                        //(snapshot.data?.location)!,
-                        style: TextStyle(
-                          color: AppColorScheme.ownBlack,
-                        ),
-                      ),
-                    ]),
-                    Divider(
-                      height: 10,
-                      color: AppColorScheme.ownBlack,
-                    ),
-                    Row(mainAxisSize: MainAxisSize.min, children: [
-                      Flexible(
-                        child: Text(
-                          (snapshot.data?.description)!,
-                          style: TextStyle(
-                            color: AppColorScheme.ownBlack,
-                          ),
-                        ),
-                      )
-                    ]),
-                    Divider(
-                      height: 10,
-                      color: AppColorScheme.ownBlack,
-                    ),
-                  ]),
+                      SizedBox(height: 16),
+                      _buildEventInfo(theme),
+                      SizedBox(height: 24),
+                      isUserLoggedIn
+                          ? ElevatedButton(
+                              onPressed: isRegistered
+                                  ? _cancelRegistration
+                                  : _registerForEvent,
+                              child: Text(isRegistered
+                                  ? AppStrings.cancelRegistration
+                                  : AppStrings.registerForEvent),
+                            )
+                          : ElevatedButton(
+                              onPressed: null,
+                              child: Text(AppStrings.loginRequired),
+                            ),
+                    ],
+                  ),
                 ),
+    );
+  }
+
+  Widget _buildEventInfo(ColorScheme theme) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildInfoRow(AppStrings.eventType, eventDetails?['event_type']),
+        _buildInfoRow(AppStrings.subjectArea, eventDetails?['subject_area']),
+        _buildInfoRow(AppStrings.participants,
+            '${eventDetails?['current_participants']}/${eventDetails?['max_participants']}'),
+        SizedBox(height: 16),
+        Text(
+          AppStrings.eventDates,
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+        ListView.builder(
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          itemCount: (eventDetails?['event_dates'] as List).length,
+          itemBuilder: (context, index) {
+            final dateInfo = eventDetails?['event_dates'][index];
+            return ListTile(
+              leading: Icon(Icons.calendar_today),
+              title: Text(
+                '${dateInfo['date']} ${dateInfo['start_time']} - ${dateInfo['end_time']}',
               ),
-              backgroundColor: AppColorScheme.antiFlash,
+              subtitle:
+                  Text('${dateInfo['location']}, ${dateInfo['federal_state']}'),
             );
-          } else {
-            // In case there's no data
-            return const Center(child: Text('No details available'));
-          }
-        });
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _buildInfoRow(String label, String? value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        children: [
+          Text('$label: ',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+          Expanded(
+            child: Text(value ?? '', style: TextStyle(fontSize: 16)),
+          ),
+        ],
+      ),
+    );
   }
 }
