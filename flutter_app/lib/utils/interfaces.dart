@@ -4,6 +4,7 @@ import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:skill_forge/utils/color_scheme.dart';
 import 'package:skill_forge/utils/languages.dart';
 import 'package:skill_forge/main.dart';
+import 'package:skill_forge/utils/holidays.dart';
 
 class MonthNavigationBar extends BottomNavigationBar {
   MonthNavigationBar({
@@ -285,6 +286,7 @@ class WeekCalendar extends SfCalendar {
         super(
             view: CalendarView.week,
             firstDayOfWeek: 1,
+            specialRegions: getWeekTimeRegions(control?.displayDate, 'None'),
             dataSource: _getCalendarDataSource(),
             backgroundColor: AppColorScheme.ownWhite,
             timeSlotViewSettings: TimeSlotViewSettings(
@@ -339,7 +341,6 @@ class WeekCalendar extends SfCalendar {
                 height: -1.01 + cellOffset,
               ),
             ));
-
   final BuildContext context;
   final DateTime initDate;
   final CalendarController? control;

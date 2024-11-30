@@ -7,6 +7,8 @@ import 'package:skill_forge/utils/languages.dart';
 import 'package:skill_forge/utils/buttons.dart';
 import 'package:skill_forge/utils/interfaces.dart';
 
+import 'package:skill_forge/utils/holidays.dart';
+
 void main() {
   runApp(const MyApp());
 }
