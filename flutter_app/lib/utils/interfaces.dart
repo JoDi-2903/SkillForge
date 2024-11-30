@@ -336,11 +336,7 @@ class MonthCalendar extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (context) => AppointmentDetailScreen(
-                      subject: appointment.subject,
-                      startTime: appointment.startTime,
-                      endTime: appointment.endTime,
-                      location: appointment.location!,
-                      color: appointment.color,
+                      dayId: appointment.notes!,
                     ),
                   ),
                 );
@@ -482,11 +478,7 @@ class WeekCalendar extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (context) => AppointmentDetailScreen(
-                      subject: appointment.subject,
-                      startTime: appointment.startTime,
-                      endTime: appointment.endTime,
-                      location: appointment.location!,
-                      color: appointment.color,
+                      dayId: appointment.notes!,
                     ),
                   ),
                 );
