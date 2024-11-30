@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:skill_forge/utils/color_scheme.dart';
@@ -167,11 +168,18 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
   }
 
   String _formatTime(String timeString) {
-    // Parses time string and returns in HH:MM format
+    // Format time
     TimeOfDay time = TimeOfDay(
         hour: int.parse(timeString.split(":")[0]),
         minute: int.parse(timeString.split(":")[1]));
     return time.format(context);
+  }
+
+  String _formatDate(String dateString) {
+    // Format date
+    DateTime date = DateTime.parse(dateString);
+    String locale = MyApp.language.toString();
+    return DateFormat.yMMMMd(locale).format(date);
   }
 
   @override
@@ -210,6 +218,7 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
                       SizedBox(height: 16),
                       Text(
                         eventDetails?['description'] ?? '',
+                        textAlign: TextAlign.justify,
                         style: TextStyle(
                           fontSize: 16,
                           color: AppColorScheme.ownBlack,
@@ -285,7 +294,7 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
                 color: appBarColor,
               ),
               title: Text(
-                '${dateInfo['date']} ${_formatTime(dateInfo['start_time'])} - ${_formatTime(dateInfo['end_time'])}',
+                '${_formatDate(dateInfo['date'])} ${_formatTime(dateInfo['start_time'])} - ${_formatTime(dateInfo['end_time'])}',
                 style: TextStyle(color: AppColorScheme.ownBlack),
               ),
               subtitle: Text(
