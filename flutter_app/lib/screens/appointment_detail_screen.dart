@@ -39,7 +39,7 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
 
     try {
       final response = await http.get(Uri.parse(
-          'http://127.0.0.1:5000/api/event-details?day_id=${widget.dayId}&language=${language}'));
+          'http://127.0.0.1:5000/api/event-details?day_id=${widget.dayId}&language=$language'));
       if (response.statusCode == 200) {
         setState(() {
           eventDetails = json.decode(response.body);
@@ -141,14 +141,10 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isDarkMode =
-        MediaQuery.of(context).platformBrightness == Brightness.dark;
-    final theme = isDarkMode ? AppColorScheme.dark : AppColorScheme.light;
-
     return Scaffold(
       appBar: AppBar(
         title: Text(AppStrings.appointmentDetails),
-        backgroundColor: theme.primaryColor,
+        backgroundColor: AppColorScheme.indigo,
       ),
       body: isLoading
           ? Center(child: CircularProgressIndicator())
@@ -162,26 +158,40 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
                       Text(
                         eventDetails?['title'] ?? '',
                         style: TextStyle(
-                            fontSize: 24, fontWeight: FontWeight.bold),
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: AppColorScheme.ownBlack,
+                        ),
                       ),
                       SizedBox(height: 16),
                       Text(
                         eventDetails?['description'] ?? '',
-                        style: TextStyle(fontSize: 16),
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: AppColorScheme.ownBlack,
+                        ),
                       ),
                       SizedBox(height: 16),
-                      _buildEventInfo(theme),
+                      _buildEventInfo(),
                       SizedBox(height: 24),
                       isUserLoggedIn
                           ? ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColorScheme.indigo,
+                              ),
                               onPressed: isRegistered
                                   ? _cancelRegistration
                                   : _registerForEvent,
-                              child: Text(isRegistered
-                                  ? AppStrings.cancelRegistration
-                                  : AppStrings.registerForEvent),
+                              child: Text(
+                                isRegistered
+                                    ? AppStrings.cancelRegistration
+                                    : AppStrings.registerForEvent,
+                              ),
                             )
                           : ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColorScheme.indigo,
+                              ),
                               onPressed: null,
                               child: Text(AppStrings.loginRequired),
                             ),
@@ -191,18 +201,24 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
     );
   }
 
-  Widget _buildEventInfo(ColorScheme theme) {
+  Widget _buildEventInfo() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _buildInfoRow(AppStrings.eventType, eventDetails?['event_type']),
         _buildInfoRow(AppStrings.subjectArea, eventDetails?['subject_area']),
-        _buildInfoRow(AppStrings.participants,
-            '${eventDetails?['current_participants']}/${eventDetails?['max_participants']}'),
+        _buildInfoRow(
+          AppStrings.participants,
+          '${eventDetails?['current_participants']}/${eventDetails?['max_participants']}',
+        ),
         SizedBox(height: 16),
         Text(
           AppStrings.eventDates,
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: AppColorScheme.ownBlack,
+          ),
         ),
         ListView.builder(
           shrinkWrap: true,
@@ -211,12 +227,18 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
           itemBuilder: (context, index) {
             final dateInfo = eventDetails?['event_dates'][index];
             return ListTile(
-              leading: Icon(Icons.calendar_today),
+              leading: Icon(
+                Icons.calendar_today,
+                color: AppColorScheme.indigo,
+              ),
               title: Text(
                 '${dateInfo['date']} ${dateInfo['start_time']} - ${dateInfo['end_time']}',
+                style: TextStyle(color: AppColorScheme.ownBlack),
               ),
-              subtitle:
-                  Text('${dateInfo['location']}, ${dateInfo['federal_state']}'),
+              subtitle: Text(
+                '${dateInfo['location']}, ${dateInfo['federal_state']}',
+                style: TextStyle(color: AppColorScheme.ownBlack),
+              ),
             );
           },
         ),
@@ -229,10 +251,22 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
         children: [
-          Text('$label: ',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+          Text(
+            '$label: ',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+              color: AppColorScheme.ownBlack,
+            ),
+          ),
           Expanded(
-            child: Text(value ?? '', style: TextStyle(fontSize: 16)),
+            child: Text(
+              value ?? '',
+              style: TextStyle(
+                fontSize: 16,
+                color: AppColorScheme.ownBlack,
+              ),
+            ),
           ),
         ],
       ),
