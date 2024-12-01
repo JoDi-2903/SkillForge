@@ -136,7 +136,23 @@ class AppStrings {
         subjectArea = '部門';
         clearFilters = '清除過濾器';
         applyFilters = '應用過濾器';
-        // ToDo: Add Chinese translations here
+        failedToLoadEventDetails = '無法載入事件詳細資訊。';
+        failedToCheckRegistrationStatus = '無法檢查註冊狀態。';
+        registrationSuccessful = '活動報名成功。';
+        registrationFailed = '註冊失敗。';
+        cancellationSuccessful = '已成功取消您的註冊。';
+        cancellationFailed = '取消失敗。';
+        appointmentDetails = '預約詳情';
+        noEventDetails = '沒有可用的活動詳細資訊。';
+        cancelRegistration = '取消註冊';
+        registerForEvent = '註冊參加活動';
+        loginRequired = '需要登入才能執行此操作。';
+        participants = '參加者';
+        eventDates = '活動日期';
+        minParticipants = '最低參加人數';
+        maxParticipants = '最多參加人數';
+        currentParticipants = '目前參與者';
+        participantInfo = '參與者資訊';
         break;
       default:
         appTitle = 'Skillforge';
