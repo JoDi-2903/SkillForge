@@ -188,6 +188,7 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
       backgroundColor: AppColorScheme.ownWhite,
       appBar: AppBar(
         title: Text(AppStrings.appointmentDetails),
+        centerTitle: true,
         backgroundColor: appBarColor,
       ),
       body: isLoading

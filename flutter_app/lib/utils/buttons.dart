@@ -5,6 +5,7 @@ import 'package:skill_forge/utils/languages.dart';
 import 'package:skill_forge/screens/login_screen.dart' as login;
 import 'package:skill_forge/screens/admin_screen.dart' as admin;
 import 'package:skill_forge/screens/week_screen.dart';
+import 'package:skill_forge/utils/holidays.dart';
 
 class ButtonBack extends StatefulWidget {
   final Function() backFunction;
@@ -151,6 +152,7 @@ class _LanguageButtonState extends State<LanguageButton> {
         fontFamily: 'Noto Color Emoji',
         fontFamilyFallback: ['Noto Color Emoji'],
       ),
+      padding: const EdgeInsets.all(7),
       onChanged: (Language? lang) {
         setState(() {
           dropdownValue = lang!;
@@ -240,6 +242,71 @@ class _WeekButtonState extends State<WeekButton> {
           ),
         );
       },
+    );
+  }
+}
+
+class RegionButton extends StatefulWidget {
+  final Function(Region code) region;
+  const RegionButton({
+    super.key,
+    required this.region,
+  });
+
+  @override
+  State<RegionButton> createState() => _RegionButtonState();
+}
+
+class _RegionButtonState extends State<RegionButton> {
+  final List<Region> list = <Region>[
+    de,
+    bw,
+    by,
+    be,
+    bb,
+    hb,
+    hh,
+    he,
+    mv,
+    ni,
+    nw,
+    rp,
+    sl,
+    sn,
+    st,
+    sh,
+    th
+  ];
+  Region dropdownValue = de;
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButton<Region>(
+      value: dropdownValue,
+      icon: const Visibility(visible: false, child: Icon(Icons.arrow_downward)),
+      dropdownColor: AppColorScheme.antiFlash,
+      focusColor: AppColorScheme.antiFlash,
+      underline: Container(
+        height: 0,
+        color: AppColorScheme.antiFlash,
+      ),
+      padding: const EdgeInsets.all(7),
+      onChanged: (Region? region) {
+        setState(() {
+          dropdownValue = region!;
+        });
+        widget.region(dropdownValue);
+      },
+      items: list.map<DropdownMenuItem<Region>>((Region value) {
+        return DropdownMenuItem<Region>(
+          value: value,
+          child: Center(
+              child: Image.asset(
+            value.locCoa,
+            width: 55,
+            height: 27,
+          )),
+        );
+      }).toList(),
     );
   }
 }

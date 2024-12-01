@@ -21,6 +21,8 @@ class _WeekPageState extends State<WeekPage> {
   void initState() {
     controller = CalendarController();
     super.initState();
+    controller.displayDate =
+        DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
   }
 
   void _onItemTapped(int index) {
@@ -60,7 +62,7 @@ class _WeekPageState extends State<WeekPage> {
             DateTime.now().day,
           ),
           control: controller,
-          factorScaling: 1.5,
+          factorScaling: 2,
           cellOffset: 1.01,
           filters: widget.filters,
         ),

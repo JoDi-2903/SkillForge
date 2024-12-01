@@ -48,6 +48,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
           icon: Icon(Icons.arrow_back, color: AppColorScheme.indigo),
           onPressed: () => Navigator.pop(context),
         ),
+        centerTitle: true,
       ),
       body: Center(
         child: _controller.value.isInitialized
