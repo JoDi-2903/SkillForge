@@ -179,22 +179,16 @@ class LoginButton extends StatefulWidget {
 class _LoginButtonState extends State<LoginButton> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        IconButton(
-          icon: const Icon(Icons.account_circle_outlined),
-          color: AppColorScheme.indigo,
-          iconSize: 35,
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const login.LoginScreen()),
-            );
-          },
-        ),
-      ],
+    return IconButton(
+      icon: const Icon(Icons.account_circle_outlined),
+      color: AppColorScheme.indigo,
+      iconSize: 35,
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const login.LoginScreen()),
+        );
+      },
     );
   }
 }
@@ -209,22 +203,17 @@ class AdminButton extends StatefulWidget {
 class _AdminButtonState extends State<AdminButton> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        IconButton(
-          icon: const Icon(Icons.library_add),
-          color: AppColorScheme.indigo,
-          iconSize: 35,
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const admin.AdminEventScreen()),
-            );
-          },
-        ),
-      ],
+    return IconButton(
+      icon: const Icon(Icons.library_add),
+      color: AppColorScheme.indigo,
+      iconSize: 35,
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => const admin.AdminEventScreen()),
+        );
+      },
     );
   }
 }
