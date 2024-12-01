@@ -107,11 +107,7 @@ class _MonthButtonState extends State<MonthButton> {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      icon: Tab(
-          icon: Image.asset('/img/bw.png',
-              width: 44,
-              height: 44,
-              fit: BoxFit.cover)), //const Icon(Icons.calendar_month_rounded),
+      icon: const Icon(Icons.calendar_month_rounded),
       color: AppColorScheme.indigo,
       iconSize: 35,
       onPressed: () {
@@ -156,6 +152,7 @@ class _LanguageButtonState extends State<LanguageButton> {
         fontFamily: 'Noto Color Emoji',
         fontFamilyFallback: ['Noto Color Emoji'],
       ),
+      padding: const EdgeInsets.all(7),
       onChanged: (Language? lang) {
         setState(() {
           dropdownValue = lang!;
@@ -303,11 +300,7 @@ class _RegionButtonState extends State<RegionButton> {
         height: 0,
         color: AppColorScheme.antiFlash,
       ),
-      style: const TextStyle(
-        fontSize: 24,
-        fontFamily: 'Noto Color Emoji',
-        fontFamilyFallback: ['Noto Color Emoji'],
-      ),
+      padding: const EdgeInsets.all(7),
       onChanged: (Region? region) {
         setState(() {
           dropdownValue = region!;
@@ -317,7 +310,12 @@ class _RegionButtonState extends State<RegionButton> {
       items: list.map<DropdownMenuItem<Region>>((Region value) {
         return DropdownMenuItem<Region>(
           value: value,
-          child: Text(value.name),
+          child: Center(
+              child: Image.asset(
+            value.locCoa,
+            width: 55,
+            height: 27,
+          )),
         );
       }).toList(),
     );

@@ -1,5 +1,5 @@
 import 'dart:ui';
-
+import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:skill_forge/utils/color_scheme.dart';
@@ -399,75 +399,75 @@ List<Appointment> getHolidayasAppointment(DateTime? currentDate, String state) {
 
 class Region {
   String identifier = '';
-  String name = '';
-  Region(this.identifier, this.name);
+  String locCoa;
+  Region(this.identifier, this.locCoa);
 }
 
 final bw = Region(
   'BW',
-  AppStrings.badenWurrtemberg,
+  'assets/img/bw.png',
 );
 final by = Region(
   'BY',
-  AppStrings.bavaria,
+  'assets/img/by.png',
 );
 final be = Region(
   'BE',
-  AppStrings.berlin,
+  'assets/img/be.png',
 );
 final bb = Region(
   'BB',
-  AppStrings.brandenburg,
+  'assets/img/bb.png',
 );
 final hb = Region(
   'HB',
-  AppStrings.bremen,
+  'assets/img/hb.png',
 );
 final hh = Region(
   'HH',
-  AppStrings.hamburg,
+  'assets/img/hh.png',
 );
 final he = Region(
   'HE',
-  AppStrings.hesse,
+  'assets/img/he.png',
 );
 final mv = Region(
   'MV',
-  AppStrings.mecklenburg,
+  'assets/img/mv.png',
 );
 final ni = Region(
   'NI',
-  AppStrings.lsaxony,
+  'assets/img/ni.png',
 );
 final nw = Region(
   'NW',
-  AppStrings.nrWestphalia,
+  'assets/img/nw.png',
 );
 final rp = Region(
   'RP',
-  AppStrings.palatinate,
+  'assets/img/rp.png',
 );
 final sl = Region(
   'SL',
-  AppStrings.saarland,
+  'assets/img/sl.png',
 );
 final sn = Region(
   'SN',
-  AppStrings.saxony,
+  'assets/img/sn.png',
 );
 final st = Region(
   'ST',
-  AppStrings.saxonya,
+  'assets/img/st.png',
 );
 final sh = Region(
   'SH',
-  AppStrings.schleswig,
+  'assets/img/sh.png',
 );
 final th = Region(
   'TH',
-  AppStrings.thuringia,
+  'assets/img/th.png',
 );
 final de = Region(
   'DE',
-  AppStrings.germany,
+  'assets/img/de.png',
 );
