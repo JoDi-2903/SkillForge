@@ -48,6 +48,23 @@ class AppStrings {
   static String worldChildDay = 'World Children`s Day';
   static String reformationDay = 'Reformation Day';
   static String allSaints = 'All Saints` Day';
+  static String badenWurrtemberg = 'Baden-Wuerttemberg';
+  static String bavaria = 'Bavaria';
+  static String berlin = 'Berlin';
+  static String brandenburg = 'Brandenburg';
+  static String bremen = 'Bremen';
+  static String hamburg = 'Hamburg';
+  static String hesse = 'Hesse';
+  static String mecklenburg = 'Mecklenburg Western Pomerania';
+  static String lsaxony = 'Lower Saxony';
+  static String nrWestphalia = 'North Rhine Westphalia';
+  static String palatinate = 'Rhineland Palatinate';
+  static String saarland = 'Saarland';
+  static String saxony = 'Saxony';
+  static String saxonya = 'Saxony-Anhalt';
+  static String schleswig = 'Schleswig-Holstein';
+  static String thuringia = 'Thuringia';
+  static String germany = 'Germany';
 
   static void refreshLanguage(String language) {
     switch (language) {

@@ -1,8 +1,12 @@
+import 'dart:ui';
+
 import 'package:flutter/foundation.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:skill_forge/utils/color_scheme.dart';
 import 'package:easter/easter.dart';
 import 'package:skill_forge/utils/languages.dart';
+
+Region region = de;
 
 List<TimeRegion> getWeekTimeRegions(DateTime? currentDate, String state) {
   final List<TimeRegion> regions = <TimeRegion>[];
@@ -85,56 +89,91 @@ List<TimeRegion> getWeekTimeRegions(DateTime? currentDate, String state) {
       endTime: easter.add(const Duration(hours: 51 * 24)),
       color: AppColorScheme.antiFlash,
     ));
-    //switch case
     //6.Jan
-    regions.add(TimeRegion(
-      startTime: DateTime(yearNow + i, 1, 6, 0),
-      endTime: DateTime(yearNow + i, 1, 6, 24),
-      color: AppColorScheme.antiFlash,
-    ));
+    if (region.identifier == 'BW' ||
+        region.identifier == 'BY' ||
+        region.identifier == 'ST') {
+      regions.add(TimeRegion(
+        startTime: DateTime(yearNow + i, 1, 6, 0),
+        endTime: DateTime(yearNow + i, 1, 6, 24),
+        color: AppColorScheme.antiFlash,
+      ));
+    }
     //8March IntWomenDay
-    regions.add(TimeRegion(
-      startTime: DateTime(yearNow + i, 3, 8, 0),
-      endTime: DateTime(yearNow + i, 3, 8, 24),
-      color: AppColorScheme.antiFlash,
-    ));
+    if (region.identifier == 'BE' || region.identifier == 'MV') {
+      regions.add(TimeRegion(
+        startTime: DateTime(yearNow + i, 3, 8, 0),
+        endTime: DateTime(yearNow + i, 3, 8, 24),
+        color: AppColorScheme.antiFlash,
+      ));
+    }
     //HappyCadaver
-    regions.add(TimeRegion(
-      startTime: easter.add(const Duration(hours: 59 * 24)),
-      endTime: easter.add(const Duration(hours: 60 * 24)),
-      color: AppColorScheme.antiFlash,
-    ));
+    if (region.identifier == 'BW' ||
+        region.identifier == 'BY' ||
+        region.identifier == 'HE' ||
+        region.identifier == 'NW' ||
+        region.identifier == 'RP' ||
+        region.identifier == 'SL' ||
+        region.identifier == 'SN' ||
+        region.identifier == 'TH') {
+      regions.add(TimeRegion(
+        startTime: easter.add(const Duration(hours: 59 * 24)),
+        endTime: easter.add(const Duration(hours: 60 * 24)),
+        color: AppColorScheme.antiFlash,
+      ));
+    }
     //8August AugsburgPeaceHoliday
-    regions.add(TimeRegion(
-      startTime: DateTime(yearNow + i, 8, 8, 0),
-      endTime: DateTime(yearNow + i, 8, 8, 24),
-      color: AppColorScheme.antiFlash,
-    ));
+    if (region.identifier == 'BY') {
+      regions.add(TimeRegion(
+        startTime: DateTime(yearNow + i, 8, 8, 0),
+        endTime: DateTime(yearNow + i, 8, 8, 24),
+        color: AppColorScheme.antiFlash,
+      ));
+    }
     //15August Mariaheavendrive
-    regions.add(TimeRegion(
-      startTime: DateTime(yearNow + i, 15, 8, 0),
-      endTime: DateTime(yearNow + i, 15, 8, 24),
-      color: AppColorScheme.antiFlash,
-    ));
+    if (region.identifier == 'BY' || region.identifier == 'SL') {
+      regions.add(TimeRegion(
+        startTime: DateTime(yearNow + i, 15, 8, 0),
+        endTime: DateTime(yearNow + i, 15, 8, 24),
+        color: AppColorScheme.antiFlash,
+      ));
+    }
     //20Sept WorldChildDay
-    regions.add(TimeRegion(
-      startTime: DateTime(yearNow + i, 9, 20, 0),
-      endTime: DateTime(yearNow + i, 9, 20, 24),
-      color: AppColorScheme.antiFlash,
-    ));
+    if (region.identifier == 'TH') {
+      regions.add(TimeRegion(
+        startTime: DateTime(yearNow + i, 9, 20, 0),
+        endTime: DateTime(yearNow + i, 9, 20, 24),
+        color: AppColorScheme.antiFlash,
+      ));
+    }
     //31Oct Reformationday
-    regions.add(TimeRegion(
-      startTime: DateTime(yearNow + i, 10, 31, 0),
-      endTime: DateTime(yearNow + i, 10, 31, 24),
-      color: AppColorScheme.antiFlash,
-    ));
-    //1Nov AllahHoly
-    regions.add(TimeRegion(
-      startTime: DateTime(yearNow + i, 11, 1, 0),
-      endTime: DateTime(yearNow + i, 11, 1, 24),
-      color: AppColorScheme.antiFlash,
-    ));
-    //
+    if (region.identifier == 'BB' ||
+        region.identifier == 'HB' ||
+        region.identifier == 'HH' ||
+        region.identifier == 'MV' ||
+        region.identifier == 'NI' ||
+        region.identifier == 'SN' ||
+        region.identifier == 'ST' ||
+        region.identifier == 'SH' ||
+        region.identifier == 'TH') {
+      regions.add(TimeRegion(
+        startTime: DateTime(yearNow + i, 10, 31, 0),
+        endTime: DateTime(yearNow + i, 10, 31, 24),
+        color: AppColorScheme.antiFlash,
+      ));
+    }
+    //1Nov AllSaints
+    if (region.identifier == 'BW' ||
+        region.identifier == 'BY' ||
+        region.identifier == 'NW' ||
+        region.identifier == 'RP' ||
+        region.identifier == 'SL') {
+      regions.add(TimeRegion(
+        startTime: DateTime(yearNow + i, 11, 1, 0),
+        endTime: DateTime(yearNow + i, 11, 1, 24),
+        color: AppColorScheme.antiFlash,
+      ));
+    }
   }
   return regions;
 }
@@ -244,80 +283,191 @@ List<Appointment> getHolidayasAppointment(DateTime? currentDate, String state) {
       endTime: easter.add(const Duration(hours: 50 * 24)),
       notes: null,
     ));
-    //switchcase
     //6.Jan
-    holidays.add(Appointment(
-      isAllDay: true,
-      subject: AppStrings.epiphany,
-      color: AppColorScheme.lapisLazuli,
-      startTime: DateTime(yearNow + i, 1, 6, 0),
-      endTime: DateTime(yearNow + i, 1, 6, 0),
-      notes: null,
-    ));
+    if (region.identifier == 'BW' ||
+        region.identifier == 'BY' ||
+        region.identifier == 'ST') {
+      holidays.add(Appointment(
+        isAllDay: true,
+        subject: AppStrings.epiphany,
+        color: AppColorScheme.lapisLazuli,
+        startTime: DateTime(yearNow + i, 1, 6, 0),
+        endTime: DateTime(yearNow + i, 1, 6, 0),
+        notes: null,
+      ));
+    }
     //8March
-    holidays.add(Appointment(
-      isAllDay: true,
-      subject: AppStrings.intlWomen,
-      color: AppColorScheme.lapisLazuli,
-      startTime: DateTime(yearNow + i, 3, 8, 0),
-      endTime: DateTime(yearNow + i, 3, 8, 0),
-      notes: null,
-    ));
+    if (region.identifier == 'BE' || region.identifier == 'MV') {
+      holidays.add(Appointment(
+        isAllDay: true,
+        subject: AppStrings.intlWomen,
+        color: AppColorScheme.lapisLazuli,
+        startTime: DateTime(yearNow + i, 3, 8, 0),
+        endTime: DateTime(yearNow + i, 3, 8, 0),
+        notes: null,
+      ));
+    }
     //HappyCadaver
-    holidays.add(Appointment(
-      isAllDay: true,
-      subject: AppStrings.happyCadaver,
-      color: AppColorScheme.lapisLazuli,
-      startTime: easter.add(const Duration(hours: 60 * 24)),
-      endTime: easter.add(const Duration(hours: 60 * 24)),
-      notes: null,
-    ));
+    if (region.identifier == 'BW' ||
+        region.identifier == 'BY' ||
+        region.identifier == 'HE' ||
+        region.identifier == 'NW' ||
+        region.identifier == 'RP' ||
+        region.identifier == 'SL' ||
+        region.identifier == 'SN' ||
+        region.identifier == 'TH') {
+      holidays.add(Appointment(
+        isAllDay: true,
+        subject: AppStrings.happyCadaver,
+        color: AppColorScheme.lapisLazuli,
+        startTime: easter.add(const Duration(hours: 60 * 24)),
+        endTime: easter.add(const Duration(hours: 60 * 24)),
+        notes: null,
+      ));
+    }
     //8August
-    holidays.add(Appointment(
-      isAllDay: true,
-      subject: AppStrings.peaceParty,
-      color: AppColorScheme.lapisLazuli,
-      startTime: DateTime(yearNow + i, 8, 8, 0),
-      endTime: DateTime(yearNow + i, 8, 8, 0),
-      notes: null,
-    ));
+    if (region.identifier == 'BY') {
+      holidays.add(Appointment(
+        isAllDay: true,
+        subject: AppStrings.peaceParty,
+        color: AppColorScheme.lapisLazuli,
+        startTime: DateTime(yearNow + i, 8, 8, 0),
+        endTime: DateTime(yearNow + i, 8, 8, 0),
+        notes: null,
+      ));
+    }
     //15August
-    holidays.add(Appointment(
-      isAllDay: true,
-      subject: AppStrings.mariaHeavenDrive,
-      color: AppColorScheme.lapisLazuli,
-      startTime: DateTime(yearNow + i, 8, 15, 0),
-      endTime: DateTime(yearNow + i, 8, 15, 0),
-      notes: null,
-    ));
+    if (region.identifier == 'BY' || region.identifier == 'SL') {
+      holidays.add(Appointment(
+        isAllDay: true,
+        subject: AppStrings.mariaHeavenDrive,
+        color: AppColorScheme.lapisLazuli,
+        startTime: DateTime(yearNow + i, 8, 15, 0),
+        endTime: DateTime(yearNow + i, 8, 15, 0),
+        notes: null,
+      ));
+    }
     //20Sept
-    holidays.add(Appointment(
-      isAllDay: true,
-      subject: AppStrings.worldChildDay,
-      color: AppColorScheme.lapisLazuli,
-      startTime: DateTime(yearNow + i, 9, 20, 0),
-      endTime: DateTime(yearNow + i, 9, 20, 0),
-      notes: null,
-    ));
+    if (region.identifier == 'TH') {
+      holidays.add(Appointment(
+        isAllDay: true,
+        subject: AppStrings.worldChildDay,
+        color: AppColorScheme.lapisLazuli,
+        startTime: DateTime(yearNow + i, 9, 20, 0),
+        endTime: DateTime(yearNow + i, 9, 20, 0),
+        notes: null,
+      ));
+    }
     //31Oct
-    holidays.add(Appointment(
-      isAllDay: true,
-      subject: AppStrings.reformationDay,
-      color: AppColorScheme.lapisLazuli,
-      startTime: DateTime(yearNow + i, 10, 31, 0),
-      endTime: DateTime(yearNow + i, 10, 31, 0),
-      notes: null,
-    ));
+    if (region.identifier == 'BB' ||
+        region.identifier == 'HB' ||
+        region.identifier == 'HH' ||
+        region.identifier == 'MV' ||
+        region.identifier == 'NI' ||
+        region.identifier == 'SN' ||
+        region.identifier == 'ST' ||
+        region.identifier == 'SH' ||
+        region.identifier == 'TH') {
+      holidays.add(Appointment(
+        isAllDay: true,
+        subject: AppStrings.reformationDay,
+        color: AppColorScheme.lapisLazuli,
+        startTime: DateTime(yearNow + i, 10, 31, 0),
+        endTime: DateTime(yearNow + i, 10, 31, 0),
+        notes: null,
+      ));
+    }
     //all saints
-    holidays.add(Appointment(
-      isAllDay: true,
-      subject: AppStrings.allSaints,
-      color: AppColorScheme.lapisLazuli,
-      startTime: DateTime(yearNow + i, 11, 1, 0),
-      endTime: DateTime(yearNow + i, 11, 1, 0),
-      notes: null,
-    ));
+    if (region.identifier == 'BW' ||
+        region.identifier == 'BY' ||
+        region.identifier == 'NW' ||
+        region.identifier == 'RP' ||
+        region.identifier == 'SL') {
+      holidays.add(Appointment(
+        isAllDay: true,
+        subject: AppStrings.allSaints,
+        color: AppColorScheme.lapisLazuli,
+        startTime: DateTime(yearNow + i, 11, 1, 0),
+        endTime: DateTime(yearNow + i, 11, 1, 0),
+        notes: null,
+      ));
+    }
   }
 
   return holidays;
 }
+
+class Region {
+  String identifier = '';
+  String name = '';
+  Region(this.identifier, this.name);
+}
+
+final bw = Region(
+  'BW',
+  AppStrings.badenWurrtemberg,
+);
+final by = Region(
+  'BY',
+  AppStrings.bavaria,
+);
+final be = Region(
+  'BE',
+  AppStrings.berlin,
+);
+final bb = Region(
+  'BB',
+  AppStrings.brandenburg,
+);
+final hb = Region(
+  'HB',
+  AppStrings.bremen,
+);
+final hh = Region(
+  'HH',
+  AppStrings.hamburg,
+);
+final he = Region(
+  'HE',
+  AppStrings.hesse,
+);
+final mv = Region(
+  'MV',
+  AppStrings.mecklenburg,
+);
+final ni = Region(
+  'NI',
+  AppStrings.lsaxony,
+);
+final nw = Region(
+  'NW',
+  AppStrings.nrWestphalia,
+);
+final rp = Region(
+  'RP',
+  AppStrings.palatinate,
+);
+final sl = Region(
+  'SL',
+  AppStrings.saarland,
+);
+final sn = Region(
+  'SN',
+  AppStrings.saxony,
+);
+final st = Region(
+  'ST',
+  AppStrings.saxonya,
+);
+final sh = Region(
+  'SH',
+  AppStrings.schleswig,
+);
+final th = Region(
+  'TH',
+  AppStrings.thuringia,
+);
+final de = Region(
+  'DE',
+  AppStrings.germany,
+);

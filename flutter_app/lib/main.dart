@@ -141,6 +141,11 @@ class _MyHomePageState extends State<MyHomePage> {
     refresh();
   }
 
+  dynamic setRegion(Region code) {
+    region = code;
+    refresh();
+  }
+
   bool _isAdmin = false;
 
   Future<void> _checkAdminStatus() async {
@@ -273,6 +278,7 @@ class _MyHomePageState extends State<MyHomePage> {
               if (_isAdmin) const AdminButton(),
               const LoginButton(),
               LanguageButton(language: setLocale),
+              RegionButton(region: setRegion),
               WeekButton(filters: _filters),
               MonthButton(filters: _filters),
             ]),

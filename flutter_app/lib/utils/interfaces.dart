@@ -193,8 +193,8 @@ Future<DataSource> _getCalendarDataSource(
         ));
       }
     }
-    appointments
-        .addAll(getHolidayasAppointment(controller!.displayDate, 'None'));
+    appointments.addAll(
+        getHolidayasAppointment(controller!.displayDate, region.identifier));
     return DataSource(appointments);
   } else {
     throw Exception('Failed to load appointments');
@@ -435,7 +435,8 @@ class WeekCalendar extends StatelessWidget {
           return SfCalendar(
             view: CalendarView.week,
             firstDayOfWeek: 1,
-            specialRegions: getWeekTimeRegions(control?.displayDate, 'None'),
+            specialRegions:
+                getWeekTimeRegions(control?.displayDate, region.identifier),
             dataSource: snapshot.data,
             backgroundColor: AppColorScheme.ownWhite,
             timeSlotViewSettings: TimeSlotViewSettings(
