@@ -266,8 +266,8 @@ class _MyHomePageState extends State<MyHomePage> {
             shadowColor: AppColorScheme.indigo,
             surfaceTintColor: Colors.transparent,
             actions: <Widget>[
-              if (_isAdmin) const AdminButton(),
-              const LoginButton(),
+              if (_isAdmin) AdminButton(),
+              LoginButton(),
               LanguageButton(language: setLocale),
               WeekButton(filters: _filters),
               MonthButton(filters: _filters),
