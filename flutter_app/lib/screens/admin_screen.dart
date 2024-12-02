@@ -219,6 +219,7 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
           'Admin Panel for creating Events',
           style: TextStyle(color: AppColorScheme.ownBlack),
         ),
+        centerTitle: true,
       ),
       body: SingleChildScrollView(
         child: Padding(

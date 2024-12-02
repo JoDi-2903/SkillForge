@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:skill_forge/screens/bankholiday_screen.dart';
+import 'package:skill_forge/screens/video_player_screen.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:skill_forge/utils/color_scheme.dart';
 import 'package:skill_forge/utils/languages.dart';
 import 'package:skill_forge/main.dart';
+import 'package:skill_forge/utils/holidays.dart';
 import 'package:skill_forge/screens/appointment_detail_screen.dart';
+import 'package:skill_forge/screens/bankholiday_screen.dart';
 
 class MonthNavigationBar extends BottomNavigationBar {
   MonthNavigationBar({
@@ -114,7 +118,8 @@ class DataSource extends CalendarDataSource {
   }
 }
 
-Future<DataSource> _getCalendarDataSource(Map<String, dynamic> filters) async {
+Future<DataSource> _getCalendarDataSource(
+    Map<String, dynamic> filters, CalendarController? controller) async {
   // Prepare the language parameter
   String language = MyApp.language.languageCode.toUpperCase();
   if (language == 'ZH') {
@@ -188,7 +193,8 @@ Future<DataSource> _getCalendarDataSource(Map<String, dynamic> filters) async {
         ));
       }
     }
-
+    appointments.addAll(
+        getHolidayasAppointment(controller!.displayDate, region.identifier));
     return DataSource(appointments);
   } else {
     throw Exception('Failed to load appointments');
@@ -250,7 +256,7 @@ class MonthCalendar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<DataSource>(
-      future: _getCalendarDataSource(filters), // Fetch the data source
+      future: _getCalendarDataSource(filters, control), // Fetch the data source
       builder: (BuildContext context, AsyncSnapshot<DataSource> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           // Show a loading indicator while waiting for the data
@@ -339,14 +345,25 @@ class MonthCalendar extends StatelessWidget {
               if (details.appointments != null &&
                   details.appointments!.isNotEmpty) {
                 Appointment appointment = details.appointments!.first;
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => AppointmentDetailScreen(
-                      dayId: appointment.notes!,
+                if (appointment.notes != null) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AppointmentDetailScreen(
+                        dayId: appointment.notes!,
+                      ),
                     ),
-                  ),
-                );
+                  );
+                } else {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => HolidayPage(
+                        name: appointment.subject,
+                      ),
+                    ),
+                  );
+                }
               }
             },
           );
@@ -414,7 +431,7 @@ class WeekCalendar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<DataSource>(
-      future: _getCalendarDataSource(filters), // Fetch the data source
+      future: _getCalendarDataSource(filters, control), // Fetch the data source
       builder: (BuildContext context, AsyncSnapshot<DataSource> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           // Show a loading indicator while waiting for the data
@@ -427,6 +444,8 @@ class WeekCalendar extends StatelessWidget {
           return SfCalendar(
             view: CalendarView.week,
             firstDayOfWeek: 1,
+            specialRegions:
+                getWeekTimeRegions(control?.displayDate, region.identifier),
             dataSource: snapshot.data,
             backgroundColor: AppColorScheme.ownWhite,
             selectionDecoration: BoxDecoration(
@@ -489,14 +508,16 @@ class WeekCalendar extends StatelessWidget {
               if (details.appointments != null &&
                   details.appointments!.isNotEmpty) {
                 Appointment appointment = details.appointments!.first;
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => AppointmentDetailScreen(
-                      dayId: appointment.notes!,
+                if (appointment.notes != null) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AppointmentDetailScreen(
+                        dayId: appointment.notes!,
+                      ),
                     ),
-                  ),
-                );
+                  );
+                }
               }
             },
           );
