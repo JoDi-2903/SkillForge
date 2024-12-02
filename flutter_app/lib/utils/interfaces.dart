@@ -208,7 +208,9 @@ class MonthCalendarCard extends Card {
             margin: const EdgeInsets.all(7),
             child: SfCalendarTheme(
                 data: SfCalendarThemeData(
-                    todayBackgroundColor: AppColorScheme.indigo),
+                  todayBackgroundColor: AppColorScheme.indigo,
+                  selectionBorderColor: Colors.transparent,
+                ),
                 child: MonthCalendar(
                   context: context,
                   initDate: initDate,
@@ -261,6 +263,12 @@ class MonthCalendar extends StatelessWidget {
           return SfCalendar(
             view: CalendarView.month,
             firstDayOfWeek: 1,
+            selectionDecoration: BoxDecoration(
+              color: Colors.transparent,
+              border: Border.all(
+                color: Colors.transparent,
+              ),
+            ),
             dataSource: snapshot.data,
             backgroundColor: AppColorScheme.ownWhite,
             initialDisplayDate: initDate,
@@ -313,9 +321,6 @@ class MonthCalendar extends StatelessWidget {
                   factorScaling * AutoScalingFactor.cellTextScaler(context),
               height: -1.01 + cellOffset,
             ),
-            selectionDecoration: BoxDecoration(
-              border: Border.all(color: AppColorScheme.indigo, width: 2),
-            ),
             viewHeaderHeight:
                 factorScaling * 3 * AutoScalingFactor.cellTextScaler(context),
             viewHeaderStyle: ViewHeaderStyle(
@@ -365,7 +370,9 @@ class WeekCalendarCard extends Card {
             margin: const EdgeInsets.all(7),
             child: SfCalendarTheme(
                 data: SfCalendarThemeData(
-                    todayBackgroundColor: AppColorScheme.indigo),
+                  todayBackgroundColor: AppColorScheme.indigo,
+                  selectionBorderColor: Colors.transparent,
+                ),
                 child: WeekCalendar(
                   context: context,
                   initDate: initDate,
@@ -420,6 +427,12 @@ class WeekCalendar extends StatelessWidget {
             firstDayOfWeek: 1,
             dataSource: snapshot.data,
             backgroundColor: AppColorScheme.ownWhite,
+            selectionDecoration: BoxDecoration(
+              color: Colors.transparent,
+              border: Border.all(
+                color: Colors.transparent,
+              ),
+            ),
             timeSlotViewSettings: TimeSlotViewSettings(
                 timeTextStyle: TextStyle(
               color: AppColorScheme.ownBlack,
@@ -448,9 +461,6 @@ class WeekCalendar extends StatelessWidget {
               fontSize:
                   factorScaling * AutoScalingFactor.cellTextScaler(context),
               height: -1.01 + cellOffset,
-            ),
-            selectionDecoration: BoxDecoration(
-              border: Border.all(color: AppColorScheme.indigo, width: 2),
             ),
             viewHeaderHeight:
                 factorScaling * 8 * AutoScalingFactor.cellTextScaler(context),
