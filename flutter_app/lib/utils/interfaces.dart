@@ -210,8 +210,12 @@ class MonthCalendarCard extends Card {
     this.factorScaling = 1,
     this.cellOffset = 0,
     required this.filters,
+    this.roundness = 0,
   }) : super(
             margin: const EdgeInsets.all(7),
+            shape: ContinuousRectangleBorder(
+              borderRadius: BorderRadius.circular(roundness),
+            ),
             child: SfCalendarTheme(
                 data: SfCalendarThemeData(
                   todayBackgroundColor: AppColorScheme.indigo,
@@ -231,6 +235,7 @@ class MonthCalendarCard extends Card {
   final double factorScaling;
   final double cellOffset;
   final Map<String, dynamic> filters;
+  final double roundness;
 }
 
 class MonthCalendar extends StatelessWidget {
@@ -385,8 +390,12 @@ class WeekCalendarCard extends Card {
     this.factorScaling = 1,
     this.cellOffset = 0,
     required this.filters,
+    this.roundness = 0,
   }) : super(
             margin: const EdgeInsets.all(7),
+            shape: ContinuousRectangleBorder(
+              borderRadius: BorderRadius.circular(roundness),
+            ),
             child: SfCalendarTheme(
                 data: SfCalendarThemeData(
                   todayBackgroundColor: AppColorScheme.indigo,
@@ -406,6 +415,7 @@ class WeekCalendarCard extends Card {
   final double factorScaling;
   final double cellOffset;
   final Map<String, dynamic> filters;
+  final double roundness;
 }
 
 class WeekCalendar extends StatelessWidget {
