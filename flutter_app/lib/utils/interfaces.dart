@@ -447,8 +447,9 @@ class WeekCalendar extends StatelessWidget {
             headerStyle: CalendarHeaderStyle(
                 textStyle: TextStyle(
                   color: AppColorScheme.ownBlack,
-                  fontSize:
-                      factorScaling * AutoScalingFactor.cellTextScaler(context),
+                  fontSize: factorScaling *
+                      2.5 *
+                      AutoScalingFactor.cellTextScaler(context),
                 ),
                 textAlign: TextAlign.center,
                 backgroundColor: AppColorScheme.antiFlash),
@@ -470,14 +471,16 @@ class WeekCalendar extends StatelessWidget {
               backgroundColor: AppColorScheme.ownWhite,
               dayTextStyle: TextStyle(
                 color: AppColorScheme.ownBlack,
-                fontSize:
-                    factorScaling * AutoScalingFactor.cellTextScaler(context),
+                fontSize: factorScaling *
+                    1.5 *
+                    AutoScalingFactor.cellTextScaler(context),
                 height: -1.01 + cellOffset,
               ),
               dateTextStyle: TextStyle(
                 color: AppColorScheme.ownBlack,
-                fontSize:
-                    factorScaling * AutoScalingFactor.cellTextScaler(context),
+                fontSize: factorScaling *
+                    1.5 *
+                    AutoScalingFactor.cellTextScaler(context),
                 height: -1.01 + cellOffset,
               ),
             ),

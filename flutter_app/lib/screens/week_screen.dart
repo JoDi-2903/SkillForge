@@ -60,7 +60,7 @@ class _WeekPageState extends State<WeekPage> {
             DateTime.now().day,
           ),
           control: controller,
-          factorScaling: 1.5,
+          factorScaling: 1.6,
           cellOffset: 1.01,
           filters: widget.filters,
         ),
