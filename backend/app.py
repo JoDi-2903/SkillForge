@@ -212,83 +212,66 @@ def get_event_details():
 
     # Validate input parameters
     if not (day_id or training_id):
-        return jsonify({
-            'error': 'Either day_id or training_id must be provided'
-        }), 400
+        return jsonify({'error': 'Either day_id or training_id must be provided'}), 400
+
+    # If day_id is provided, get the corresponding training_id
+    if day_id:
+        day = EventDays.query.filter_by(DayID=day_id).first()
+        if not day:
+            return jsonify({'error': 'Invalid day_id provided'}), 404
+        training_id = day.consists_of
 
     # Base query to join relevant tables
     query = db.session.query(
-        TrainingCourses, 
-        EventInformation, 
+        TrainingCourses,
+        EventInformation,
         EventDays
     ).join(
-        EventInformation, 
+        EventInformation,
         TrainingCourses.TrainingID == EventInformation.describes
     ).join(
-        EventDays, 
+        EventDays,
         TrainingCourses.TrainingID == EventDays.consists_of
+    ).filter(
+        TrainingCourses.TrainingID == training_id
     )
-
-    # Apply filtering based on input parameters
-    if day_id:
-        query = query.filter(EventDays.DayID == day_id)
-    elif training_id:
-        query = query.filter(TrainingCourses.TrainingID == training_id)
 
     # Execute query
     results = query.all()
 
     # If no results found
     if not results:
-        return jsonify({
-            'error': 'No event details found'
-        }), 404
+        return jsonify({'error': 'No event found for the provided training_id'}), 404
 
     # Prepare event details
-    event_details = {}
-    event_dates = []
-    locations = set()
+    training, event_info, _ = results[0]
 
-    for training, event_info, event_day in results:
-        # Select name and description based on language
-        name = event_info.NameEN if language == 'EN' else event_info.NameDE
-        description = event_info.DescriptionEN if language == 'EN' else event_info.DescriptionDE
+    # Select description based on language
+    name = event_info.NameEN if language == 'EN' else event_info.NameDE
+    description = event_info.DescriptionEN if language == 'EN' else event_info.DescriptionDE
 
-        # Collect event dates
+    event_details = {
+        'training_id': training.TrainingID,
+        'event_type': event_info.EventType,
+        'subject_area': event_info.SubjectArea,
+        'name': name,
+        'description': description,
+        'min_participants': training.MinParticipants,
+        'max_participants': training.MaxParticipants,
+        'event_dates': []
+    }
+
+    # Collect all event dates
+    for _, _, event_day in results:
         event_date = {
+            'day_id': event_day.DayID,
             'date': event_day.EventDate.isoformat(),
             'start_time': str(event_day.StartTime),
             'end_time': str(event_day.EndTime),
             'location': event_day.EventLocation,
             'federal_state': event_day.LocationFederalState
         }
-        event_dates.append(event_date)
-        locations.add((event_day.EventLocation, event_day.LocationFederalState))
-
-        # Populate event details (do this only once)
-        if not event_details:
-            # Count registered participants
-            participant_count = db.session.query(Participates)\
-                .filter(Participates.TrainingID == training.TrainingID)\
-                .count()
-
-            event_details = {
-                'training_id': training.TrainingID,
-                'title': name,
-                'description': description,
-                'event_type': event_info.EventType,
-                'subject_area': event_info.SubjectArea,
-                'locations': [
-                    {
-                        'location': loc[0],
-                        'federal_state': loc[1]
-                    } for loc in locations
-                ],
-                'min_participants': training.MinParticipants,
-                'max_participants': training.MaxParticipants,
-                'current_participants': participant_count,
-                'event_dates': event_dates
-            }
+        event_details['event_dates'].append(event_date)
 
     return jsonify(event_details)
 

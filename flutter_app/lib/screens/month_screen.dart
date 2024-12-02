@@ -21,6 +21,8 @@ class _MonthPageState extends State<MonthPage> {
   void initState() {
     controller = CalendarController();
     super.initState();
+    controller.displayDate =
+        DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
   }
 
   void _onItemTapped(int index) {
