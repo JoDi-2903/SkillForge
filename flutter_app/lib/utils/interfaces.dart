@@ -290,6 +290,7 @@ class MonthCalendar extends StatelessWidget {
               appointmentDisplayCount: 2,
               monthCellStyle: MonthCellStyle(
                 leadingDatesTextStyle: TextStyle(
+                  color: AppColorScheme.ownBlack,
                   fontSize:
                       factorScaling * AutoScalingFactor.cellTextScaler(context),
                   height: -1.01 + cellOffset,
@@ -301,6 +302,7 @@ class MonthCalendar extends StatelessWidget {
                   height: -1.01 + cellOffset,
                 ),
                 trailingDatesTextStyle: TextStyle(
+                  color: AppColorScheme.ownBlack,
                   fontSize:
                       factorScaling * AutoScalingFactor.cellTextScaler(context),
                   height: -1.01 + cellOffset,
