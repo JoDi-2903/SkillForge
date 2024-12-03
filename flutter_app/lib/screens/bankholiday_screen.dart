@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:skill_forge/utils/color_scheme.dart';
-import '../utils/buttons.dart';
-import 'package:skill_forge/utils/interfaces.dart';
 
 class HolidayPage extends StatelessWidget {
   final String name;

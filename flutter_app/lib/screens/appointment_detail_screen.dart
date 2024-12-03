@@ -10,11 +10,10 @@ import 'package:skill_forge/utils/languages.dart';
 class AppointmentDetailScreen extends StatefulWidget {
   final String dayId;
 
-  const AppointmentDetailScreen({Key? key, required this.dayId})
-      : super(key: key);
+  const AppointmentDetailScreen({super.key, required this.dayId}) : super();
 
   @override
-  _AppointmentDetailScreenState createState() =>
+  State<AppointmentDetailScreen> createState() =>
       _AppointmentDetailScreenState();
 }
 
@@ -192,11 +191,11 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
         backgroundColor: appBarColor,
       ),
       body: isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : eventDetails == null
               ? Center(child: Text(AppStrings.noEventDetails))
               : SingleChildScrollView(
-                  padding: EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -208,7 +207,7 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
                           color: AppColorScheme.ownBlack,
                         ),
                       ),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       Text(
                         eventDetails?['name'] ?? '',
                         style: TextStyle(
@@ -216,7 +215,7 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
                           color: AppColorScheme.indigo,
                         ),
                       ),
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
                       Text(
                         eventDetails?['description'] ?? '',
                         textAlign: TextAlign.justify,
@@ -225,9 +224,9 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
                           color: AppColorScheme.ownBlack,
                         ),
                       ),
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
                       _buildEventInfo(),
-                      SizedBox(height: 24),
+                      const SizedBox(height: 24),
                       isUserLoggedIn
                           ? ElevatedButton(
                               style: ElevatedButton.styleFrom(
@@ -263,7 +262,7 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
       children: [
         _buildInfoRow(AppStrings.eventType, eventDetails?['event_type']),
         _buildInfoRow(AppStrings.subjectArea, eventDetails?['subject_area']),
-        SizedBox(height: 16),
+        const SizedBox(height: 16),
         Text(
           AppStrings.participantInfo,
           style: TextStyle(
@@ -272,9 +271,9 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
             color: AppColorScheme.ownBlack,
           ),
         ),
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
         _buildParticipantRow(),
-        SizedBox(height: 16),
+        const SizedBox(height: 16),
         Text(
           AppStrings.eventDates,
           style: TextStyle(
@@ -285,7 +284,7 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
         ),
         ListView.builder(
           shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           itemCount: (eventDetails?['event_dates'] as List).length,
           itemBuilder: (context, index) {
             final dateInfo = eventDetails?['event_dates'][index];
@@ -316,7 +315,7 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
         Column(
           children: [
             Icon(Icons.person_outline, color: appBarColor),
-            SizedBox(height: 4),
+            const SizedBox(height: 4),
             Text(
               '${eventDetails?['min_participants']}',
               style: TextStyle(color: AppColorScheme.ownBlack),
@@ -330,7 +329,7 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
         Column(
           children: [
             Icon(Icons.person, color: appBarColor),
-            SizedBox(height: 4),
+            const SizedBox(height: 4),
             Text(
               '${eventDetails?['current_participants'] ?? 0}',
               style: TextStyle(color: AppColorScheme.ownBlack),
@@ -344,7 +343,7 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
         Column(
           children: [
             Icon(Icons.group, color: appBarColor),
-            SizedBox(height: 4),
+            const SizedBox(height: 4),
             Text(
               '${eventDetails?['max_participants']}',
               style: TextStyle(color: AppColorScheme.ownBlack),

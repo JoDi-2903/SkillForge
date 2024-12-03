@@ -68,6 +68,7 @@ class AppStrings {
   static String maxParticipants = 'Max Participants';
   static String currentParticipants = 'Current Participants';
   static String participantInfo = 'Participant Information';
+  static String noAppointments = 'No appointments available';
 
   static void refreshLanguage(String language) {
     switch (language) {
@@ -142,6 +143,7 @@ class AppStrings {
         maxParticipants = 'Maximale Teilnehmer';
         currentParticipants = 'Aktuelle Teilnehmer';
         participantInfo = 'Teilnehmerinformationen';
+        noAppointments = 'Keine Termine vorhanden';
         break;
       case 'zh':
         appTitle = '技能鍛造';
@@ -210,6 +212,7 @@ class AppStrings {
         maxParticipants = '最多參加人數';
         currentParticipants = '目前參與者';
         participantInfo = '參與者資訊';
+        noAppointments = '沒有可用的預約';
         break;
       default:
         appTitle = 'Skillforge';
@@ -279,6 +282,7 @@ class AppStrings {
         maxParticipants = 'Max Participants';
         currentParticipants = 'Current Participants';
         participantInfo = 'Participant Information';
+        noAppointments = 'No appointments available';
     }
   }
 }

@@ -18,6 +18,7 @@ class UserState {
   int? userId;
   String? username;
   bool? isAdmin;
+  bool isLoggedIn = false;
 
   Future<void> saveUserData(int userId, String username, bool isAdmin) async {
     final prefs = await SharedPreferences.getInstance();
@@ -28,6 +29,7 @@ class UserState {
     this.userId = userId;
     this.username = username;
     this.isAdmin = isAdmin;
+    isLoggedIn = true;
   }
 
   Future<void> loadUserData() async {

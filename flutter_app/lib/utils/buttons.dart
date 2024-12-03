@@ -58,7 +58,7 @@ class _ToggleSwitchState extends State<ToggleSwitch> {
     return Switch(
       value: light,
       activeTrackColor: AppColorScheme.indigo,
-      inactiveTrackColor: AppColorScheme.slate,
+      inactiveTrackColor: AppColorScheme.indigo,
       trackOutlineColor: WidgetStateProperty.resolveWith(
         (final Set<WidgetState> states) {
           if (states.contains(WidgetState.selected)) {
@@ -138,33 +138,41 @@ class _LanguageButtonState extends State<LanguageButton> {
   Language dropdownValue = english;
   @override
   Widget build(BuildContext context) {
-    return DropdownButton<Language>(
-      value: dropdownValue,
-      icon: const Visibility(visible: false, child: Icon(Icons.arrow_downward)),
-      dropdownColor: AppColorScheme.antiFlash,
-      focusColor: AppColorScheme.antiFlash,
-      underline: Container(
-        height: 0,
-        color: AppColorScheme.antiFlash,
+    return Theme(
+      data: ThemeData(
+        hoverColor: AppColorScheme.transparentIndigo,
+        focusColor: AppColorScheme.transparentIndigo,
+        highlightColor: AppColorScheme.transparentIndigo,
       ),
-      style: const TextStyle(
-        fontSize: 24,
-        fontFamily: 'Noto Color Emoji',
-        fontFamilyFallback: ['Noto Color Emoji'],
+      child: DropdownButton<Language>(
+        value: dropdownValue,
+        icon:
+            const Visibility(visible: false, child: Icon(Icons.arrow_downward)),
+        dropdownColor: AppColorScheme.antiFlash,
+        focusColor: AppColorScheme.antiFlash,
+        underline: Container(
+          height: 0,
+          color: AppColorScheme.antiFlash,
+        ),
+        style: const TextStyle(
+          fontSize: 24,
+          fontFamily: 'Noto Color Emoji',
+          fontFamilyFallback: ['Noto Color Emoji'],
+        ),
+        padding: const EdgeInsets.all(7),
+        onChanged: (Language? lang) {
+          setState(() {
+            dropdownValue = lang!;
+          });
+          widget.language(dropdownValue.identifier);
+        },
+        items: list.map<DropdownMenuItem<Language>>((Language value) {
+          return DropdownMenuItem<Language>(
+            value: value,
+            child: Text(value.icon),
+          );
+        }).toList(),
       ),
-      padding: const EdgeInsets.all(7),
-      onChanged: (Language? lang) {
-        setState(() {
-          dropdownValue = lang!;
-        });
-        widget.language(dropdownValue.identifier);
-      },
-      items: list.map<DropdownMenuItem<Language>>((Language value) {
-        return DropdownMenuItem<Language>(
-          value: value,
-          child: Text(value.icon),
-        );
-      }).toList(),
     );
   }
 }
@@ -179,8 +187,14 @@ class LoginButton extends StatefulWidget {
 class _LoginButtonState extends State<LoginButton> {
   @override
   Widget build(BuildContext context) {
+    Icon loginIcon;
+    if (login.UserState().isLoggedIn) {
+      loginIcon = const Icon(Icons.how_to_reg);
+    } else {
+      loginIcon = const Icon(Icons.account_circle_outlined);
+    }
     return IconButton(
-      icon: const Icon(Icons.account_circle_outlined),
+      icon: loginIcon,
       color: AppColorScheme.indigo,
       iconSize: 35,
       onPressed: () {
@@ -280,33 +294,41 @@ class _RegionButtonState extends State<RegionButton> {
   Region dropdownValue = de;
   @override
   Widget build(BuildContext context) {
-    return DropdownButton<Region>(
-      value: dropdownValue,
-      icon: const Visibility(visible: false, child: Icon(Icons.arrow_downward)),
-      dropdownColor: AppColorScheme.antiFlash,
-      focusColor: AppColorScheme.antiFlash,
-      underline: Container(
-        height: 0,
-        color: AppColorScheme.antiFlash,
+    return Theme(
+      data: ThemeData(
+        hoverColor: AppColorScheme.transparentIndigo,
+        focusColor: AppColorScheme.transparentIndigo,
+        highlightColor: AppColorScheme.transparentIndigo,
       ),
-      padding: const EdgeInsets.all(7),
-      onChanged: (Region? region) {
-        setState(() {
-          dropdownValue = region!;
-        });
-        widget.region(dropdownValue);
-      },
-      items: list.map<DropdownMenuItem<Region>>((Region value) {
-        return DropdownMenuItem<Region>(
-          value: value,
-          child: Center(
-              child: Image.asset(
-            value.locCoa,
-            width: 55,
-            height: 27,
-          )),
-        );
-      }).toList(),
+      child: DropdownButton<Region>(
+        value: dropdownValue,
+        icon:
+            const Visibility(visible: false, child: Icon(Icons.arrow_downward)),
+        dropdownColor: AppColorScheme.antiFlash,
+        focusColor: AppColorScheme.antiFlash,
+        underline: Container(
+          height: 0,
+          color: AppColorScheme.antiFlash,
+        ),
+        padding: const EdgeInsets.all(7),
+        onChanged: (Region? region) {
+          setState(() {
+            dropdownValue = region!;
+          });
+          widget.region(dropdownValue);
+        },
+        items: list.map<DropdownMenuItem<Region>>((Region value) {
+          return DropdownMenuItem<Region>(
+            value: value,
+            child: Center(
+                child: Image.asset(
+              value.locCoa,
+              width: 55,
+              height: 27,
+            )),
+          );
+        }).toList(),
+      ),
     );
   }
 }

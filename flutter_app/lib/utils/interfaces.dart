@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:skill_forge/screens/bankholiday_screen.dart';
-import 'package:skill_forge/screens/video_player_screen.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:skill_forge/utils/color_scheme.dart';
@@ -10,7 +9,6 @@ import 'package:skill_forge/utils/languages.dart';
 import 'package:skill_forge/main.dart';
 import 'package:skill_forge/utils/holidays.dart';
 import 'package:skill_forge/screens/appointment_detail_screen.dart';
-import 'package:skill_forge/screens/bankholiday_screen.dart';
 
 class MonthNavigationBar extends BottomNavigationBar {
   MonthNavigationBar({
@@ -265,7 +263,7 @@ class MonthCalendar extends StatelessWidget {
       builder: (BuildContext context, AsyncSnapshot<DataSource> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           // Show a loading indicator while waiting for the data
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
           // Display an error message if something went wrong
           return Center(child: Text('Error: ${snapshot.error}'));
@@ -374,7 +372,7 @@ class MonthCalendar extends StatelessWidget {
           );
         } else {
           // In case there's no data
-          return Center(child: Text('No appointments available'));
+          return Center(child: Text(AppStrings.noAppointments));
         }
       },
     );
@@ -445,7 +443,7 @@ class WeekCalendar extends StatelessWidget {
       builder: (BuildContext context, AsyncSnapshot<DataSource> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           // Show a loading indicator while waiting for the data
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
           // Display an error message if something went wrong
           return Center(child: Text('Error: ${snapshot.error}'));
@@ -533,7 +531,7 @@ class WeekCalendar extends StatelessWidget {
           );
         } else {
           // In case there's no data
-          return Center(child: Text('No appointments available'));
+          return Center(child: Text(AppStrings.noAppointments));
         }
       },
     );
