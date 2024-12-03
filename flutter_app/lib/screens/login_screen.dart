@@ -215,6 +215,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         }
                         return null;
                       },
+                      style: TextStyle(color: AppColorScheme.ownBlack),
                     ),
                     const SizedBox(height: 16),
                     TextFormField(
@@ -255,6 +256,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         }
                         return null;
                       },
+                      style: TextStyle(color: AppColorScheme.ownBlack),
                     ),
                     const SizedBox(height: 16),
                     Container(
@@ -301,6 +303,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 }
                                 return null;
                               },
+                              style: TextStyle(color: AppColorScheme.ownBlack),
                             ),
                           ),
                         ],
