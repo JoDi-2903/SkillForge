@@ -52,6 +52,67 @@ class UserState {
   }
 }
 
+class CaptchaWidget extends StatefulWidget {
+  final LocalCaptchaController controller;
+  final TextEditingController textController;
+
+  CaptchaWidget({required this.controller, required this.textController});
+
+  @override
+  _CaptchaWidgetState createState() => _CaptchaWidgetState();
+}
+
+class _CaptchaWidgetState extends State<CaptchaWidget> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(color: AppColorScheme.slate),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        children: [
+          LocalCaptcha(
+            controller: widget.controller,
+            height: 150,
+            width: 300,
+            backgroundColor: AppColorScheme.ownWhite,
+            chars: 'abdefghnryABDEFGHNQRY3468',
+            length: 5,
+            fontSize: 30,
+            textColors: [AppColorScheme.indigo],
+            noiseColors: [AppColorScheme.slate],
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextFormField(
+              controller: widget.textController,
+              decoration: InputDecoration(
+                labelText: AppStrings.captcha,
+                suffixIcon: IconButton(
+                  icon: Icon(Icons.refresh, color: AppColorScheme.indigo),
+                  onPressed: () => widget.controller.refresh(),
+                ),
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return AppStrings.insertCaptcha;
+                }
+                final validation = widget.controller.validate(value);
+                if (validation != LocalCaptchaValidation.valid) {
+                  return AppStrings.wrongCaptcha;
+                }
+                return null;
+              },
+              style: TextStyle(color: AppColorScheme.ownBlack),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -323,55 +384,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       style: TextStyle(color: AppColorScheme.ownBlack),
                     ),
                     const SizedBox(height: 16),
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: AppColorScheme.slate),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Column(
-                        children: [
-                          LocalCaptcha(
-                            key: const ValueKey('captcha'),
-                            controller: _captchaController,
-                            height: 150,
-                            width: 300,
-                            backgroundColor: AppColorScheme.ownWhite,
-                            chars: 'abdefghnryABDEFGHNQRY3468',
-                            length: 5,
-                            fontSize: 30,
-                            textColors: [AppColorScheme.indigo],
-                            noiseColors: [AppColorScheme.slate],
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: TextFormField(
-                              controller: _captchaTextController,
-                              decoration: InputDecoration(
-                                labelText: AppStrings.captcha,
-                                suffixIcon: IconButton(
-                                  icon: Icon(Icons.refresh,
-                                      color: AppColorScheme.indigo),
-                                  onPressed: () => _captchaController.refresh(),
-                                ),
-                              ),
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return AppStrings.insertCaptcha;
-                                }
-                                // Korrigierte Validierung
-                                final validation =
-                                    _captchaController.validate(value);
-                                if (validation !=
-                                    LocalCaptchaValidation.valid) {
-                                  return AppStrings.wrongCaptcha;
-                                }
-                                return null;
-                              },
-                              style: TextStyle(color: AppColorScheme.ownBlack),
-                            ),
-                          ),
-                        ],
-                      ),
+                    CaptchaWidget(
+                      controller: _captchaController,
+                      textController: _captchaTextController,
                     ),
                     const SizedBox(height: 8),
                     Row(
