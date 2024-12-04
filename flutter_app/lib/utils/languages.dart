@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+import 'package:universal_io/io.dart';
+
 class AppStrings {
   static String appTitle = 'Skillforge';
   static String hompageTitle = 'Skillforge';
@@ -69,6 +72,16 @@ class AppStrings {
   static String currentParticipants = 'Current Participants';
   static String participantInfo = 'Participant Information';
   static String noAppointments = 'No appointments available';
+  static Locale checkLanguage() {
+    switch (Platform.localeName.substring(0, 2)) {
+      case 'de':
+        return const Locale('de');
+      case 'zh':
+        return const Locale('zh');
+      default:
+        return const Locale('en');
+    }
+  }
 
   static void refreshLanguage(String language) {
     switch (language) {
