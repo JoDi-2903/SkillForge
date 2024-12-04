@@ -130,12 +130,54 @@ class _LoginScreenState extends State<LoginScreen> {
           responseData['is_admin'],
         );
 
-        // Navigate to home screen
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    MyHomePage(title: AppStrings.hompageTitle)));
+        // Show success message
+        showDialog(
+          context: context,
+          barrierDismissible:
+              false, // Prevent user from dismissing dialog by tapping outside
+          builder: (BuildContext context) {
+            Future.delayed(Duration(seconds: 2), () {
+              Navigator.of(context).pop(); // Close the dialog after 2 seconds
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      MyHomePage(title: AppStrings.hompageTitle),
+                ),
+              );
+            });
+
+            return Dialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: AppColorScheme.ownWhite,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                padding: EdgeInsets.all(24),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.check_circle,
+                      color: Colors.green,
+                      size: 64,
+                    ),
+                    SizedBox(height: 16),
+                    Text(
+                      '${AppStrings.loginSuccessful} ${_usernameController.text}!',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: 18, color: AppColorScheme.ownBlack),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
       } else {
         // Refresh captcha and clear captcha text field on failed login
         setState(() {
