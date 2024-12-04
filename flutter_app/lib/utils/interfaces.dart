@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:skill_forge/screens/bankholiday_screen.dart';
-import 'package:skill_forge/screens/video_player_screen.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:skill_forge/utils/color_scheme.dart';
@@ -10,7 +9,6 @@ import 'package:skill_forge/utils/languages.dart';
 import 'package:skill_forge/main.dart';
 import 'package:skill_forge/utils/holidays.dart';
 import 'package:skill_forge/screens/appointment_detail_screen.dart';
-import 'package:skill_forge/screens/bankholiday_screen.dart';
 
 class MonthNavigationBar extends BottomNavigationBar {
   MonthNavigationBar({
@@ -210,11 +208,17 @@ class MonthCalendarCard extends Card {
     this.factorScaling = 1,
     this.cellOffset = 0,
     required this.filters,
+    this.roundness = 0,
   }) : super(
             margin: const EdgeInsets.all(7),
+            shape: ContinuousRectangleBorder(
+              borderRadius: BorderRadius.circular(roundness),
+            ),
             child: SfCalendarTheme(
                 data: SfCalendarThemeData(
-                    todayBackgroundColor: AppColorScheme.indigo),
+                  todayBackgroundColor: AppColorScheme.indigo,
+                  selectionBorderColor: Colors.transparent,
+                ),
                 child: MonthCalendar(
                   context: context,
                   initDate: initDate,
@@ -229,6 +233,7 @@ class MonthCalendarCard extends Card {
   final double factorScaling;
   final double cellOffset;
   final Map<String, dynamic> filters;
+  final double roundness;
 }
 
 class MonthCalendar extends StatelessWidget {
@@ -258,7 +263,7 @@ class MonthCalendar extends StatelessWidget {
       builder: (BuildContext context, AsyncSnapshot<DataSource> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           // Show a loading indicator while waiting for the data
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
           // Display an error message if something went wrong
           return Center(child: Text('Error: ${snapshot.error}'));
@@ -267,6 +272,12 @@ class MonthCalendar extends StatelessWidget {
           return SfCalendar(
             view: CalendarView.month,
             firstDayOfWeek: 1,
+            selectionDecoration: BoxDecoration(
+              color: Colors.transparent,
+              border: Border.all(
+                color: Colors.transparent,
+              ),
+            ),
             dataSource: snapshot.data,
             backgroundColor: AppColorScheme.ownWhite,
             initialDisplayDate: initDate,
@@ -288,6 +299,7 @@ class MonthCalendar extends StatelessWidget {
               appointmentDisplayCount: 2,
               monthCellStyle: MonthCellStyle(
                 leadingDatesTextStyle: TextStyle(
+                  color: AppColorScheme.ownBlack,
                   fontSize:
                       factorScaling * AutoScalingFactor.cellTextScaler(context),
                   height: -1.01 + cellOffset,
@@ -299,6 +311,7 @@ class MonthCalendar extends StatelessWidget {
                   height: -1.01 + cellOffset,
                 ),
                 trailingDatesTextStyle: TextStyle(
+                  color: AppColorScheme.ownBlack,
                   fontSize:
                       factorScaling * AutoScalingFactor.cellTextScaler(context),
                   height: -1.01 + cellOffset,
@@ -318,9 +331,6 @@ class MonthCalendar extends StatelessWidget {
               fontSize:
                   factorScaling * AutoScalingFactor.cellTextScaler(context),
               height: -1.01 + cellOffset,
-            ),
-            selectionDecoration: BoxDecoration(
-              border: Border.all(color: AppColorScheme.indigo, width: 2),
             ),
             viewHeaderHeight:
                 factorScaling * 3 * AutoScalingFactor.cellTextScaler(context),
@@ -362,7 +372,7 @@ class MonthCalendar extends StatelessWidget {
           );
         } else {
           // In case there's no data
-          return Center(child: Text('No appointments available'));
+          return Center(child: Text(AppStrings.noAppointments));
         }
       },
     );
@@ -378,11 +388,17 @@ class WeekCalendarCard extends Card {
     this.factorScaling = 1,
     this.cellOffset = 0,
     required this.filters,
+    this.roundness = 0,
   }) : super(
             margin: const EdgeInsets.all(7),
+            shape: ContinuousRectangleBorder(
+              borderRadius: BorderRadius.circular(roundness),
+            ),
             child: SfCalendarTheme(
                 data: SfCalendarThemeData(
-                    todayBackgroundColor: AppColorScheme.indigo),
+                  todayBackgroundColor: AppColorScheme.indigo,
+                  selectionBorderColor: Colors.transparent,
+                ),
                 child: WeekCalendar(
                   context: context,
                   initDate: initDate,
@@ -397,6 +413,7 @@ class WeekCalendarCard extends Card {
   final double factorScaling;
   final double cellOffset;
   final Map<String, dynamic> filters;
+  final double roundness;
 }
 
 class WeekCalendar extends StatelessWidget {
@@ -426,7 +443,7 @@ class WeekCalendar extends StatelessWidget {
       builder: (BuildContext context, AsyncSnapshot<DataSource> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           // Show a loading indicator while waiting for the data
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
           // Display an error message if something went wrong
           return Center(child: Text('Error: ${snapshot.error}'));
@@ -439,6 +456,12 @@ class WeekCalendar extends StatelessWidget {
                 getWeekTimeRegions(control?.displayDate, region.identifier),
             dataSource: snapshot.data,
             backgroundColor: AppColorScheme.ownWhite,
+            selectionDecoration: BoxDecoration(
+              color: Colors.transparent,
+              border: Border.all(
+                color: Colors.transparent,
+              ),
+            ),
             timeSlotViewSettings: TimeSlotViewSettings(
                 timeTextStyle: TextStyle(
               color: AppColorScheme.ownBlack,
@@ -451,8 +474,9 @@ class WeekCalendar extends StatelessWidget {
             headerStyle: CalendarHeaderStyle(
                 textStyle: TextStyle(
                   color: AppColorScheme.ownBlack,
-                  fontSize:
-                      factorScaling * AutoScalingFactor.cellTextScaler(context),
+                  fontSize: factorScaling *
+                      2.5 *
+                      AutoScalingFactor.cellTextScaler(context),
                 ),
                 textAlign: TextAlign.center,
                 backgroundColor: AppColorScheme.antiFlash),
@@ -468,23 +492,22 @@ class WeekCalendar extends StatelessWidget {
                   factorScaling * AutoScalingFactor.cellTextScaler(context),
               height: -1.01 + cellOffset,
             ),
-            selectionDecoration: BoxDecoration(
-              border: Border.all(color: AppColorScheme.indigo, width: 2),
-            ),
             viewHeaderHeight:
                 factorScaling * 8 * AutoScalingFactor.cellTextScaler(context),
             viewHeaderStyle: ViewHeaderStyle(
               backgroundColor: AppColorScheme.ownWhite,
               dayTextStyle: TextStyle(
                 color: AppColorScheme.ownBlack,
-                fontSize:
-                    factorScaling * AutoScalingFactor.cellTextScaler(context),
+                fontSize: factorScaling *
+                    1.5 *
+                    AutoScalingFactor.cellTextScaler(context),
                 height: -1.01 + cellOffset,
               ),
               dateTextStyle: TextStyle(
                 color: AppColorScheme.ownBlack,
-                fontSize:
-                    factorScaling * AutoScalingFactor.cellTextScaler(context),
+                fontSize: factorScaling *
+                    1.5 *
+                    AutoScalingFactor.cellTextScaler(context),
                 height: -1.01 + cellOffset,
               ),
             ),
@@ -508,7 +531,7 @@ class WeekCalendar extends StatelessWidget {
           );
         } else {
           // In case there's no data
-          return Center(child: Text('No appointments available'));
+          return Center(child: Text(AppStrings.noAppointments));
         }
       },
     );

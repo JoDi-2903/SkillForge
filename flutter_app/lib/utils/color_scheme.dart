@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 class AppColorScheme {
   static Color indigo = const Color(0xFF034875);
+  static Color transparentIndigo = const Color(0x15034875);
   static Color lapisLazuli = const Color(0xFF799BB2);
   static Color payne = const Color(0xFF4E7187);
   static Color slate = const Color(0xFF748590);
@@ -18,6 +19,7 @@ class AppColorScheme {
   static void setDarkmode(bool darkmode) {
     if (darkmode) {
       indigo = const Color(0xFFE05408);
+      transparentIndigo = const Color(0x15E05408);
       lapisLazuli = const Color(0xFF799BB2);
       payne = const Color(0xFF4E7187);
       slate = const Color(0xFF034875);
@@ -32,6 +34,7 @@ class AppColorScheme {
       otherSubject = const Color(0xFF795548);
     } else {
       indigo = const Color(0xFF034875);
+      transparentIndigo = const Color(0x15034875);
       lapisLazuli = const Color(0xFF799BB2);
       payne = const Color(0xFF4E7187);
       slate = const Color(0xFF748590);

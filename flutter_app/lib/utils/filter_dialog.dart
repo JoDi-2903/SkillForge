@@ -9,7 +9,7 @@ class FilterDialog extends StatefulWidget {
   const FilterDialog({super.key, required this.initialFilters});
 
   @override
-  _FilterDialogState createState() => _FilterDialogState();
+  State<FilterDialog> createState() => _FilterDialogState();
 }
 
 class _FilterDialogState extends State<FilterDialog> {
@@ -54,7 +54,7 @@ class _FilterDialogState extends State<FilterDialog> {
         child: Container(
           decoration: BoxDecoration(
             color: AppColorScheme.ownWhite,
-            borderRadius: BorderRadius.vertical(
+            borderRadius: const BorderRadius.vertical(
               top: Radius.circular(20),
             ),
           ),

@@ -1,6 +1,3 @@
-import 'dart:ui';
-import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:skill_forge/utils/color_scheme.dart';
 import 'package:easter/easter.dart';
