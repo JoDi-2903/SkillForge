@@ -141,9 +141,9 @@ INSERT INTO `trainingcourses` (`TrainingID`, `MinParticipants`, `MaxParticipants
 
 INSERT INTO `users` (`UserID`, `Username`, `PasswordHash`, `FirstName`, `LastName`, `Email`, `SpecializationField`, `is_admin`, `is_active`, `CountLoginAttempts`) VALUES
 (1, 'JoDi2903', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', 'Jonathan', 'Diebel', 'notamail@email.com', 'Computer Science', 1, 1, 0),
-(2, 'Firq', NULL, 'Noah Leon', 'Meier', 'MrMeier@email.com', 'Computer Science', 0, 1, 0),
+(2, 'HitAndRun', NULL, 'Noah Lion', 'Meier', 'MrMeier@email.com', 'Computer Science', 0, 1, 0),
 (3, 'Nehper', NULL, 'Nicki Matthias', 'Schuhmacher', 'MrSchuhmacher@email.com', 'Electrical Engineering', 0, 1, 0),
-(4, 'Neshura', NULL, 'Jan Elias', 'Sulzberger', 'MrSulzberger@email.com', 'Mechatronics', 0, 1, 0),
+(4, 'Nutjob', NULL, 'Juergen', 'Salz', 'MrSalz@email.com', 'Mechatronics', 0, 1, 0),
 (5, 'Auftragsgriller30', '753692ec36adb4c794c973945eb2a99c1649703ea6f76bf259abb4fb838e013e', 'Arne Laudris', 'Fränznick', 'MrLaudris@email.com', 'Electrical Engineering', 1, 1, 0),
 (6, 'DrSaumweber', NULL, 'Vicent', 'Saumweber', 'DrSaumweber@email.com', 'Mechanical Engineering', 0, 1, 0),
 (7, 'TheMan', NULL, 'Timo', 'Wehrle-Brunner', 'MrWehrle-Brunner@email.com', 'Other', 0, 1, 0),
