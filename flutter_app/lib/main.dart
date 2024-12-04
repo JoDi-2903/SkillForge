@@ -276,7 +276,6 @@ class _MyHomePageState extends State<MyHomePage> {
             leading: ToggleSwitch(notifyParent: refresh),
             backgroundColor: AppColorScheme.antiFlash,
             elevation: 5,
-            title: Text(language.toString()),
             shadowColor: AppColorScheme.indigo,
             surfaceTintColor: Colors.transparent,
             actions: <Widget>[
