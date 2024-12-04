@@ -9,6 +9,7 @@ import 'package:skill_forge/utils/interfaces.dart';
 import 'package:skill_forge/utils/filter_dialog.dart';
 
 import 'package:skill_forge/utils/holidays.dart';
+import 'package:universal_io/io.dart';
 
 void main() {
   runApp(const MyApp());
@@ -84,8 +85,8 @@ class _MyHomePageState extends State<MyHomePage> {
     CalendarController(),
     CalendarController(),
   ];
-  static Locale language = Locale(AppStrings.english);
-
+  static Locale language =
+      Locale(Platform.localeName.substring(0, 2)); //Locale(AppStrings.german);
   @override
   void initState() {
     for (var i = 0; i < 12; i++) {
@@ -98,6 +99,7 @@ class _MyHomePageState extends State<MyHomePage> {
       AppColorScheme.setDarkmode(true);
     }
     _checkAdminStatus();
+    refresh();
   }
 
   void _onItemTapped(int index) {
@@ -254,6 +256,7 @@ class _MyHomePageState extends State<MyHomePage> {
         filters: _filters,
       ),
     ];
+
     return MaterialApp(
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
@@ -272,6 +275,7 @@ class _MyHomePageState extends State<MyHomePage> {
             leading: ToggleSwitch(notifyParent: refresh),
             backgroundColor: AppColorScheme.antiFlash,
             elevation: 5,
+            title: Text(language.toString()),
             shadowColor: AppColorScheme.indigo,
             surfaceTintColor: Colors.transparent,
             actions: <Widget>[
