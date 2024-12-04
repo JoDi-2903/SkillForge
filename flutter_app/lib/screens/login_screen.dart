@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
+import 'package:dargon2_flutter/dargon2_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:local_captcha/local_captcha.dart';
 import 'package:skill_forge/utils/color_scheme.dart';
@@ -68,16 +69,30 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _isPasswordVisible = false;
   bool _rememberMe = false;
 
-  // Hash password using SHA-256
-  String _hashPassword(String password) {
-    return sha256.convert(utf8.encode(password)).toString();
+  // Hash password using Argon2
+  Future<String> _hashPassword(String password) async {
+    // Note: Use a new salt for each user in production
+    final Salt salt = Salt(
+        [12, 34, 56, 78, 90, 123, 234, 56, 78, 90, 12, 34, 56, 78, 90, 123]);
+
+    // Use argon2 instance to call hashPasswordString
+    final result = await argon2.hashPasswordString(password,
+        salt: salt,
+        type: Argon2Type.id,
+        iterations: 32,
+        memory: 19 * 1024,
+        parallelism: 1,
+        length: 32);
+
+    // Return the encoded hash
+    return result.encodedString;
   }
 
   // Perform login API call
   Future _performLogin() async {
     if (!_formKey.currentState!.validate()) return;
 
-    // Validate captcha
+    // Validate captcha first
     final captchaValidation =
         _captchaController.validate(_captchaTextController.text);
     if (captchaValidation != LocalCaptchaValidation.valid) {
@@ -92,12 +107,17 @@ class _LoginScreenState extends State<LoginScreen> {
     }
 
     try {
+      // Hash password using Argon2
+      final passwordHash = await _hashPassword(_passwordController.text);
+      print(
+          'Password Hash for debugging: $passwordHash'); // Remove in production
+
       final response = await http.post(
         Uri.parse('http://127.0.0.1:5000/api/login'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'username': _usernameController.text,
-          'password_hash': _hashPassword(_passwordController.text),
+          'password_hash': passwordHash,
         }),
       );
       final responseData = jsonDecode(response.body);
