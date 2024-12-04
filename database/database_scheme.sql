@@ -146,7 +146,7 @@ INSERT INTO `users` (`UserID`, `Username`, `PasswordHash`, `FirstName`, `LastNam
 (2, 'Firq', NULL, 'Noah Leon', 'Meier', 'MrMeier@email.com', 'Computer Science', 0, 1, 0),
 (3, 'Nehper', NULL, 'Nicki Matthias', 'Schuhmacher', 'MrSchuhmacher@email.com', 'Electrical Engineering', 0, 1, 0),
 (4, 'Neshura', NULL, 'Jan Elias', 'Sulzberger', 'MrSulzberger@email.com', 'Mechatronics', 0, 1, 0),
-(5, 'Auftragsgriller30', '753692ec36adb4c794c973945eb2a99c1649703ea6f76bf259abb4fb838e013e', 'Arne Laudris', 'Fränznick', 'MrLaudris@email.com', 'Electrical Engineering', 1, 1, 0),
+(5, 'Auftragsgriller30', '753692ec36adb4c794c973945eb2a99c1649703ea6f76bf259abb4fb838e013e', 'Arne Laurids', 'Fränznick', 'MrFraenznick@email.com', 'Electrical Engineering', 1, 1, 0),
 (6, 'DrSaumweber', NULL, 'Vicent', 'Saumweber', 'DrSaumweber@email.com', 'Mechanical Engineering', 0, 1, 0),
 (7, 'TheMan', NULL, 'Timo', 'Wehrle-Brunner', 'MrWehrle-Brunner@email.com', 'Other', 0, 1, 0),
 (8, 'Fish', NULL, 'Emma', 'Fischer', 'MsFischer@email.com', 'Computer Science', 0, 1, 0),
@@ -166,7 +166,7 @@ INSERT INTO `users` (`UserID`, `Username`, `PasswordHash`, `FirstName`, `LastNam
 (22, 'Anwalt', NULL, 'Lina ', 'Richter', 'MsRichter@email.com', 'Mechatronics', 0, 1, 0),
 (23, 'Arche', NULL, 'Noah ', 'Schulz', 'MrSchulz@email.com', 'Other', 0, 1, 0),
 (24, 'Lehmann', NULL, 'Marie ', 'Lehmann', 'MsLehmann@email.com', 'Other', 0, 1, 0),
-(25, 'King', NULL, 'Elias ', 'Koenig', 'MrKoenig@email.com', 'Other', 0, 1, 0),
+(25, 'King', NULL, 'Elias ', 'König', 'MrKoenig@email.com', 'Other', 0, 1, 0),
 (26, 'Farmer', NULL, 'Clara ', 'Bauer', 'MsBauer@email.com', 'Other', 0, 1, 0),
 (27, 'Lorenz', NULL, 'Simon ', 'Lorenz', 'MrLorenz@email.com', 'Other', 0, 1, 0),
 (28, 'Frankonia', NULL, 'Julia ', 'Frank', 'MsFrank@email.com', 'Electrical Engineering', 0, 1, 0);
