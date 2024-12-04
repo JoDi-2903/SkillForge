@@ -483,6 +483,13 @@ def user_login():
             'error': 'Username and password hash are required'
         }), 400
 
+    # Prevent login with wildcard username
+    if username == "*":
+        return jsonify({
+            'success': False,
+            'error': 'Invalid username or password'
+        }), 401
+
     try:
         # Find user by username
         user = Users.query.filter_by(Username=username).first()
