@@ -85,8 +85,9 @@ class _MyHomePageState extends State<MyHomePage> {
     CalendarController(),
     CalendarController(),
   ];
+
   static Locale language =
-      Locale(Platform.localeName.substring(0, 2)); //Locale(AppStrings.german);
+      AppStrings.checkLanguage(); //Locale(AppStrings.german);
   @override
   void initState() {
     for (var i = 0; i < 12; i++) {
