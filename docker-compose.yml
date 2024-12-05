@@ -1,6 +1,6 @@
 services:
   db:
-    image: mariadb:latest
+    image: mariadb:11.6.2
     container_name: mariadb
     environment:
       MYSQL_ROOT_PASSWORD: passwort
@@ -14,7 +14,7 @@ services:
       - ./database/database_scheme.sql:/docker-entrypoint-initdb.d/init.sql
 
   phpmyadmin:
-    image: phpmyadmin/phpmyadmin
+    image: phpmyadmin/phpmyadmin:5.2.1
     container_name: phpmyadmin
     ports:
       - "8081:80"

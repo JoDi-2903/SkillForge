@@ -17,8 +17,10 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
   // Controllers for event information
   final _nameDeController = TextEditingController();
   final _nameEnController = TextEditingController();
+  final _nameZhController = TextEditingController();
   final _descriptionDeController = TextEditingController();
   final _descriptionEnController = TextEditingController();
+  final _descriptionZhController = TextEditingController();
 
   // Controllers for training course details
   final _minParticipantsController = TextEditingController(text: '7');
@@ -31,6 +33,8 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
   String _inputLanguage = 'EN';
   String _subjectArea = 'Other';
   String _eventType = 'Other';
+
+  final List<String> _inputLanguages = ['DE', 'EN', 'ZH'];
 
   final List<String> _subjectAreas = [
     'Computer Science',
@@ -142,18 +146,24 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
           ? {
               'name': _inputLanguage == 'EN'
                   ? _nameEnController.text
-                  : _nameDeController.text,
+                  : _inputLanguage == 'DE'
+                      ? _nameDeController.text
+                      : _nameZhController.text,
               'description': _inputLanguage == 'EN'
                   ? _descriptionEnController.text
-                  : _descriptionDeController.text,
+                  : _inputLanguage == 'DE'
+                      ? _descriptionDeController.text
+                      : _descriptionZhController.text,
               'subject_area': _subjectArea,
               'event_type': _eventType,
             }
           : {
               'name_de': _nameDeController.text,
               'name_en': _nameEnController.text,
+              'name_zh': _nameZhController.text,
               'description_de': _descriptionDeController.text,
               'description_en': _descriptionEnController.text,
+              'description_zh': _descriptionZhController.text,
               'subject_area': _subjectArea,
               'event_type': _eventType,
             },
@@ -253,6 +263,7 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                       const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 ),
                 const SizedBox(height: 16),
+                // Name and Description Fields
                 if (_autoTranslate)
                   DropdownButtonFormField<String>(
                     value: _inputLanguage,
@@ -275,13 +286,10 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                     style: TextStyle(color: AppColorScheme.ownBlack),
                     icon: Icon(Icons.arrow_drop_down,
                         color: AppColorScheme.indigo),
-                    items: ['EN', 'DE'].map((String value) {
+                    items: _inputLanguages.map((String language) {
                       return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(
-                          value,
-                          style: TextStyle(color: AppColorScheme.ownBlack),
-                        ),
+                        value: language,
+                        child: Text(language),
                       );
                     }).toList(),
                     onChanged: (String? newValue) {
@@ -291,12 +299,12 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                     },
                   ),
                 const SizedBox(height: 16),
-                // Name and Description Fields
+                // Event Names and Descriptions
                 if (!_autoTranslate) ...[
                   TextFormField(
                     controller: _nameDeController,
                     decoration: InputDecoration(
-                      labelText: 'Name (German)',
+                      labelText: 'Name (DE)',
                       labelStyle: TextStyle(color: AppColorScheme.ownBlack),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
@@ -312,14 +320,18 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                     ),
                     style: TextStyle(color: AppColorScheme.ownBlack),
                     cursorColor: AppColorScheme.indigo,
-                    validator: (value) =>
-                        value!.isEmpty ? 'Please enter a name' : null,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter the name in German';
+                      }
+                      return null;
+                    },
                   ),
                   const SizedBox(height: 16),
                   TextFormField(
                     controller: _nameEnController,
                     decoration: InputDecoration(
-                      labelText: 'Name (English)',
+                      labelText: 'Name (EN)',
                       labelStyle: TextStyle(color: AppColorScheme.ownBlack),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
@@ -335,14 +347,45 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                     ),
                     style: TextStyle(color: AppColorScheme.ownBlack),
                     cursorColor: AppColorScheme.indigo,
-                    validator: (value) =>
-                        value!.isEmpty ? 'Please enter a name' : null,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter the name in English';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  TextFormField(
+                    controller: _nameZhController,
+                    decoration: InputDecoration(
+                      labelText: 'Name (ZH)',
+                      labelStyle: TextStyle(color: AppColorScheme.ownBlack),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(color: AppColorScheme.slate),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(color: AppColorScheme.indigo),
+                      ),
+                    ),
+                    style: TextStyle(color: AppColorScheme.ownBlack),
+                    cursorColor: AppColorScheme.indigo,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter the name in Chinese';
+                      }
+                      return null;
+                    },
                   ),
                   const SizedBox(height: 16),
                   TextFormField(
                     controller: _descriptionDeController,
                     decoration: InputDecoration(
-                      labelText: 'Description (German)',
+                      labelText: 'Description (DE)',
                       labelStyle: TextStyle(color: AppColorScheme.ownBlack),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
@@ -359,14 +402,18 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                     style: TextStyle(color: AppColorScheme.ownBlack),
                     cursorColor: AppColorScheme.indigo,
                     maxLines: 3,
-                    validator: (value) =>
-                        value!.isEmpty ? 'Please enter a description' : null,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter the description in German';
+                      }
+                      return null;
+                    },
                   ),
                   const SizedBox(height: 16),
                   TextFormField(
                     controller: _descriptionEnController,
                     decoration: InputDecoration(
-                      labelText: 'Description (English)',
+                      labelText: 'Description (EN)',
                       labelStyle: TextStyle(color: AppColorScheme.ownBlack),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
@@ -383,49 +430,18 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                     style: TextStyle(color: AppColorScheme.ownBlack),
                     cursorColor: AppColorScheme.indigo,
                     maxLines: 3,
-                    validator: (value) =>
-                        value!.isEmpty ? 'Please enter a description' : null,
-                  ),
-                ] else ...[
-                  TextFormField(
-                    controller: _autoTranslate
-                        ? (_inputLanguage == 'EN'
-                            ? _nameEnController
-                            : _nameDeController)
-                        : _nameEnController,
-                    decoration: InputDecoration(
-                      labelText: _inputLanguage == 'EN'
-                          ? 'Name (English)'
-                          : 'Name (German)',
-                      labelStyle: TextStyle(color: AppColorScheme.ownBlack),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: AppColorScheme.slate),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: AppColorScheme.indigo),
-                      ),
-                    ),
-                    style: TextStyle(color: AppColorScheme.ownBlack),
-                    cursorColor: AppColorScheme.indigo,
-                    validator: (value) =>
-                        value!.isEmpty ? 'Please enter a name' : null,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter the description in English';
+                      }
+                      return null;
+                    },
                   ),
                   const SizedBox(height: 16),
                   TextFormField(
-                    controller: _autoTranslate
-                        ? (_inputLanguage == 'EN'
-                            ? _descriptionEnController
-                            : _descriptionDeController)
-                        : _descriptionEnController,
+                    controller: _descriptionZhController,
                     decoration: InputDecoration(
-                      labelText: _inputLanguage == 'EN'
-                          ? 'Description (English)'
-                          : 'Description (German)',
+                      labelText: 'Description (ZH)',
                       labelStyle: TextStyle(color: AppColorScheme.ownBlack),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
@@ -442,9 +458,183 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                     style: TextStyle(color: AppColorScheme.ownBlack),
                     cursorColor: AppColorScheme.indigo,
                     maxLines: 3,
-                    validator: (value) =>
-                        value!.isEmpty ? 'Please enter a description' : null,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter the description in Chinese';
+                      }
+                      return null;
+                    },
                   ),
+                  const SizedBox(height: 16),
+                ] else ...[
+                  // Auto-Translate Fields
+                  if (_inputLanguage == 'DE') ...[
+                    TextFormField(
+                      controller: _nameDeController,
+                      decoration: InputDecoration(
+                        labelText: 'Name (DE)',
+                        labelStyle: TextStyle(color: AppColorScheme.ownBlack),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(color: AppColorScheme.slate),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(color: AppColorScheme.indigo),
+                        ),
+                      ),
+                      style: TextStyle(color: AppColorScheme.ownBlack),
+                      cursorColor: AppColorScheme.indigo,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter the name in German';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      controller: _descriptionDeController,
+                      decoration: InputDecoration(
+                        labelText: 'Description (DE)',
+                        labelStyle: TextStyle(color: AppColorScheme.ownBlack),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(color: AppColorScheme.slate),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(color: AppColorScheme.indigo),
+                        ),
+                      ),
+                      style: TextStyle(color: AppColorScheme.ownBlack),
+                      cursorColor: AppColorScheme.indigo,
+                      maxLines: 3,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter the description in German';
+                        }
+                        return null;
+                      },
+                    ),
+                  ] else if (_inputLanguage == 'EN') ...[
+                    TextFormField(
+                      controller: _nameEnController,
+                      decoration: InputDecoration(
+                        labelText: 'Name (EN)',
+                        labelStyle: TextStyle(color: AppColorScheme.ownBlack),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(color: AppColorScheme.slate),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(color: AppColorScheme.indigo),
+                        ),
+                      ),
+                      style: TextStyle(color: AppColorScheme.ownBlack),
+                      cursorColor: AppColorScheme.indigo,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter the name in English';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      controller: _descriptionEnController,
+                      decoration: InputDecoration(
+                        labelText: 'Description (EN)',
+                        labelStyle: TextStyle(color: AppColorScheme.ownBlack),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(color: AppColorScheme.slate),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(color: AppColorScheme.indigo),
+                        ),
+                      ),
+                      style: TextStyle(color: AppColorScheme.ownBlack),
+                      cursorColor: AppColorScheme.indigo,
+                      maxLines: 3,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter the description in English';
+                        }
+                        return null;
+                      },
+                    ),
+                  ] else if (_inputLanguage == 'ZH') ...[
+                    TextFormField(
+                      controller: _nameZhController,
+                      decoration: InputDecoration(
+                        labelText: 'Name (ZH)',
+                        labelStyle: TextStyle(color: AppColorScheme.ownBlack),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(color: AppColorScheme.slate),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(color: AppColorScheme.indigo),
+                        ),
+                      ),
+                      style: TextStyle(color: AppColorScheme.ownBlack),
+                      cursorColor: AppColorScheme.indigo,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter the name in Chinese';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      controller: _descriptionZhController,
+                      decoration: InputDecoration(
+                        labelText: 'Description (ZH)',
+                        labelStyle: TextStyle(color: AppColorScheme.ownBlack),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(color: AppColorScheme.slate),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(color: AppColorScheme.indigo),
+                        ),
+                      ),
+                      style: TextStyle(color: AppColorScheme.ownBlack),
+                      cursorColor: AppColorScheme.indigo,
+                      maxLines: 3,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter the description in Chinese';
+                        }
+                        return null;
+                      },
+                    ),
+                  ],
+                  const SizedBox(height: 16),
                 ],
                 // Additional Event Details
                 const SizedBox(height: 16),
@@ -840,8 +1030,10 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
     // Dispose all controllers
     _nameDeController.dispose();
     _nameEnController.dispose();
+    _nameZhController.dispose();
     _descriptionDeController.dispose();
     _descriptionEnController.dispose();
+    _descriptionZhController.dispose();
     _minParticipantsController.dispose();
     _maxParticipantsController.dispose();
 

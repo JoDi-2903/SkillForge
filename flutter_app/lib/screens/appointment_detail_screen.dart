@@ -34,9 +34,6 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
   Future<void> _fetchEventDetails() async {
     // Prepare the language parameter
     String language = MyApp.language.languageCode.toUpperCase();
-    if (language == 'ZH') {
-      language = 'EN';
-    }
 
     try {
       final response = await http.get(Uri.parse(

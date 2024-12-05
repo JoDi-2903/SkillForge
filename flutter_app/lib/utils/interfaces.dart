@@ -120,9 +120,6 @@ Future<DataSource> _getCalendarDataSource(
     Map<String, dynamic> filters, CalendarController? controller) async {
   // Prepare the language parameter
   String language = MyApp.language.languageCode.toUpperCase();
-  if (language == 'ZH') {
-    language = 'EN';
-  }
 
   // Optional parameters
   Map<String, String> params = {
