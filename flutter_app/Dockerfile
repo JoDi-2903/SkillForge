@@ -7,8 +7,9 @@ WORKDIR /app
 RUN apt-get update && \
     apt-get install -y git curl xz-utils zip
 
-# Install Flutter SDK
+# Install Flutter SDK with pinned version
 RUN git clone https://github.com/flutter/flutter.git /flutter
+RUN cd /flutter && git checkout 3.24.5
 
 # Add Flutter to path
 ENV PATH="/flutter/bin:$PATH"

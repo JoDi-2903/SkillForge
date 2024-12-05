@@ -499,6 +499,13 @@ def user_login():
             'error': 'Username and password hash are required'
         }), 400
 
+    # Prevent login with wildcard username
+    if username == "*":
+        return jsonify({
+            'success': False,
+            'error': 'Invalid username or password'
+        }), 401
+
     try:
         # Find user by username
         user = Users.query.filter_by(Username=username).first()
@@ -587,9 +594,19 @@ def create_new_event():
     try:
         # Create TrainingCourses entry
         training_course_data = data.get('training_course_data', {})
+        min_participants = training_course_data.get('min_participants', 7)
+        max_participants = training_course_data.get('max_participants', 25)
+
+        # Validate min_participants and max_participants
+        if not isinstance(min_participants, int) or not isinstance(max_participants, int):
+            return jsonify({
+                'success': False,
+                'error': 'min_participants and max_participants must be integers'
+            }), 400
+
         new_training_course = TrainingCourses(
-            MinParticipants=training_course_data.get('min_participants', 7),
-            MaxParticipants=training_course_data.get('max_participants', 25)
+            MinParticipants=min_participants,
+            MaxParticipants=max_participants
         )
         db.session.add(new_training_course)
         db.session.flush()  # Get the new TrainingID

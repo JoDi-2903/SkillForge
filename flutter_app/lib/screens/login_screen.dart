@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
+import 'package:dargon2_flutter/dargon2_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:local_captcha/local_captcha.dart';
 import 'package:skill_forge/utils/color_scheme.dart';
@@ -51,6 +52,67 @@ class UserState {
   }
 }
 
+class CaptchaWidget extends StatefulWidget {
+  final LocalCaptchaController controller;
+  final TextEditingController textController;
+
+  CaptchaWidget({required this.controller, required this.textController});
+
+  @override
+  _CaptchaWidgetState createState() => _CaptchaWidgetState();
+}
+
+class _CaptchaWidgetState extends State<CaptchaWidget> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(color: AppColorScheme.slate),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        children: [
+          LocalCaptcha(
+            controller: widget.controller,
+            height: 150,
+            width: 300,
+            backgroundColor: AppColorScheme.ownWhite,
+            chars: 'abdefghnryABDEFGHNQRY3468',
+            length: 5,
+            fontSize: 30,
+            textColors: [AppColorScheme.indigo],
+            noiseColors: [AppColorScheme.slate],
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextFormField(
+              controller: widget.textController,
+              decoration: InputDecoration(
+                labelText: AppStrings.captcha,
+                suffixIcon: IconButton(
+                  icon: Icon(Icons.refresh, color: AppColorScheme.indigo),
+                  onPressed: () => widget.controller.refresh(),
+                ),
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return AppStrings.insertCaptcha;
+                }
+                final validation = widget.controller.validate(value);
+                if (validation != LocalCaptchaValidation.valid) {
+                  return AppStrings.wrongCaptcha;
+                }
+                return null;
+              },
+              style: TextStyle(color: AppColorScheme.ownBlack),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -68,16 +130,30 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _isPasswordVisible = false;
   bool _rememberMe = false;
 
-  // Hash password using SHA-256
-  String _hashPassword(String password) {
-    return sha256.convert(utf8.encode(password)).toString();
+  // Hash password using Argon2
+  Future<String> _hashPassword(String password) async {
+    // Note: Use a new salt for each user in production
+    final Salt salt = Salt(
+        [12, 34, 56, 78, 90, 123, 234, 56, 78, 90, 12, 34, 56, 78, 90, 123]);
+
+    // Use argon2 instance to call hashPasswordString
+    final result = await argon2.hashPasswordString(password,
+        salt: salt,
+        type: Argon2Type.id,
+        iterations: 32,
+        memory: 19 * 1024,
+        parallelism: 1,
+        length: 32);
+
+    // Return the encoded hash
+    return result.encodedString;
   }
 
   // Perform login API call
   Future _performLogin() async {
     if (!_formKey.currentState!.validate()) return;
 
-    // Validate captcha
+    // Validate captcha first
     final captchaValidation =
         _captchaController.validate(_captchaTextController.text);
     if (captchaValidation != LocalCaptchaValidation.valid) {
@@ -92,12 +168,17 @@ class _LoginScreenState extends State<LoginScreen> {
     }
 
     try {
+      // Hash password using Argon2
+      final passwordHash = await _hashPassword(_passwordController.text);
+      print(
+          'Password Hash for debugging: $passwordHash'); // Remove in production
+
       final response = await http.post(
         Uri.parse('http://127.0.0.1:5000/api/login'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'username': _usernameController.text,
-          'password_hash': _hashPassword(_passwordController.text),
+          'password_hash': passwordHash,
         }),
       );
       final responseData = jsonDecode(response.body);
@@ -110,12 +191,54 @@ class _LoginScreenState extends State<LoginScreen> {
           responseData['is_admin'],
         );
 
-        // Navigate to home screen
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    MyHomePage(title: AppStrings.hompageTitle)));
+        // Show success message
+        showDialog(
+          context: context,
+          barrierDismissible:
+              false, // Prevent user from dismissing dialog by tapping outside
+          builder: (BuildContext context) {
+            Future.delayed(Duration(seconds: 2), () {
+              Navigator.of(context).pop(); // Close the dialog after 2 seconds
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      MyHomePage(title: AppStrings.hompageTitle),
+                ),
+              );
+            });
+
+            return Dialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: AppColorScheme.ownWhite,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                padding: EdgeInsets.all(24),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.check_circle,
+                      color: Colors.green,
+                      size: 64,
+                    ),
+                    SizedBox(height: 16),
+                    Text(
+                      '${AppStrings.loginSuccessful} ${_usernameController.text}!',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: 18, color: AppColorScheme.ownBlack),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
       } else {
         // Refresh captcha and clear captcha text field on failed login
         setState(() {
@@ -261,55 +384,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       style: TextStyle(color: AppColorScheme.ownBlack),
                     ),
                     const SizedBox(height: 16),
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: AppColorScheme.slate),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Column(
-                        children: [
-                          LocalCaptcha(
-                            key: const ValueKey('captcha'),
-                            controller: _captchaController,
-                            height: 150,
-                            width: 300,
-                            backgroundColor: AppColorScheme.ownWhite,
-                            chars: 'abdefghnryABDEFGHNQRY3468',
-                            length: 5,
-                            fontSize: 30,
-                            textColors: [AppColorScheme.indigo],
-                            noiseColors: [AppColorScheme.slate],
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: TextFormField(
-                              controller: _captchaTextController,
-                              decoration: InputDecoration(
-                                labelText: AppStrings.captcha,
-                                suffixIcon: IconButton(
-                                  icon: Icon(Icons.refresh,
-                                      color: AppColorScheme.indigo),
-                                  onPressed: () => _captchaController.refresh(),
-                                ),
-                              ),
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return AppStrings.insertCaptcha;
-                                }
-                                // Korrigierte Validierung
-                                final validation =
-                                    _captchaController.validate(value);
-                                if (validation !=
-                                    LocalCaptchaValidation.valid) {
-                                  return AppStrings.wrongCaptcha;
-                                }
-                                return null;
-                              },
-                              style: TextStyle(color: AppColorScheme.ownBlack),
-                            ),
-                          ),
-                        ],
-                      ),
+                    CaptchaWidget(
+                      controller: _captchaController,
+                      textController: _captchaTextController,
                     ),
                     const SizedBox(height: 8),
                     Row(
