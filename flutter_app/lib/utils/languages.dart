@@ -26,6 +26,7 @@ class AppStrings {
   static String forgotPassword = 'Forgot password?';
   static String resetPassword = 'Reset password';
   static String loginSuccessful = 'Login successful. Hello,';
+  static String logoutSuccessful = 'Logout successful. See you soon';
   static String filterOptions = 'Filter Options';
   static String filterByUser = 'Show only my events';
   static String loginToFilter = 'Please log in to filter by user.';
@@ -111,6 +112,7 @@ class AppStrings {
         forgotPassword = 'Passwort vergessen?';
         resetPassword = 'Passwort zurücksetzten';
         loginSuccessful = 'Anmeldung erfolgreich. Hallo,';
+        logoutSuccessful = 'Logout erfolgreich. Bis bald';
         filterOptions = 'Filteroptionen';
         filterByUser = 'Nur meine Termine anzeigen';
         loginToFilter =
@@ -183,6 +185,7 @@ class AppStrings {
         wrongCaptcha = '驗證碼無效';
         rememberMe = '記住帳號';
         loginSuccessful = '登录成功。你好';
+        logoutSuccessful = '注销成功。再见';
         forgotPassword = '忘記密碼？';
         resetPassword = '重設密碼';
         filterOptions = '過濾器選項';
@@ -253,6 +256,7 @@ class AppStrings {
         wrongCaptcha = 'Invalid Captcha code';
         rememberMe = 'Remember me';
         loginSuccessful = 'Login successful. Hello,';
+        logoutSuccessful = 'Logout successful. See you soon';
         forgotPassword = 'Forgot password?';
         resetPassword = 'Reset password';
         filterOptions = 'Filter Options';
