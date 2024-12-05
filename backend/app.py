@@ -308,9 +308,9 @@ def get_event_details():
         description = event_info.DescriptionEN
 
     # Count current participants
-        current_participants = Participates.query.filter_by(
-            TrainingID=training_id
-        ).count()
+    current_participants = Participates.query.filter_by(
+        TrainingID=training_id
+    ).count()
 
     event_details = {
         'training_id': training.TrainingID,

@@ -192,7 +192,16 @@ class _LanguageButtonState extends State<LanguageButton> {
 }
 
 class LoginButton extends StatefulWidget {
-  const LoginButton({super.key});
+  final bool isUserLoggedIn;
+  final Function() onLogout;
+  final Function() onLoginStatusChanged;
+
+  const LoginButton({
+    super.key,
+    required this.isUserLoggedIn,
+    required this.onLogout,
+    required this.onLoginStatusChanged,
+  });
 
   @override
   State<LoginButton> createState() => _LoginButtonState();
@@ -202,6 +211,13 @@ class _LoginButtonState extends State<LoginButton> {
   final FlutterSecureStorage secureStorage = const FlutterSecureStorage();
   bool isUserLoggedIn = false;
   String username = '';
+
+  @override
+  void initState() {
+    super.initState();
+    isUserLoggedIn = widget.isUserLoggedIn;
+    _checkUserLoginStatus();
+  }
 
   Future<void> _checkUserLoginStatus() async {
     String? token = await secureStorage.read(key: 'jwt_token');
@@ -217,12 +233,6 @@ class _LoginButtonState extends State<LoginButton> {
         username = '';
       });
     }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _checkUserLoginStatus();
   }
 
   @override
@@ -244,37 +254,8 @@ class _LoginButtonState extends State<LoginButton> {
             username = '';
           });
 
-          // Show logout dialog
-          showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (BuildContext context) {
-              Future.delayed(const Duration(seconds: 2), () {
-                Navigator.of(context).pop(true);
-              });
-              return AlertDialog(
-                content: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Icon(
-                      Icons.logout,
-                      color: Colors.green,
-                      size: 64,
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      '${AppStrings.logoutSuccessful}!',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: AppColorScheme.ownBlack,
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            },
-          );
+          // Call the logout callback
+          widget.onLogout();
         } else {
           // User is not logged in, navigate to login screen
           Navigator.push(
@@ -284,7 +265,7 @@ class _LoginButtonState extends State<LoginButton> {
             ),
           ).then((_) {
             // Refresh login status after returning from login screen
-            _checkUserLoginStatus();
+            widget.onLoginStatusChanged();
           });
         }
       },
