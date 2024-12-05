@@ -189,25 +189,33 @@ class _MyHomePageState extends State<MyHomePage> {
         Future.delayed(const Duration(seconds: 2), () {
           Navigator.of(context).pop(true);
         });
-        return AlertDialog(
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(
-                Icons.logout,
-                color: Colors.green,
-                size: 64,
-              ),
-              const SizedBox(height: 16),
-              Text(
-                '${AppStrings.logoutSuccessful}!',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 18,
-                  color: AppColorScheme.ownBlack,
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Container(
+            decoration: BoxDecoration(
+              color: AppColorScheme.ownWhite,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            padding: EdgeInsets.all(24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.logout,
+                  color: Colors.green,
+                  size: 64,
                 ),
-              ),
-            ],
+                SizedBox(height: 16),
+                Text(
+                  '${AppStrings.logoutSuccessful}!',
+                  textAlign: TextAlign.center,
+                  style:
+                      TextStyle(fontSize: 18, color: AppColorScheme.ownBlack),
+                ),
+              ],
+            ),
           ),
         );
       },
