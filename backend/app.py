@@ -99,15 +99,24 @@ def token_required(f):
                 token = auth_header.split(' ')[1]
 
         if not token:
-            return jsonify({'message': 'Token is missing!'}), 401
+            return jsonify({
+                'success': False,
+                'error':  'Token is missing!'
+            }), 401
 
         try:
             data = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
             current_user = Users.query.filter_by(UserID=data['user_id']).first()
         except jwt.ExpiredSignatureError:
-            return jsonify({'message': 'Token has expired!'}), 401
+            return jsonify({
+                'success': False,
+                'error':  'Token has expired!'
+            }), 401
         except jwt.InvalidTokenError:
-            return jsonify({'message': 'Invalid token!'}), 401
+            return jsonify({
+                'success': False,
+                'error':  'Invalid token!'
+            }), 401
 
         return f(current_user, *args, **kwargs)
     return decorated
@@ -356,7 +365,8 @@ def check_event_registration_status():
     })
 
 @app.route('/api/book-event', methods=['POST'])
-def book_event():
+@token_required
+def book_event(current_user):
     """
     Book an event for a user.
     
@@ -377,7 +387,7 @@ def book_event():
     # Parse request data
     data = request.get_json()
     training_id = data.get('training_id')
-    user_id = data.get('user_id')
+    user_id = current_user.UserID
 
     # Validate input parameters
     if not training_id or not user_id:
@@ -440,7 +450,8 @@ def book_event():
         }), 500
 
 @app.route('/api/cancel-event-registration', methods=['DELETE'])
-def cancel_event_registration():
+@token_required
+def cancel_event_registration(current_user):
     """
     Cancel a user's registration for an event.
     
@@ -461,7 +472,7 @@ def cancel_event_registration():
     # Parse request data
     data = request.get_json()
     training_id = data.get('training_id')
-    user_id = data.get('user_id')
+    user_id = current_user.UserID
 
     # Validate input parameters
     if not training_id or not user_id:

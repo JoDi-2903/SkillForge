@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:dargon2_flutter/dargon2_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:local_captcha/local_captcha.dart';
@@ -194,16 +193,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
         // Store the token securely
         await secureStorage.write(key: 'jwt_token', value: token);
-
-        // Decode the token to get user data
-        Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
-
-        // Save user data globally
-        await UserState().saveUserData(
-          decodedToken['user_id'],
-          decodedToken['username'],
-          decodedToken['is_admin'],
-        );
 
         // Show success message
         showDialog(

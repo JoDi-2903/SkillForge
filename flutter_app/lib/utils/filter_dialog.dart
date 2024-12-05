@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:skill_forge/utils/color_scheme.dart';
 import 'package:skill_forge/utils/languages.dart';
-import 'package:skill_forge/screens/login_screen.dart' as login;
 
 class FilterDialog extends StatefulWidget {
   final Map<String, dynamic> initialFilters;
@@ -33,9 +34,25 @@ class _FilterDialogState extends State<FilterDialog> {
     'Other',
   ];
 
+  final FlutterSecureStorage secureStorage = const FlutterSecureStorage();
+  bool isUserLoggedIn = false;
+  int userId = 0;
+
+  Future<void> _checkUserLoginStatus() async {
+    String? token = await secureStorage.read(key: 'jwt_token');
+    if (token != null) {
+      Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
+      setState(() {
+        isUserLoggedIn = decodedToken['username'] != null;
+        userId = decodedToken['user_id'];
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
+    _checkUserLoginStatus();
     // Load initial filters if any
     _filterByUser = widget.initialFilters['user_id'] != null;
     _selectedEventTypes =
@@ -46,8 +63,6 @@ class _FilterDialogState extends State<FilterDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final bool isUserLoggedIn = login.UserState().userId != null;
-
     return Padding(
       padding: MediaQuery.of(context).viewInsets,
       child: SingleChildScrollView(
@@ -189,9 +204,7 @@ class _FilterDialogState extends State<FilterDialog> {
                     onPressed: () {
                       // Apply filters
                       Navigator.pop(context, {
-                        'user_id': _filterByUser
-                            ? login.UserState().userId.toString()
-                            : null,
+                        'user_id': _filterByUser ? userId.toString() : null,
                         'event_type': _selectedEventTypes,
                         'subject_area': _selectedSubjectAreas,
                       });

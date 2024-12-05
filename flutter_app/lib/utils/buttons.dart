@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:skill_forge/utils/color_scheme.dart';
 import 'package:skill_forge/screens/month_screen.dart';
 import 'package:skill_forge/utils/languages.dart';
@@ -197,10 +199,29 @@ class LoginButton extends StatefulWidget {
 }
 
 class _LoginButtonState extends State<LoginButton> {
+  final FlutterSecureStorage secureStorage = const FlutterSecureStorage();
+  bool isUserLoggedIn = false;
+
+  Future<void> _checkUserLoginStatus() async {
+    String? token = await secureStorage.read(key: 'jwt_token');
+    if (token != null) {
+      Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
+      setState(() {
+        isUserLoggedIn = decodedToken['username'] != null;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _checkUserLoginStatus();
+  }
+
   @override
   Widget build(BuildContext context) {
     Icon loginIcon;
-    if (login.UserState().isLoggedIn) {
+    if (isUserLoggedIn) {
       loginIcon = const Icon(Icons.how_to_reg);
     } else {
       loginIcon = const Icon(Icons.account_circle_outlined);
