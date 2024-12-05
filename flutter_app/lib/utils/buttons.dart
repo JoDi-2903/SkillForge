@@ -201,6 +201,7 @@ class LoginButton extends StatefulWidget {
 class _LoginButtonState extends State<LoginButton> {
   final FlutterSecureStorage secureStorage = const FlutterSecureStorage();
   bool isUserLoggedIn = false;
+  String username = '';
 
   Future<void> _checkUserLoginStatus() async {
     String? token = await secureStorage.read(key: 'jwt_token');
@@ -208,6 +209,12 @@ class _LoginButtonState extends State<LoginButton> {
       Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
       setState(() {
         isUserLoggedIn = decodedToken['username'] != null;
+        username = decodedToken['username'] ?? '';
+      });
+    } else {
+      setState(() {
+        isUserLoggedIn = false;
+        username = '';
       });
     }
   }
@@ -220,21 +227,66 @@ class _LoginButtonState extends State<LoginButton> {
 
   @override
   Widget build(BuildContext context) {
-    Icon loginIcon;
-    if (isUserLoggedIn) {
-      loginIcon = const Icon(Icons.how_to_reg);
-    } else {
-      loginIcon = const Icon(Icons.account_circle_outlined);
-    }
+    Icon loginIcon = isUserLoggedIn
+        ? const Icon(Icons.how_to_reg)
+        : const Icon(Icons.account_circle_outlined);
+
     return IconButton(
       icon: loginIcon,
       color: AppColorScheme.indigo,
       iconSize: 35,
-      onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const login.LoginScreen()),
-        );
+      onPressed: () async {
+        if (isUserLoggedIn) {
+          // User is logged in, perform logout
+          await secureStorage.delete(key: 'jwt_token');
+          setState(() {
+            isUserLoggedIn = false;
+            username = '';
+          });
+
+          // Show logout dialog
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (BuildContext context) {
+              Future.delayed(const Duration(seconds: 2), () {
+                Navigator.of(context).pop(true);
+              });
+              return AlertDialog(
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(
+                      Icons.logout,
+                      color: Colors.green,
+                      size: 64,
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      '${AppStrings.logoutSuccessful}!',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: AppColorScheme.ownBlack,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          );
+        } else {
+          // User is not logged in, navigate to login screen
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const login.LoginScreen(),
+            ),
+          ).then((_) {
+            // Refresh login status after returning from login screen
+            _checkUserLoginStatus();
+          });
+        }
       },
     );
   }
