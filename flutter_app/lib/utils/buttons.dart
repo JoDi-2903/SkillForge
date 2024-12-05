@@ -6,6 +6,7 @@ import 'package:skill_forge/screens/login_screen.dart' as login;
 import 'package:skill_forge/screens/admin_screen.dart' as admin;
 import 'package:skill_forge/screens/week_screen.dart';
 import 'package:skill_forge/utils/holidays.dart';
+import 'package:skill_forge/main.dart';
 
 class ButtonBack extends StatefulWidget {
   final Function() backFunction;
@@ -135,7 +136,18 @@ class LanguageButton extends StatefulWidget {
 
 class _LanguageButtonState extends State<LanguageButton> {
   final List<Language> list = <Language>[german, english, chinese];
-  Language dropdownValue = english;
+  Language chooseLanguage() {
+    switch (MyApp.language.languageCode) {
+      case 'de':
+        return german;
+      case 'zh':
+        return chinese;
+      default:
+        return english;
+    }
+  }
+
+  late Language dropdownValue = chooseLanguage();
   @override
   Widget build(BuildContext context) {
     return Theme(
