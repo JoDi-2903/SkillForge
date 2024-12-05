@@ -30,8 +30,10 @@ class EventInformation(db.Model):
     InformationID = db.Column(db.BigInteger, primary_key=True, autoincrement=True)
     NameDE = db.Column(db.String(50), nullable=False)
     NameEN = db.Column(db.String(50), nullable=False)
+    NameZH = db.Column(db.String(50), nullable=False)
     DescriptionDE = db.Column(db.Text)
     DescriptionEN = db.Column(db.Text)
+    DescriptionZH = db.Column(db.Text)
     SubjectArea = db.Column(db.String(25))
     EventType = db.Column(db.String(20), nullable=False)
     describes = db.Column(db.BigInteger, db.ForeignKey('trainingcourses.TrainingID'))
@@ -102,8 +104,10 @@ def get_training_courses():
             'EventInfo': {
                 'NameDE': event_info.NameDE if event_info else None,
                 'NameEN': event_info.NameEN if event_info else None,
+                'NameZH': event_info.NameZH if event_info else None,
                 'DescriptionDE': event_info.DescriptionDE if event_info else None,
                 'DescriptionEN': event_info.DescriptionEN if event_info else None,
+                'DescriptionZH': event_info.DescriptionZH if event_info else None,
                 'SubjectArea': event_info.SubjectArea if event_info else None,
                 'EventType': event_info.EventType if event_info else None
             }
@@ -118,7 +122,7 @@ def get_calendar_events():
     Retrieve calendar events with optional filtering.
     
     Query Parameters:
-    - language: 'DE' or 'EN' (required)
+    - language: 'DE', 'EN' or 'ZH' (required)
     - user_id: Optional user ID to filter events
     - event_type: Optional event types filter (comma-separated list)
     - subject_area: Optional subject areas filter (comma-separated list)
@@ -172,7 +176,12 @@ def get_calendar_events():
     calendar_events = []
     for training, event_info, event_day in results:
         # Select name based on language
-        name = event_info.NameEN if language == 'EN' else event_info.NameDE
+        if language == 'DE':
+            name = event_info.NameDE
+        elif language == 'ZH':
+            name = event_info.NameZH
+        else:
+            name = event_info.NameEN
 
         event = {
             'training_id': training.TrainingID,
@@ -198,7 +207,7 @@ def get_event_details():
     Retrieve detailed event information.
     
     Query Parameters:
-    - language: 'DE' or 'EN' (required)
+    - language: 'DE', 'EN' or 'ZH' (required)
     - day_id: Optional Day ID to filter event
     - training_id: Optional Training ID to filter event
     
@@ -247,8 +256,15 @@ def get_event_details():
     training, event_info, _ = results[0]
 
     # Select description based on language
-    name = event_info.NameEN if language == 'EN' else event_info.NameDE
-    description = event_info.DescriptionEN if language == 'EN' else event_info.DescriptionDE
+    if language == 'DE':
+        name = event_info.NameDE
+        description = event_info.DescriptionDE
+    elif language == 'ZH':
+        name = event_info.NameZH
+        description = event_info.DescriptionZH
+    else:
+        name = event_info.NameEN
+        description = event_info.DescriptionEN
 
     event_details = {
         'training_id': training.TrainingID,
@@ -549,7 +565,7 @@ def create_new_event():
     - event_info_data: Event details
     - event_days_data: List of event dates/times
     - auto_translate: Optional boolean flag for automatic translation
-    - input_language: 'DE' or 'EN' (default: 'EN')
+    - input_language: 'DE', 'EN' or 'ZH' (default: 'EN')
     
     Returns:
     JSON response with created event details or error message
@@ -597,32 +613,47 @@ def create_new_event():
             if input_language == 'DE':
                 name_de = name
                 name_en = argo.translate(name, "de", "en")
+                name_zh = argo.translate(name_en, "en", "zh")
                 description_de = description
                 description_en = argo.translate(description, "de", "en")
+                description_zh = argo.translate(description_en, "en", "zh")
+            elif input_language == 'ZH':
+                name_zh = name
+                name_en = argo.translate(name, "zh", "en")
+                name_de = argo.translate(name_en, "en", "de")
+                description_zh = description
+                description_en = argo.translate(description, "zh", "en")
+                description_de = argo.translate(description_en, "en", "de")
             else:
                 name_en = name
                 name_de = argo.translate(name, "en", "de")
+                name_zh = argo.translate(name, "en", "zh")
                 description_en = description
                 description_de = argo.translate(description, "en", "de")
+                description_zh = argo.translate(description, "en", "zh")
         else:
-            # Manual input of both languages
+            # Manual input of all languages
             name_de = event_info_data.get('name_de')
             name_en = event_info_data.get('name_en')
+            name_zh = event_info_data.get('name_zh')
             description_de = event_info_data.get('description_de')
             description_en = event_info_data.get('description_en')
+            description_zh = event_info_data.get('description_zh')
 
-            if not (name_de and name_en and description_de and description_en):
+            if not (name_de and name_en and name_zh and description_de and description_en and description_zh):
                 return jsonify({
                     'success': False,
-                    'error': 'Both language versions of name and description are required'
+                    'error': 'All language versions of name and description are required'
                 }), 400
 
         # Create EventInformation entry
         new_event_info = EventInformation(
             NameDE=name_de,
             NameEN=name_en,
+            NameZH=name_zh,
             DescriptionDE=description_de,
             DescriptionEN=description_en,
+            DescriptionZH=description_zh,
             SubjectArea=event_info_data.get('subject_area', 'Other'),
             EventType=event_info_data.get('event_type', 'Other'),
             describes=new_training_course.TrainingID

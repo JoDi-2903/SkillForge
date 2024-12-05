@@ -121,10 +121,6 @@ Future<DataSource> _getCalendarDataSource(
   // Prepare the language parameter
   String language = MyApp.language.languageCode.toUpperCase();
 
-  if (language == 'ZH') {
-    language = 'EN';
-  }
-
   // Optional parameters
   Map<String, String> params = {
     'language': language,
