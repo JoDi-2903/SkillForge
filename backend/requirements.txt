@@ -4,3 +4,4 @@ pymysql
 flask-cors
 argostranslate
 requests
+PyJWT==2.6.0

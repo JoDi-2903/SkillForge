@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:crypto/crypto.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:dargon2_flutter/dargon2_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:local_captcha/local_captcha.dart';
@@ -113,11 +114,14 @@ class _CaptchaWidgetState extends State<CaptchaWidget> {
   }
 }
 
+// Secure storage for storing the JWT
+final FlutterSecureStorage secureStorage = const FlutterSecureStorage();
+
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+  const LoginScreen({Key? key}) : super(key: key);
 
   @override
-  State createState() => _LoginScreenState();
+  _LoginScreenState createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
@@ -129,6 +133,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   bool _isPasswordVisible = false;
   bool _rememberMe = false;
+  bool _isLoading = false;
 
   // Hash password using Argon2
   Future<String> _hashPassword(String password) async {
@@ -158,6 +163,7 @@ class _LoginScreenState extends State<LoginScreen> {
         _captchaController.validate(_captchaTextController.text);
     if (captchaValidation != LocalCaptchaValidation.valid) {
       setState(() {
+        _isLoading = true;
         _captchaController.refresh();
         _captchaTextController.clear();
       });
@@ -183,12 +189,20 @@ class _LoginScreenState extends State<LoginScreen> {
       );
       final responseData = jsonDecode(response.body);
 
-      if (responseData['success']) {
+      if (responseData['success'] && response.statusCode == 200) {
+        final String token = responseData['token'];
+
+        // Store the token securely
+        await secureStorage.write(key: 'jwt_token', value: token);
+
+        // Decode the token to get user data
+        Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
+
         // Save user data globally
         await UserState().saveUserData(
-          responseData['user_id'],
-          _usernameController.text,
-          responseData['is_admin'],
+          decodedToken['user_id'],
+          decodedToken['username'],
+          decodedToken['is_admin'],
         );
 
         // Show success message
@@ -280,7 +294,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Existing UI code remains the same, just update the onPressed for login button
     return Scaffold(
       backgroundColor: AppColorScheme.ownWhite,
       appBar: AppBar(
@@ -416,8 +429,15 @@ class _LoginScreenState extends State<LoginScreen> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      onPressed: _performLogin,
-                      child: Text(AppStrings.login),
+                      onPressed: _isLoading ? null : _performLogin,
+                      child: _isLoading
+                          ? CircularProgressIndicator(
+                              color: AppColorScheme.ownWhite)
+                          : Text(
+                              AppStrings.login,
+                              style: TextStyle(
+                                  fontSize: 18, color: AppColorScheme.ownWhite),
+                            ),
                     ),
                     const SizedBox(height: 16),
                     TextButton(

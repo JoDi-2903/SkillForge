@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:skill_forge/screens/login_screen.dart' as login;
 import 'package:skill_forge/utils/color_scheme.dart';
 import 'package:skill_forge/utils/languages.dart';
@@ -149,13 +151,20 @@ class _MyHomePageState extends State<MyHomePage> {
     refresh();
   }
 
+  final FlutterSecureStorage secureStorage = const FlutterSecureStorage();
   bool _isAdmin = false;
 
   Future<void> _checkAdminStatus() async {
-    await login.UserState().loadUserData();
-    setState(() {
-      _isAdmin = login.UserState().isAdmin ?? false;
-    });
+    String? token = await secureStorage.read(key: 'jwt_token');
+    if (token != null) {
+      Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
+      setState(() {
+        _isAdmin = decodedToken['is_admin'];
+      });
+    } else {
+      // Redirect to login or show error
+      Navigator.pushReplacementNamed(context, '/login');
+    }
   }
 
   Map<String, dynamic> _filters = {
