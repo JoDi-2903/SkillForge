@@ -344,7 +344,9 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
             Icon(Icons.person, color: appBarColor),
             const SizedBox(height: 4),
             Text(
-              '${eventDetails?['current_participants'] ?? 0}',
+              '${eventDetails?['current_participants']}' != 'null'
+                  ? '${eventDetails?['current_participants']}'
+                  : '0',
               style: TextStyle(color: AppColorScheme.ownBlack),
             ),
             Text(
