@@ -354,16 +354,17 @@ class MonthCalendar extends StatelessWidget {
                       ),
                     ),
                   );
-                } else {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => HolidayPage(
-                        name: appointment.subject,
-                      ),
-                    ),
-                  );
-                }
+                } // Note: Deactivated holiday page because it gives no addtitional value if appointment is clickable
+                //else {
+                //  Navigator.push(
+                //    context,
+                //    MaterialPageRoute(
+                //      builder: (context) => HolidayPage(
+                //        name: appointment.subject,
+                //      ),
+                //    ),
+                //  );
+                //}
               }
             },
           );

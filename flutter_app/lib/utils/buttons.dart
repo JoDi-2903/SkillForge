@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:skill_forge/utils/color_scheme.dart';
 import 'package:skill_forge/screens/month_screen.dart';
 import 'package:skill_forge/utils/languages.dart';
@@ -190,30 +192,82 @@ class _LanguageButtonState extends State<LanguageButton> {
 }
 
 class LoginButton extends StatefulWidget {
-  const LoginButton({super.key});
+  final bool isUserLoggedIn;
+  final Function() onLogout;
+  final Function() onLoginStatusChanged;
+
+  const LoginButton({
+    super.key,
+    required this.isUserLoggedIn,
+    required this.onLogout,
+    required this.onLoginStatusChanged,
+  });
 
   @override
   State<LoginButton> createState() => _LoginButtonState();
 }
 
 class _LoginButtonState extends State<LoginButton> {
+  final FlutterSecureStorage secureStorage = const FlutterSecureStorage();
+  bool isUserLoggedIn = false;
+  String username = '';
+
+  @override
+  void initState() {
+    super.initState();
+    isUserLoggedIn = widget.isUserLoggedIn;
+    _checkUserLoginStatus();
+  }
+
+  Future<void> _checkUserLoginStatus() async {
+    String? token = await secureStorage.read(key: 'jwt_token');
+    if (token != null) {
+      Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
+      setState(() {
+        isUserLoggedIn = decodedToken['username'] != null;
+        username = decodedToken['username'] ?? '';
+      });
+    } else {
+      setState(() {
+        isUserLoggedIn = false;
+        username = '';
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    Icon loginIcon;
-    if (login.UserState().isLoggedIn) {
-      loginIcon = const Icon(Icons.how_to_reg);
-    } else {
-      loginIcon = const Icon(Icons.account_circle_outlined);
-    }
+    Icon loginIcon = isUserLoggedIn
+        ? const Icon(Icons.how_to_reg)
+        : const Icon(Icons.account_circle_outlined);
+
     return IconButton(
       icon: loginIcon,
       color: AppColorScheme.indigo,
       iconSize: 35,
-      onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const login.LoginScreen()),
-        );
+      onPressed: () async {
+        if (isUserLoggedIn) {
+          // User is logged in, perform logout
+          await secureStorage.delete(key: 'jwt_token');
+          setState(() {
+            isUserLoggedIn = false;
+            username = '';
+          });
+
+          // Call the logout callback
+          widget.onLogout();
+        } else {
+          // User is not logged in, navigate to login screen
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const login.LoginScreen(),
+            ),
+          ).then((_) {
+            // Refresh login status after returning from login screen
+            widget.onLoginStatusChanged();
+          });
+        }
       },
     );
   }

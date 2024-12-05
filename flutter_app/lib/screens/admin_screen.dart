@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:skill_forge/utils/color_scheme.dart';
 import 'package:intl/intl.dart';
+import 'package:skill_forge/screens/login_screen.dart' as login;
 
 class AdminEventScreen extends StatefulWidget {
-  const AdminEventScreen({super.key});
+  const AdminEventScreen({Key? key}) : super(key: key);
 
   @override
   State<AdminEventScreen> createState() => _AdminEventScreenState();
@@ -13,6 +16,8 @@ class AdminEventScreen extends StatefulWidget {
 
 class _AdminEventScreenState extends State<AdminEventScreen> {
   final _formKey = GlobalKey<FormState>();
+  final FlutterSecureStorage secureStorage = const FlutterSecureStorage();
+  bool isAdmin = false;
 
   // Controllers for event information
   final _nameDeController = TextEditingController();
@@ -57,6 +62,7 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
     super.initState();
     // Add initial event day
     _addEventDay();
+    _checkAdminStatus();
   }
 
   void _addEventDay() {
@@ -179,9 +185,14 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
     };
 
     try {
+      String? token = await secureStorage.read(key: 'jwt_token');
+
       final response = await http.post(
         Uri.parse('http://127.0.0.1:5000/api/admin/create-event'),
-        headers: {'Content-Type': 'application/json'},
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
         body: jsonEncode(eventData),
       );
 
@@ -215,8 +226,34 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
     }
   }
 
+  Future<void> _checkAdminStatus() async {
+    String? token = await secureStorage.read(key: 'jwt_token');
+    if (token != null) {
+      Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
+      setState(() {
+        isAdmin = decodedToken['is_admin'];
+      });
+    } else {
+      // Redirect to login screen if token is not found
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const login.LoginScreen()),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (!isAdmin) {
+      return Scaffold(
+        appBar: AppBar(
+          title: const Text('Access Denied'),
+        ),
+        body: const Center(
+          child: Text('You are not authorized to access this page.'),
+        ),
+      );
+    }
     return Scaffold(
       backgroundColor: AppColorScheme.ownWhite,
       appBar: AppBar(

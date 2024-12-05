@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'dart:convert';
 import 'package:skill_forge/utils/color_scheme.dart';
 import 'package:skill_forge/main.dart';
-import 'package:skill_forge/screens/login_screen.dart' as login;
 import 'package:skill_forge/utils/languages.dart';
 
 class AppointmentDetailScreen extends StatefulWidget {
@@ -19,9 +20,11 @@ class AppointmentDetailScreen extends StatefulWidget {
 
 class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
   Map<String, dynamic>? eventDetails;
+  final FlutterSecureStorage secureStorage = const FlutterSecureStorage();
   bool isLoading = true;
   bool isRegistered = false;
   bool isUserLoggedIn = false;
+  int userId = 0;
   late Color appBarColor;
 
   @override
@@ -76,16 +79,21 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
     }
   }
 
-  void _checkUserLoginStatus() {
-    setState(() {
-      isUserLoggedIn = login.UserState().username != null;
-    });
+  Future<void> _checkUserLoginStatus() async {
+    String? token = await secureStorage.read(key: 'jwt_token');
+    if (token != null) {
+      Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
+      setState(() {
+        isUserLoggedIn = decodedToken['username'] != null;
+        userId = decodedToken['user_id'];
+      });
+    }
   }
 
   Future<void> _checkRegistrationStatus() async {
     try {
       final response = await http.get(Uri.parse(
-          'http://127.0.0.1:5000/api/event-registration-status?training_id=${eventDetails?['training_id']}&user_id=${login.UserState().userId}'));
+          'http://127.0.0.1:5000/api/event-registration-status?training_id=${eventDetails?['training_id']}&user_id=${userId}'));
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         setState(() {
@@ -101,12 +109,16 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
 
   Future<void> _registerForEvent() async {
     try {
+      String? token = await secureStorage.read(key: 'jwt_token');
+
       final response = await http.post(
         Uri.parse('http://127.0.0.1:5000/api/book-event'),
-        headers: {'Content-Type': 'application/json'},
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
         body: json.encode({
           'training_id': eventDetails?['training_id'],
-          'user_id': login.UserState().userId,
         }),
       );
       final data = json.decode(response.body);
@@ -127,12 +139,16 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
 
   Future<void> _cancelRegistration() async {
     try {
+      String? token = await secureStorage.read(key: 'jwt_token');
+
       final response = await http.delete(
         Uri.parse('http://127.0.0.1:5000/api/cancel-event-registration'),
-        headers: {'Content-Type': 'application/json'},
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
         body: json.encode({
           'training_id': eventDetails?['training_id'],
-          'user_id': login.UserState().userId,
         }),
       );
       final data = json.decode(response.body);
@@ -328,7 +344,9 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
             Icon(Icons.person, color: appBarColor),
             const SizedBox(height: 4),
             Text(
-              '${eventDetails?['current_participants'] ?? 0}',
+              '${eventDetails?['current_participants']}' != 'null'
+                  ? '${eventDetails?['current_participants']}'
+                  : '0',
               style: TextStyle(color: AppColorScheme.ownBlack),
             ),
             Text(

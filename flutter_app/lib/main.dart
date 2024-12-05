@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:skill_forge/screens/login_screen.dart' as login;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:skill_forge/utils/color_scheme.dart';
 import 'package:skill_forge/utils/languages.dart';
 import 'package:skill_forge/utils/buttons.dart';
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Skill Forge',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -149,13 +150,76 @@ class _MyHomePageState extends State<MyHomePage> {
     refresh();
   }
 
+  final FlutterSecureStorage secureStorage = const FlutterSecureStorage();
   bool _isAdmin = false;
+  bool _isUserLoggedIn = false;
+  String _username = '';
 
   Future<void> _checkAdminStatus() async {
-    await login.UserState().loadUserData();
+    String? token = await secureStorage.read(key: 'jwt_token');
+    if (token != null) {
+      Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
+      setState(() {
+        _isAdmin = decodedToken['is_admin'];
+        _isUserLoggedIn = decodedToken['username'] != null;
+        _username = decodedToken['username'] ?? '';
+      });
+    } else {
+      setState(() {
+        _isAdmin = false;
+        _isUserLoggedIn = false;
+        _username = '';
+      });
+    }
+  }
+
+  void _handleLogout() async {
+    await secureStorage.delete(key: 'jwt_token');
     setState(() {
-      _isAdmin = login.UserState().isAdmin ?? false;
+      _isAdmin = false;
+      _isUserLoggedIn = false;
+      _username = '';
     });
+
+    // Show logout dialog
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        Future.delayed(const Duration(seconds: 2), () {
+          Navigator.of(context).pop(true);
+        });
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Container(
+            decoration: BoxDecoration(
+              color: AppColorScheme.ownWhite,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            padding: EdgeInsets.all(24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.logout,
+                  color: Colors.green,
+                  size: 64,
+                ),
+                SizedBox(height: 16),
+                Text(
+                  '${AppStrings.logoutSuccessful}!',
+                  textAlign: TextAlign.center,
+                  style:
+                      TextStyle(fontSize: 18, color: AppColorScheme.ownBlack),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
   Map<String, dynamic> _filters = {
@@ -280,7 +344,11 @@ class _MyHomePageState extends State<MyHomePage> {
             surfaceTintColor: Colors.transparent,
             actions: <Widget>[
               if (_isAdmin) AdminButton(),
-              LoginButton(),
+              LoginButton(
+                isUserLoggedIn: _isUserLoggedIn,
+                onLogout: _handleLogout,
+                onLoginStatusChanged: _checkAdminStatus,
+              ),
               LanguageButton(language: setLocale),
               RegionButton(region: setRegion),
               WeekButton(filters: _filters),

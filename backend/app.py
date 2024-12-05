@@ -1,11 +1,18 @@
+import datetime
+from functools import wraps
+
 import argostranslate.translate as argo
-from flask import Flask, jsonify, request
+import jwt
+from flask import Flask, jsonify, make_response, request
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship
 
 app = Flask(__name__)
 CORS(app)
+
+# Secret key for JWT
+app.config['SECRET_KEY'] = 'skillforge_dhbw_2024_mobile_computing'  # Replace with a more secure key in production
 
 # Database configuration
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://dbuser:dbpasswort@db/skillforge_db'
@@ -79,6 +86,40 @@ class Users(db.Model):
     
     # Relationship
     participates = relationship('Participates', back_populates='user')
+
+
+# JWT token required decorator
+def token_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = None
+        if 'Authorization' in request.headers:
+            auth_header = request.headers['Authorization']
+            if auth_header.startswith('Bearer '):
+                token = auth_header.split(' ')[1]
+
+        if not token:
+            return jsonify({
+                'success': False,
+                'error':  'Token is missing!'
+            }), 401
+
+        try:
+            data = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
+            current_user = Users.query.filter_by(UserID=data['user_id']).first()
+        except jwt.ExpiredSignatureError:
+            return jsonify({
+                'success': False,
+                'error':  'Token has expired!'
+            }), 401
+        except jwt.InvalidTokenError:
+            return jsonify({
+                'success': False,
+                'error':  'Invalid token!'
+            }), 401
+
+        return f(current_user, *args, **kwargs)
+    return decorated
 
 @app.route('/api/trainingcourses', methods=['GET'])
 def get_training_courses():
@@ -266,6 +307,11 @@ def get_event_details():
         name = event_info.NameEN
         description = event_info.DescriptionEN
 
+    # Count current participants
+    current_participants = Participates.query.filter_by(
+        TrainingID=training_id
+    ).count()
+
     event_details = {
         'training_id': training.TrainingID,
         'event_type': event_info.EventType,
@@ -274,6 +320,7 @@ def get_event_details():
         'description': description,
         'min_participants': training.MinParticipants,
         'max_participants': training.MaxParticipants,
+        'current_participants': current_participants,
         'event_dates': []
     }
 
@@ -324,7 +371,8 @@ def check_event_registration_status():
     })
 
 @app.route('/api/book-event', methods=['POST'])
-def book_event():
+@token_required
+def book_event(current_user):
     """
     Book an event for a user.
     
@@ -345,7 +393,7 @@ def book_event():
     # Parse request data
     data = request.get_json()
     training_id = data.get('training_id')
-    user_id = data.get('user_id')
+    user_id = current_user.UserID
 
     # Validate input parameters
     if not training_id or not user_id:
@@ -408,7 +456,8 @@ def book_event():
         }), 500
 
 @app.route('/api/cancel-event-registration', methods=['DELETE'])
-def cancel_event_registration():
+@token_required
+def cancel_event_registration(current_user):
     """
     Cancel a user's registration for an event.
     
@@ -429,7 +478,7 @@ def cancel_event_registration():
     # Parse request data
     data = request.get_json()
     training_id = data.get('training_id')
-    user_id = data.get('user_id')
+    user_id = current_user.UserID
 
     # Validate input parameters
     if not training_id or not user_id:
@@ -488,19 +537,19 @@ def user_login():
         }), 415
 
     # Extract login credentials
-    data = request.get_json()
-    username = data.get('username')
-    provided_password_hash = data.get('password_hash')
+    auth_data = request.get_json()
+    if not auth_data or not auth_data.get('username') or not auth_data.get('password_hash'):
+        return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login required!"'})
 
     # Validate input parameters
-    if not username or not provided_password_hash:
+    if not auth_data['username'] or not auth_data['password_hash']:
         return jsonify({
             'success': False,
-            'error': 'Username and password hash are required'
+            'error': 'Username and password are required'
         }), 400
 
     # Prevent login with wildcard username
-    if username == "*":
+    if auth_data['username'] == "*":
         return jsonify({
             'success': False,
             'error': 'Invalid username or password'
@@ -508,7 +557,7 @@ def user_login():
 
     try:
         # Find user by username
-        user = Users.query.filter_by(Username=username).first()
+        user = Users.query.filter_by(Username=auth_data['username']).first()
 
         # Check if user exists
         if not user:
@@ -525,7 +574,7 @@ def user_login():
             }), 403
 
         # Verify password
-        if user.PasswordHash != provided_password_hash:
+        if user.PasswordHash != auth_data['password_hash']:
             # Increment login attempts
             user.CountLoginAttempts += 1
 
@@ -548,22 +597,26 @@ def user_login():
         user.CountLoginAttempts = 0
         db.session.commit()
 
-        # Return user details
-        return jsonify({
-            'success': True,
+        # Return token with user details
+        token = jwt.encode({
             'user_id': user.UserID,
-            'is_admin': user.is_admin
-        })
+            'username': user.Username,
+            'is_admin': user.is_admin,
+            'exp': datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(hours=1)
+        }, app.config['SECRET_KEY'], algorithm='HS256')
+
+        return jsonify({'success': True, 'token': token})
 
     except Exception as e:
         db.session.rollback()
         return jsonify({
             'success': False,
-            'error': 'An unexpected error occurred'
+            'error': 'An unexpected error occurred.'
         }), 500
 
 @app.route('/api/admin/create-event', methods=['POST'])
-def create_new_event():
+@token_required
+def create_new_event(current_user):
     """
     Create a new event with optional automatic translation.
     
@@ -577,6 +630,13 @@ def create_new_event():
     Returns:
     JSON response with created event details or error message
     """
+    # Check user authorization
+    if not current_user.is_admin:
+        return jsonify({
+            'success': False,
+            'error':  'You are not authorized to perform this action.'
+        }), 403
+
     # Parse request data
     data = request.get_json()
     

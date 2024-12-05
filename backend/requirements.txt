@@ -1,6 +1,7 @@
-flask
-flask-sqlalchemy
-pymysql
-flask-cors
-argostranslate
-requests
+flask==3.1.0
+flask-sqlalchemy==3.1.1
+pymysql==1.1.1
+flask-cors==5.0.0
+argostranslate==1.9.6
+requests==2.32.3
+PyJWT==2.6.0
