@@ -307,6 +307,11 @@ def get_event_details():
         name = event_info.NameEN
         description = event_info.DescriptionEN
 
+    # Count current participants
+        current_participants = Participates.query.filter_by(
+            TrainingID=training_id
+        ).count()
+
     event_details = {
         'training_id': training.TrainingID,
         'event_type': event_info.EventType,
@@ -315,6 +320,7 @@ def get_event_details():
         'description': description,
         'min_participants': training.MinParticipants,
         'max_participants': training.MaxParticipants,
+        'current_participants': current_participants,
         'event_dates': []
     }
 
