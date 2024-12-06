@@ -290,8 +290,7 @@ class _AdminButtonState extends State<AdminButton> {
       onPressed: () {
         Navigator.push(
           context,
-          MaterialPageRoute(
-              builder: (context) => const admin.AdminEventScreen()),
+          MaterialPageRoute(builder: (context) => admin.AdminEventScreen()),
         );
       },
     );

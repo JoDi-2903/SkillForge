@@ -182,7 +182,7 @@ List<Appointment> getHolidayasAppointment(DateTime? currentDate, String state) {
     //newyear
     holidays.add(Appointment(
       isAllDay: true,
-      subject: AppStrings.newYear,
+      subject: AppStrings.newYear + ';celebration',
       color: AppColorScheme.lapisLazuli,
       startTime: DateTime(yearNow + i, 1, 1, 0),
       endTime: DateTime(yearNow + i, 1, 1, 0),
@@ -191,7 +191,7 @@ List<Appointment> getHolidayasAppointment(DateTime? currentDate, String state) {
     //firstmay
     holidays.add(Appointment(
       isAllDay: true,
-      subject: AppStrings.firstMay,
+      subject: AppStrings.firstMay + ';construction',
       color: AppColorScheme.lapisLazuli,
       startTime: DateTime(yearNow + i, 5, 1, 0),
       endTime: DateTime(yearNow + i, 5, 1, 0),
@@ -200,7 +200,7 @@ List<Appointment> getHolidayasAppointment(DateTime? currentDate, String state) {
     //germanunity
     holidays.add(Appointment(
       isAllDay: true,
-      subject: AppStrings.germanUnity,
+      subject: AppStrings.germanUnity + ';handshake',
       color: AppColorScheme.lapisLazuli,
       startTime: DateTime(yearNow + i, 10, 3, 0),
       endTime: DateTime(yearNow + i, 10, 3, 0),
@@ -209,7 +209,7 @@ List<Appointment> getHolidayasAppointment(DateTime? currentDate, String state) {
     //christmas1
     holidays.add(Appointment(
       isAllDay: true,
-      subject: AppStrings.christmas1,
+      subject: AppStrings.christmas1 + ';park',
       color: AppColorScheme.lapisLazuli,
       startTime: DateTime(yearNow + i, 12, 25, 0),
       endTime: DateTime(yearNow + i, 12, 25, 0),
@@ -218,7 +218,7 @@ List<Appointment> getHolidayasAppointment(DateTime? currentDate, String state) {
     //christmas2
     holidays.add(Appointment(
       isAllDay: true,
-      subject: AppStrings.christmas2,
+      subject: AppStrings.christmas2 + ';forest',
       color: AppColorScheme.lapisLazuli,
       startTime: DateTime(yearNow + i, 12, 26, 0),
       endTime: DateTime(yearNow + i, 12, 26, 0),
@@ -229,7 +229,7 @@ List<Appointment> getHolidayasAppointment(DateTime? currentDate, String state) {
     //carfriday
     holidays.add(Appointment(
       isAllDay: true,
-      subject: AppStrings.carFriday,
+      subject: AppStrings.carFriday + ';church',
       color: AppColorScheme.lapisLazuli,
       startTime: easter.subtract(const Duration(hours: 48)),
       endTime: easter.subtract(const Duration(hours: 48)),
@@ -238,7 +238,7 @@ List<Appointment> getHolidayasAppointment(DateTime? currentDate, String state) {
     //eastersunday
     holidays.add(Appointment(
       isAllDay: true,
-      subject: AppStrings.easterSunday,
+      subject: AppStrings.easterSunday + ';cruelty_free',
       color: AppColorScheme.lapisLazuli,
       startTime: easter,
       endTime: easter,
@@ -247,7 +247,7 @@ List<Appointment> getHolidayasAppointment(DateTime? currentDate, String state) {
     //eastermonday
     holidays.add(Appointment(
       isAllDay: true,
-      subject: AppStrings.easterMonday,
+      subject: AppStrings.easterMonday + ';egg',
       color: AppColorScheme.lapisLazuli,
       startTime: easter.add(const Duration(hours: 24)),
       endTime: easter.add(const Duration(hours: 24)),
@@ -256,7 +256,7 @@ List<Appointment> getHolidayasAppointment(DateTime? currentDate, String state) {
     //christheavendrive
     holidays.add(Appointment(
       isAllDay: true,
-      subject: AppStrings.christHeavenDrive,
+      subject: AppStrings.christHeavenDrive + ';cloud_upload',
       color: AppColorScheme.lapisLazuli,
       startTime: easter.add(const Duration(hours: 39 * 24)),
       endTime: easter.add(const Duration(hours: 39 * 24)),
@@ -265,7 +265,7 @@ List<Appointment> getHolidayasAppointment(DateTime? currentDate, String state) {
     //Pfingstsunday
     holidays.add(Appointment(
       isAllDay: true,
-      subject: AppStrings.whitSunday,
+      subject: AppStrings.whitSunday + ';lightbulb',
       color: AppColorScheme.lapisLazuli,
       startTime: easter.add(const Duration(hours: 49 * 24)),
       endTime: easter.add(const Duration(hours: 49 * 24)),
@@ -274,7 +274,7 @@ List<Appointment> getHolidayasAppointment(DateTime? currentDate, String state) {
     //Pfingstmonday
     holidays.add(Appointment(
       isAllDay: true,
-      subject: AppStrings.whitMonday,
+      subject: AppStrings.whitMonday + ';local_fire_department',
       color: AppColorScheme.lapisLazuli,
       startTime: easter.add(const Duration(hours: 50 * 24)),
       endTime: easter.add(const Duration(hours: 50 * 24)),
@@ -286,7 +286,7 @@ List<Appointment> getHolidayasAppointment(DateTime? currentDate, String state) {
         region.identifier == 'ST') {
       holidays.add(Appointment(
         isAllDay: true,
-        subject: AppStrings.epiphany,
+        subject: AppStrings.epiphany + ';star',
         color: AppColorScheme.lapisLazuli,
         startTime: DateTime(yearNow + i, 1, 6, 0),
         endTime: DateTime(yearNow + i, 1, 6, 0),
@@ -297,7 +297,7 @@ List<Appointment> getHolidayasAppointment(DateTime? currentDate, String state) {
     if (region.identifier == 'BE' || region.identifier == 'MV') {
       holidays.add(Appointment(
         isAllDay: true,
-        subject: AppStrings.intlWomen,
+        subject: AppStrings.intlWomen + ';face_3',
         color: AppColorScheme.lapisLazuli,
         startTime: DateTime(yearNow + i, 3, 8, 0),
         endTime: DateTime(yearNow + i, 3, 8, 0),
@@ -315,7 +315,7 @@ List<Appointment> getHolidayasAppointment(DateTime? currentDate, String state) {
         region.identifier == 'TH') {
       holidays.add(Appointment(
         isAllDay: true,
-        subject: AppStrings.happyCadaver,
+        subject: AppStrings.happyCadaver + ';sentiment_very_dissatisfied',
         color: AppColorScheme.lapisLazuli,
         startTime: easter.add(const Duration(hours: 60 * 24)),
         endTime: easter.add(const Duration(hours: 60 * 24)),
@@ -326,7 +326,7 @@ List<Appointment> getHolidayasAppointment(DateTime? currentDate, String state) {
     if (region.identifier == 'BY') {
       holidays.add(Appointment(
         isAllDay: true,
-        subject: AppStrings.peaceParty,
+        subject: AppStrings.peaceParty + ';mood',
         color: AppColorScheme.lapisLazuli,
         startTime: DateTime(yearNow + i, 8, 8, 0),
         endTime: DateTime(yearNow + i, 8, 8, 0),
@@ -337,7 +337,7 @@ List<Appointment> getHolidayasAppointment(DateTime? currentDate, String state) {
     if (region.identifier == 'BY' || region.identifier == 'SL') {
       holidays.add(Appointment(
         isAllDay: true,
-        subject: AppStrings.mariaHeavenDrive,
+        subject: AppStrings.mariaHeavenDrive + ';cloud_done',
         color: AppColorScheme.lapisLazuli,
         startTime: DateTime(yearNow + i, 8, 15, 0),
         endTime: DateTime(yearNow + i, 8, 15, 0),
@@ -348,7 +348,7 @@ List<Appointment> getHolidayasAppointment(DateTime? currentDate, String state) {
     if (region.identifier == 'TH') {
       holidays.add(Appointment(
         isAllDay: true,
-        subject: AppStrings.worldChildDay,
+        subject: AppStrings.worldChildDay + ';child_care',
         color: AppColorScheme.lapisLazuli,
         startTime: DateTime(yearNow + i, 9, 20, 0),
         endTime: DateTime(yearNow + i, 9, 20, 0),
@@ -367,7 +367,7 @@ List<Appointment> getHolidayasAppointment(DateTime? currentDate, String state) {
         region.identifier == 'TH') {
       holidays.add(Appointment(
         isAllDay: true,
-        subject: AppStrings.reformationDay,
+        subject: AppStrings.reformationDay + ';description',
         color: AppColorScheme.lapisLazuli,
         startTime: DateTime(yearNow + i, 10, 31, 0),
         endTime: DateTime(yearNow + i, 10, 31, 0),
@@ -382,7 +382,7 @@ List<Appointment> getHolidayasAppointment(DateTime? currentDate, String state) {
         region.identifier == 'SL') {
       holidays.add(Appointment(
         isAllDay: true,
-        subject: AppStrings.allSaints,
+        subject: AppStrings.allSaints + ';accessibility',
         color: AppColorScheme.lapisLazuli,
         startTime: DateTime(yearNow + i, 11, 1, 0),
         endTime: DateTime(yearNow + i, 11, 1, 0),
