@@ -146,7 +146,7 @@ INSERT INTO `users` (`UserID`, `Username`, `PasswordHash`, `FirstName`, `LastNam
 (2, 'Firq', NULL, 'Noah Leon', 'Meier', 'MrMeier@email.com', 'Computer Science', 0, 1, 0),
 (3, 'Nehper', NULL, 'Nicki Matthias', 'Schuhmacher', 'MrSchuhmacher@email.com', 'Electrical Engineering', 0, 1, 0),
 (4, 'Neshura', NULL, 'Jan Elias', 'Sulzberger', 'MrSulzberger@email.com', 'Mechatronics', 0, 1, 0),
-(5, 'Auftragsgriller30', NULL, 'Arne Laurids', 'Fränznick', 'MrFraenznick@email.com', 'Electrical Engineering', 1, 1, 0),
+(5, 'Auftragsgriller30', '$argon2id$v=19$m=19456,t=32,p=1$DCI4Tlp76jhOWgwiOE5aew$2HuRB5a50M4i7FKfI3hMH9lizQl0esPgJSKMGCoGi2g', 'Arne Laurids', 'Fränznick', 'MrFraenznick@email.com', 'Electrical Engineering', 1, 1, 0),
 (6, 'DrSaumweber', NULL, 'Vicent', 'Saumweber', 'DrSaumweber@email.com', 'Mechanical Engineering', 0, 1, 0),
 (7, 'TheMan', NULL, 'Timo', 'Wehrle-Brunner', 'MrWehrle-Brunner@email.com', 'Other', 0, 1, 0),
 (8, 'Fish', NULL, 'Emma', 'Fischer', 'MsFischer@email.com', 'Computer Science', 0, 1, 0),

@@ -6,6 +6,9 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:skill_forge/utils/color_scheme.dart';
 import 'package:intl/intl.dart';
 import 'package:skill_forge/screens/login_screen.dart' as login;
+import 'package:skill_forge/utils/languages.dart';
+import 'package:skill_forge/main.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 class AdminEventScreen extends StatefulWidget {
   const AdminEventScreen({Key? key}) : super(key: key);
@@ -92,6 +95,7 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
       BuildContext context, TextEditingController controller) async {
     final DateTime? picked = await showDatePicker(
       context: context,
+      locale: MyApp.language,
       initialDate: DateTime.now(),
       firstDate: DateTime.now(),
       lastDate: DateTime(2030),
@@ -118,16 +122,26 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
     final TimeOfDay? picked = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.now(),
+      barrierLabel: 'Hallo',
       builder: (context, child) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-            colorScheme: ColorScheme.light(
-              primary: AppColorScheme.indigo,
-              onPrimary: Colors.white,
-              surface: AppColorScheme.antiFlash,
+        return Localizations(
+          delegates: const [
+            GlobalMaterialLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+          ],
+          locale: MyApp.language,
+          child: Theme(
+            data: Theme.of(context).copyWith(
+              colorScheme: ColorScheme.light(
+                primary: AppColorScheme.indigo,
+                secondary: AppColorScheme.lapisLazuli,
+                onPrimary: Colors.white,
+                surface: AppColorScheme.antiFlash,
+              ),
             ),
+            child: child!,
           ),
-          child: child!,
         );
       },
     );
@@ -202,7 +216,7 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-                'Event created successfully with ID: ${responseBody['training_id']}'),
+                '${AppStrings.eventSuccessful} ${responseBody['training_id']}'),
             backgroundColor: Colors.green,
           ),
         );
@@ -211,7 +225,8 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(responseBody['error'] ?? 'Event creation failed'),
+            content:
+                Text(responseBody['error'] ?? AppStrings.eventNotSuccessful),
             backgroundColor: Colors.red,
           ),
         );
@@ -219,7 +234,7 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Network error: $e'),
+          content: Text('${AppStrings.networkError2} $e'),
           backgroundColor: Colors.red,
         ),
       );
@@ -247,10 +262,10 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
     if (!isAdmin) {
       return Scaffold(
         appBar: AppBar(
-          title: const Text('Access Denied'),
+          title: Text(AppStrings.accesDenied),
         ),
-        body: const Center(
-          child: Text('You are not authorized to access this page.'),
+        body: Center(
+          child: Text(AppStrings.notAuthorized),
         ),
       );
     }
@@ -263,7 +278,7 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
         shadowColor: AppColorScheme.indigo,
         surfaceTintColor: Colors.transparent,
         title: Text(
-          'Admin Panel for creating Events',
+          AppStrings.adminPanel,
           style: TextStyle(color: AppColorScheme.ownBlack),
         ),
         centerTitle: true,
@@ -279,7 +294,7 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                 // Translation Settings
                 SwitchListTile(
                   title: Text(
-                    'Auto Translate',
+                    AppStrings.autoTranslate,
                     style: TextStyle(
                       color: AppColorScheme.ownBlack,
                       fontSize: 16,
@@ -305,7 +320,7 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                   DropdownButtonFormField<String>(
                     value: _inputLanguage,
                     decoration: InputDecoration(
-                      labelText: 'Input Language',
+                      labelText: AppStrings.autoTranslate,
                       labelStyle: TextStyle(color: AppColorScheme.ownBlack),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
@@ -341,7 +356,7 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                   TextFormField(
                     controller: _nameDeController,
                     decoration: InputDecoration(
-                      labelText: 'Name (DE)',
+                      labelText: AppStrings.nameDE,
                       labelStyle: TextStyle(color: AppColorScheme.ownBlack),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
@@ -359,7 +374,7 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                     cursorColor: AppColorScheme.indigo,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter the name in German';
+                        return AppStrings.enterStringDE;
                       }
                       return null;
                     },
@@ -368,7 +383,7 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                   TextFormField(
                     controller: _nameEnController,
                     decoration: InputDecoration(
-                      labelText: 'Name (EN)',
+                      labelText: AppStrings.nameEN,
                       labelStyle: TextStyle(color: AppColorScheme.ownBlack),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
@@ -386,7 +401,7 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                     cursorColor: AppColorScheme.indigo,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter the name in English';
+                        return;
                       }
                       return null;
                     },
@@ -395,7 +410,7 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                   TextFormField(
                     controller: _nameZhController,
                     decoration: InputDecoration(
-                      labelText: 'Name (ZH)',
+                      labelText: AppStrings.nameZH,
                       labelStyle: TextStyle(color: AppColorScheme.ownBlack),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
@@ -413,7 +428,7 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                     cursorColor: AppColorScheme.indigo,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter the name in Chinese';
+                        return AppStrings.enterStringZH;
                       }
                       return null;
                     },
@@ -422,7 +437,7 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                   TextFormField(
                     controller: _descriptionDeController,
                     decoration: InputDecoration(
-                      labelText: 'Description (DE)',
+                      labelText: AppStrings.descriptionDE,
                       labelStyle: TextStyle(color: AppColorScheme.ownBlack),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
@@ -441,7 +456,7 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                     maxLines: 3,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter the description in German';
+                        return AppStrings.enterDescriptionDE;
                       }
                       return null;
                     },
@@ -450,7 +465,7 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                   TextFormField(
                     controller: _descriptionEnController,
                     decoration: InputDecoration(
-                      labelText: 'Description (EN)',
+                      labelText: AppStrings.descriptionEN,
                       labelStyle: TextStyle(color: AppColorScheme.ownBlack),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
@@ -469,7 +484,7 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                     maxLines: 3,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter the description in English';
+                        return AppStrings.enterDescriptionEN;
                       }
                       return null;
                     },
@@ -478,7 +493,7 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                   TextFormField(
                     controller: _descriptionZhController,
                     decoration: InputDecoration(
-                      labelText: 'Description (ZH)',
+                      labelText: AppStrings.descriptionZH,
                       labelStyle: TextStyle(color: AppColorScheme.ownBlack),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
@@ -497,7 +512,7 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                     maxLines: 3,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter the description in Chinese';
+                        return AppStrings.enterDescriptionZH;
                       }
                       return null;
                     },
@@ -509,7 +524,7 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                     TextFormField(
                       controller: _nameDeController,
                       decoration: InputDecoration(
-                        labelText: 'Name (DE)',
+                        labelText: AppStrings.nameDE,
                         labelStyle: TextStyle(color: AppColorScheme.ownBlack),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
@@ -527,7 +542,7 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                       cursorColor: AppColorScheme.indigo,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter the name in German';
+                          return AppStrings.enterStringDE;
                         }
                         return null;
                       },
@@ -536,7 +551,7 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                     TextFormField(
                       controller: _descriptionDeController,
                       decoration: InputDecoration(
-                        labelText: 'Description (DE)',
+                        labelText: AppStrings.descriptionDE,
                         labelStyle: TextStyle(color: AppColorScheme.ownBlack),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
@@ -555,7 +570,7 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                       maxLines: 3,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter the description in German';
+                          return AppStrings.enterDescriptionDE;
                         }
                         return null;
                       },
@@ -564,7 +579,7 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                     TextFormField(
                       controller: _nameEnController,
                       decoration: InputDecoration(
-                        labelText: 'Name (EN)',
+                        labelText: AppStrings.nameEN,
                         labelStyle: TextStyle(color: AppColorScheme.ownBlack),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
@@ -582,7 +597,7 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                       cursorColor: AppColorScheme.indigo,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter the name in English';
+                          return AppStrings.enterStringEN;
                         }
                         return null;
                       },
@@ -591,7 +606,7 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                     TextFormField(
                       controller: _descriptionEnController,
                       decoration: InputDecoration(
-                        labelText: 'Description (EN)',
+                        labelText: AppStrings.descriptionEN,
                         labelStyle: TextStyle(color: AppColorScheme.ownBlack),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
@@ -610,7 +625,7 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                       maxLines: 3,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter the description in English';
+                          return AppStrings.enterDescriptionEN;
                         }
                         return null;
                       },
@@ -619,7 +634,7 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                     TextFormField(
                       controller: _nameZhController,
                       decoration: InputDecoration(
-                        labelText: 'Name (ZH)',
+                        labelText: AppStrings.nameZH,
                         labelStyle: TextStyle(color: AppColorScheme.ownBlack),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
@@ -637,7 +652,7 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                       cursorColor: AppColorScheme.indigo,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter the name in Chinese';
+                          return AppStrings.enterStringZH;
                         }
                         return null;
                       },
@@ -646,7 +661,7 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                     TextFormField(
                       controller: _descriptionZhController,
                       decoration: InputDecoration(
-                        labelText: 'Description (ZH)',
+                        labelText: AppStrings.descriptionZH,
                         labelStyle: TextStyle(color: AppColorScheme.ownBlack),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
@@ -665,7 +680,7 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                       maxLines: 3,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter the description in Chinese';
+                          return AppStrings.enterDescriptionZH;
                         }
                         return null;
                       },
@@ -678,7 +693,7 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                 DropdownButtonFormField<String>(
                   value: _subjectArea,
                   decoration: InputDecoration(
-                    labelText: 'Subject Area',
+                    labelText: AppStrings.subjectArea,
                     labelStyle: TextStyle(color: AppColorScheme.ownBlack),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
@@ -715,7 +730,7 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                 DropdownButtonFormField<String>(
                   value: _eventType,
                   decoration: InputDecoration(
-                    labelText: 'Event Type',
+                    labelText: AppStrings.eventType,
                     labelStyle: TextStyle(color: AppColorScheme.ownBlack),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
@@ -756,7 +771,7 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                       child: TextFormField(
                         controller: _minParticipantsController,
                         decoration: InputDecoration(
-                          labelText: 'Min Participants',
+                          labelText: AppStrings.minParticipants,
                           labelStyle: TextStyle(color: AppColorScheme.ownBlack),
                           prefixIcon:
                               Icon(Icons.people, color: AppColorScheme.indigo),
@@ -776,8 +791,9 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                         style: TextStyle(color: AppColorScheme.ownBlack),
                         cursorColor: AppColorScheme.indigo,
                         keyboardType: TextInputType.number,
-                        validator: (value) =>
-                            value!.isEmpty ? 'Enter min participants' : null,
+                        validator: (value) => value!.isEmpty
+                            ? AppStrings.enterMinParticipants
+                            : null,
                       ),
                     ),
                     const SizedBox(width: 16),
@@ -785,7 +801,7 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                       child: TextFormField(
                         controller: _maxParticipantsController,
                         decoration: InputDecoration(
-                          labelText: 'Max Participants',
+                          labelText: AppStrings.maxParticipants,
                           labelStyle: TextStyle(color: AppColorScheme.ownBlack),
                           prefixIcon:
                               Icon(Icons.people, color: AppColorScheme.indigo),
@@ -805,8 +821,9 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                         style: TextStyle(color: AppColorScheme.ownBlack),
                         cursorColor: AppColorScheme.indigo,
                         keyboardType: TextInputType.number,
-                        validator: (value) =>
-                            value!.isEmpty ? 'Enter max participants' : null,
+                        validator: (value) => value!.isEmpty
+                            ? AppStrings.enterMaxParticipants
+                            : null,
                       ),
                     ),
                   ],
@@ -814,7 +831,7 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                 // Event Days Section
                 const SizedBox(height: 16),
                 Text(
-                  'Event Days',
+                  AppStrings.eventDays,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         color: AppColorScheme.ownBlack,
                       ),
@@ -835,7 +852,7 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                           TextFormField(
                             controller: dayControllers['date'],
                             decoration: InputDecoration(
-                              labelText: 'Date',
+                              labelText: AppStrings.date,
                               labelStyle:
                                   TextStyle(color: AppColorScheme.ownBlack),
                               prefixIcon: Icon(Icons.calendar_today,
@@ -865,7 +882,7 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                             onTap: () =>
                                 _selectDate(context, dayControllers['date']!),
                             validator: (value) =>
-                                value!.isEmpty ? 'Please select a date' : null,
+                                value!.isEmpty ? AppStrings.selectDate : null,
                           ),
                           const SizedBox(height: 16),
                           Row(
@@ -874,7 +891,7 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                                 child: TextFormField(
                                   controller: dayControllers['startTime'],
                                   decoration: InputDecoration(
-                                    labelText: 'Start Time',
+                                    labelText: AppStrings.startTime,
                                     labelStyle: TextStyle(
                                         color: AppColorScheme.ownBlack),
                                     prefixIcon: Icon(Icons.access_time,
@@ -905,7 +922,7 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                                   onTap: () => _selectTime(
                                       context, dayControllers['startTime']!),
                                   validator: (value) => value!.isEmpty
-                                      ? 'Please select start time'
+                                      ? AppStrings.selectStartTime
                                       : null,
                                 ),
                               ),
@@ -914,7 +931,7 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                                 child: TextFormField(
                                   controller: dayControllers['endTime'],
                                   decoration: InputDecoration(
-                                    labelText: 'End Time',
+                                    labelText: AppStrings.endTime,
                                     labelStyle: TextStyle(
                                         color: AppColorScheme.ownBlack),
                                     prefixIcon: Icon(Icons.access_time,
@@ -945,7 +962,7 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                                   onTap: () => _selectTime(
                                       context, dayControllers['endTime']!),
                                   validator: (value) => value!.isEmpty
-                                      ? 'Please select end time'
+                                      ? AppStrings.selectEndTime
                                       : null,
                                 ),
                               ),
@@ -955,7 +972,7 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                           TextFormField(
                             controller: dayControllers['location'],
                             decoration: InputDecoration(
-                              labelText: 'Location',
+                              labelText: AppStrings.location,
                               labelStyle:
                                   TextStyle(color: AppColorScheme.ownBlack),
                               border: OutlineInputBorder(
@@ -973,14 +990,15 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                               ),
                             ),
                             style: TextStyle(color: AppColorScheme.ownBlack),
-                            validator: (value) =>
-                                value!.isEmpty ? 'Enter location' : null,
+                            validator: (value) => value!.isEmpty
+                                ? AppStrings.enterLocation
+                                : null,
                           ),
                           const SizedBox(height: 16),
                           TextFormField(
                             controller: dayControllers['federalState'],
                             decoration: InputDecoration(
-                              labelText: 'Federal State',
+                              labelText: AppStrings.federalState,
                               labelStyle:
                                   TextStyle(color: AppColorScheme.ownBlack),
                               border: OutlineInputBorder(
@@ -998,8 +1016,9 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                               ),
                             ),
                             style: TextStyle(color: AppColorScheme.ownBlack),
-                            validator: (value) =>
-                                value!.isEmpty ? 'Enter federal state' : null,
+                            validator: (value) => value!.isEmpty
+                                ? AppStrings.enterFederalState
+                                : null,
                           ),
                           if (_eventDayControllers.length > 1)
                             TextButton(
@@ -1009,7 +1028,7 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                                     vertical: 8, horizontal: 16),
                               ),
                               onPressed: () => _removeEventDay(index),
-                              child: const Text('Remove Day'),
+                              child: Text(AppStrings.removeDay),
                             ),
                         ],
                       ),
@@ -1029,9 +1048,9 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                     elevation: 2,
                   ),
                   onPressed: _addEventDay,
-                  child: const Text(
-                    'Add another Event Day',
-                    style: TextStyle(
+                  child: Text(
+                    AppStrings.addEventDay,
+                    style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
                     ),
@@ -1046,9 +1065,9 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                     foregroundColor: AppColorScheme.ownWhite,
                     padding: const EdgeInsets.symmetric(vertical: 16),
                   ),
-                  child: const Text(
-                    'Create Event',
-                    style: TextStyle(
+                  child: Text(
+                    AppStrings.createEvent,
+                    style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w700,
                     ),
