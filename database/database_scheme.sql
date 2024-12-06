@@ -144,7 +144,7 @@ INSERT INTO `trainingcourses` (`TrainingID`, `MinParticipants`, `MaxParticipants
 INSERT INTO `users` (`UserID`, `Username`, `PasswordHash`, `FirstName`, `LastName`, `Email`, `SpecializationField`, `is_admin`, `is_active`, `CountLoginAttempts`) VALUES
 (1, 'JoDi2903', '$argon2id$v=19$m=19456,t=32,p=1$DCI4Tlp76jhOWgwiOE5aew$8arYRAMy6VXq6+lICXwNl9J6iEFY7ZFurJKPXxoYzOw', 'Jonathan', 'Diebel', 'notamail@email.com', 'Computer Science', 1, 1, 0),
 (2, 'Firq', NULL, 'Noah Leon', 'Meier', 'MrMeier@email.com', 'Computer Science', 0, 1, 0),
-(3, 'Nehper', $argon2id$v=19$m=19456,t=32,p=1$DCI4Tlp76jhOWgwiOE5aew$6vcteShhhwhLFJeZ7kYeuajOGYRTzodHXek+rVQjDOI, 'Nicki Matthias', 'Schuhmacher', 'MrSchuhmacher@email.com', 'Electrical Engineering', 0, 1, 0),
+(3, 'Nehper', '$argon2id$v=19$m=19456,t=32,p=1$DCI4Tlp76jhOWgwiOE5aew$6vcteShhhwhLFJeZ7kYeuajOGYRTzodHXek+rVQjDOI', 'Nicki Matthias', 'Schuhmacher', 'MrSchuhmacher@email.com', 'Electrical Engineering', 0, 1, 0),
 (4, 'Neshura', NULL, 'Jan Elias', 'Sulzberger', 'MrSulzberger@email.com', 'Mechatronics', 0, 1, 0),
 (5, 'Auftragsgriller30', '$argon2id$v=19$m=19456,t=32,p=1$DCI4Tlp76jhOWgwiOE5aew$2HuRB5a50M4i7FKfI3hMH9lizQl0esPgJSKMGCoGi2g', 'Arne Laurids', 'Fränznick', 'MrFraenznick@email.com', 'Electrical Engineering', 1, 1, 0),
 (6, 'DrSaumweber', NULL, 'Vicent', 'Saumweber', 'DrSaumweber@email.com', 'Mechanical Engineering', 0, 1, 0),
