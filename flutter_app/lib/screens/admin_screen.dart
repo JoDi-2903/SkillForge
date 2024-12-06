@@ -123,7 +123,6 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
     final TimeOfDay? picked = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.now(),
-      barrierLabel: 'Hallo',
       builder: (context, child) {
         return Localizations(
           delegates: const [
@@ -403,7 +402,7 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                     cursorColor: AppColorScheme.indigo,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return;
+                        return AppStrings.enterStringEN;
                       }
                       return null;
                     },
