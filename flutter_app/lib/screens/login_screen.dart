@@ -312,10 +312,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Icon(
-                      Icons.account_circle,
-                      size: 80,
-                      color: AppColorScheme.indigo,
+                    Image.asset(
+                      'assets/img/skillforge_logo.png',
+                      height: 128,
                     ),
                     const SizedBox(height: 32),
                     TextFormField(
