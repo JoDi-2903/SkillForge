@@ -28,7 +28,7 @@ jobs:
         with:
           context: ./backend
           push: true
-          tags: ghcr.io/${{ github.repository_owner | toLower }}/skillforge-python-backend:latest
+          tags: ghcr.io/jodi-2903/skillforge-python-backend:latest
 
       - name: Build and push flutter_web image
         uses: docker/build-push-action@v4
@@ -36,4 +36,4 @@ jobs:
           context: ./flutter_app
           dockerfile: Dockerfile
           push: true
-          tags: ghcr.io/${{ github.repository_owner | toLower }}/skillforge-flutter-web-app:latest
+          tags: ghcr.io/jodi-2903/skillforge-flutter-web-app:latest
