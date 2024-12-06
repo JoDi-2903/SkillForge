@@ -1,30 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:skill_forge/utils/color_scheme.dart';
+import 'package:skill_forge/utils/languages.dart';
 
 class HolidayPage extends StatelessWidget {
   final String name;
   HolidayPage({super.key, required this.name});
 
   final string2Icon = <String, IconData>{
-    'celebration': Icons.celebration_outlined,
-    'construction': Icons.construction_outlined,
-    'handshake': Icons.handshake_outlined,
-    'park': Icons.park_outlined,
-    'forest': Icons.forest_outlined,
-    'church': Icons.church_outlined,
-    'cruelty_free': Icons.cruelty_free_outlined,
-    'egg': Icons.egg_outlined,
-    'cloud_upload': Icons.cloud_upload_outlined,
-    'lightbulb': Icons.lightbulb_outline_rounded,
-    'local_fire_department': Icons.local_fire_department_outlined,
-    'star': Icons.star_border_outlined,
-    'face_3': Icons.face_3_outlined,
-    'sentiment_very_dissatisfied': Icons.sentiment_very_dissatisfied_outlined,
-    'mood': Icons.mood_outlined,
-    'cloud_done': Icons.cloud_done_outlined,
-    'child_care': Icons.child_care_outlined,
-    'description': Icons.description_outlined,
-    'accessibility': Icons.accessibility_outlined,
+    AppStrings.newYear: Icons.celebration_outlined,
+    AppStrings.firstMay: Icons.construction_outlined,
+    AppStrings.germanUnity: Icons.handshake_outlined,
+    AppStrings.christmas1: Icons.park_outlined,
+    AppStrings.christmas2: Icons.forest_outlined,
+    AppStrings.carFriday: Icons.church_outlined,
+    AppStrings.easterSunday: Icons.cruelty_free_outlined,
+    AppStrings.easterMonday: Icons.egg_outlined,
+    AppStrings.christHeavenDrive: Icons.cloud_upload_outlined,
+    AppStrings.whitSunday: Icons.lightbulb_outline_rounded,
+    AppStrings.whitMonday: Icons.local_fire_department_outlined,
+    AppStrings.epiphany: Icons.star_border_outlined,
+    AppStrings.intlWomen: Icons.face_3_outlined,
+    AppStrings.happyCadaver: Icons.sentiment_very_dissatisfied_outlined,
+    AppStrings.peaceParty: Icons.mood_outlined,
+    AppStrings.mariaHeavenDrive: Icons.cloud_done_outlined,
+    AppStrings.worldChildDay: Icons.child_care_outlined,
+    AppStrings.reformationDay: Icons.description_outlined,
+    AppStrings.allSaints: Icons.accessibility_outlined,
   };
   @override
   Widget build(BuildContext context) {
@@ -50,12 +51,12 @@ class HolidayPage extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Icon(
-                string2Icon[name.split(';')[1]],
+                string2Icon[name],
                 size: 64,
               ),
               SizedBox(height: 16),
               Text(
-                name.split(';')[0],
+                name,
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 18, color: AppColorScheme.ownBlack),
               ),
