@@ -51,7 +51,7 @@ class HolidayPage extends StatelessWidget {
             children: [
               Icon(
                 string2Icon[name.split(';')[1]],
-                size: 32,
+                size: 64,
               ),
               SizedBox(height: 16),
               Text(
