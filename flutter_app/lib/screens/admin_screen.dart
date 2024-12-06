@@ -106,6 +106,7 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
               primary: AppColorScheme.indigo,
               onPrimary: AppColorScheme.ownWhite,
               surface: AppColorScheme.antiFlash,
+              onSurface: AppColorScheme.ownBlack,
             ),
           ),
           child: child!,
@@ -136,8 +137,9 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
               colorScheme: ColorScheme.light(
                 primary: AppColorScheme.indigo,
                 secondary: AppColorScheme.lapisLazuli,
-                onPrimary: Colors.white,
+                onPrimary: AppColorScheme.ownWhite,
                 surface: AppColorScheme.antiFlash,
+                onSurface: AppColorScheme.ownBlack,
               ),
             ),
             child: child!,
